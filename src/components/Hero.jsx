@@ -1,5 +1,7 @@
 import { useLanguage } from '../i18n/LanguageContext';
 import { Link } from 'react-router-dom';
+import TrustBadges from './TrustBadges';
+import HeroCommandCenter from './HeroCommandCenter';
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -14,6 +16,12 @@ export default function Hero() {
           <Link to="/contact" className="nano-button">{t('hero.cta')}</Link>
           <a href="#products" className="hero-cta-secondary">{t('hero.cta2')}</a>
         </div>
+
+        {/* Regulatory & Enterprise Trust Badges */}
+        <TrustBadges />
+
+        {/* Live Interactive Command Center Mockup */}
+        <HeroCommandCenter />
       </div>
     </section>
   );

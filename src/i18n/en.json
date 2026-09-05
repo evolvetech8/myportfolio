@@ -12,22 +12,42 @@
     "cta": "Request Technical Demo",
     "cta2": "Explore Product Suite"
   },
+  "trust": {
+    "badge1": "Circular 88/2021/TT-BTC Standardized",
+    "badge2": "Decree 123 E-Invoicing Engine",
+    "badge3": "Bank-Grade AES-256 & E2EE Encryption",
+    "badge4": "Google Cloud Run Infrastructure SLA 99.9%"
+  },
+  "mockup": {
+    "title": "ARCHONIC COMMAND CENTER — REALTIME TELEMETRY",
+    "status": "ENGINE ACTIVE // RUNNING",
+    "terminalFeed": "Realtime Audit & Compliance Stream",
+    "auditReady": "Tax-Audit Certified",
+    "complianceScore": "100% Circular 88 Ready",
+    "ledgerSync": "7 Mandatory Ledgers Synchronized",
+    "item1": "POS #04: Retail transaction +1,450,000 VND -> Logged to Ledger S1",
+    "item2": "E-Invoice #008491 (Decree 123) -> Matched with tax authority code",
+    "item3": "VisionCore OCR: Scanned warehouse invoice -> Extracted in 0.84s"
+  },
   "products": {
     "title": "Core Product Ecosystem",
     "bridge": {
       "name": "Archonic Bridge",
       "tagline": "Tax-Ready Revenue & Compliance Engine",
-      "desc": "Automated revenue logging and e-invoice reconciliation architected to Vietnamese Circular 88/2021/TT-BTC & Decree 123/2020/ND-CP regulatory standards. Built for household businesses and SMEs."
+      "desc": "Automated revenue logging and e-invoice reconciliation architected to Vietnamese Circular 88 & Decree 123 regulatory standards. Automatically maintains 7 mandatory ledgers.",
+      "tag": "CIRCULAR 88 & DECREE 123"
     },
     "howdoi": {
       "name": "HowDoI",
       "tagline": "AI Marketing & Video Automation",
-      "desc": "Autonomous multi-channel video generation pipeline and AI-driven growth execution. Enterprise-scale content production without operational overhead."
+      "desc": "Autonomous multi-channel video generation pipeline and AI-driven growth execution. Enterprise-scale content production without operational overhead.",
+      "tag": "AUTO AI PIPELINE"
     },
     "visioncore": {
       "name": "VisionCore",
       "tagline": "Edge OCR & Document Intelligence",
-      "desc": "On-premise and edge LLM deployments extracting invoice and financial ledger data in <1.2s. Zero financial data leakage with air-gapped processing options."
+      "desc": "On-premise and edge LLM deployments extracting invoice data in <1.2s. Zero financial data leakage with air-gapped processing options.",
+      "tag": "EDGE AI SCANNER < 1.2S"
     }
   },
   "metrics": {
