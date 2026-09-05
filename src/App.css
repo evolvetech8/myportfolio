@@ -611,11 +611,19 @@ a:hover { color: var(--archonic-amber); }
   font-weight: 500;
 }
 
+.page-title {
+  font-size: 42px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
 /* === ABOUT === */
 .about-page {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 24px 100px;
+  padding: 130px 24px 100px;
 }
 .about-grid {
   display: grid;
@@ -636,7 +644,7 @@ a:hover { color: var(--archonic-amber); }
 .contact-page {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 24px 100px;
+  padding: 130px 24px 100px;
 }
 .contact-subtitle {
   text-align: center;
