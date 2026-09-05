@@ -13,21 +13,63 @@
     "cta2": "Khám Phá Tính Năng"
   },
   "trust": {
-    "badge1": "Chuẩn hoá Thông tư 88/2021/TT-BTC",
-    "badge2": "Hóa đơn điện tử Nghị định 123",
-    "badge3": "Mã hóa cấp ngân hàng AES-256 & E2EE",
-    "badge4": "Hạ tầng Google Cloud Run SLA 99.9%"
+    "badge1": "Chuẩn hoá Thông tư 88/2021/TT-BTC (7/7 Loại Sổ)",
+    "badge2": "Hóa đơn điện tử Nghị định 123/2020/NĐ-CP",
+    "infraTitle": "Tiêu Chuẩn Bảo Mật & Hạ Tầng Điện Toán Đám Mây",
+    "infra1": "Mã hóa cấp ngân hàng AES-256 & E2EE",
+    "infra1Sub": "Bảo mật tuyệt đối mọi giao dịch tài chính",
+    "infra2": "Google Cloud Run SLA 99.9%",
+    "infra2Sub": "Hạ tầng đám mây tự phục hồi & mở rộng tức thời",
+    "infra3": "Đồng bộ Tổng Cục Thuế",
+    "infra3Sub": "Xác thực hóa đơn điện tử hợp lệ theo NĐ 123",
+    "infra4": "Tự động sao lưu đa vùng",
+    "infra4Sub": "Dữ liệu kế toán an toàn 100%, không lo thất thoát"
   },
   "mockup": {
-    "title": "A-SỔ COMMAND CENTER — BẢNG ĐIỀU KHIỂN SỔ THUẾ THỜI GIAN THỰC",
-    "status": "A-SỔ ENGINE RUNNING // ONLINE",
-    "terminalFeed": "Nhật Ký Ghi Sổ Kế Toán & Đối Chiếu Thuế Trực Tiếp",
-    "auditReady": "Sẵn Sàng Thanh Tra Thuế",
-    "complianceScore": "100% Tuân Thủ TT88",
-    "ledgerSync": "Đã Đồng Bộ 7 Loại Sổ Kế Toán",
-    "item1": "POS #04: Doanh thu bán lẻ +1.450.000đ → Tự động ghi Sổ S1-HKD (Doanh thu)",
-    "item2": "Hóa đơn điện tử #008491 (NĐ 123) → Đối chiếu hợp lệ với Sổ S2-HKD (Hàng hóa)",
-    "item3": "Giao dịch VietQR +8.200.000đ → Tự động cân đối Sổ S5-HKD (Tiền gửi ngân hàng)"
+    "windowTitle": "A-Sổ Cloud Dashboard",
+    "storeContext": "Cửa hàng mẫu: Tiệm Bánh & Cà Phê Mộc",
+    "status": "Đang Tự Động Ghi Sổ & Đối Chiếu",
+    "feedHeader": "Hoạt Động Giao Dịch & Ghi Sổ Tự Động",
+    "feedLiveBadge": "Thời gian thực",
+    "complianceScore": "100% Đạt Chuẩn TT88 & NĐ123",
+    "auditReady": "Sẵn Sàng Xuất Báo Cáo & Thanh Tra Thuế",
+    "exportBtn": "Xuất 7 Sổ Ra Excel / XML",
+    "ledgerProgressTitle": "Tiến Độ 7 Loại Sổ Kế Toán Bắt Buộc",
+    "ledger1": "Sổ Doanh Thu (S1-HKD)",
+    "ledger1Status": "Đã chốt doanh thu",
+    "ledger2": "Sổ Hàng Hóa & CP (S2, S3-HKD)",
+    "ledger2Status": "Khớp 100% hóa đơn NĐ123",
+    "ledger3": "Sổ Tiền Mặt & Tiền Gửi (S4, S5)",
+    "ledger3Status": "Cân đối dòng tiền VietQR & POS",
+    "securityReassurance": "Dữ liệu kế toán được bảo mật mã hóa đa tầng & Tự động sao lưu đám mây",
+    "item1": {
+      "title": "Bán lẻ tại quầy (Máy POS #04)",
+      "desc": "Tự động kết chuyển vào Sổ Doanh thu (S1-HKD)",
+      "amount": "+1.450.000đ",
+      "tag": "Đã vào sổ S1",
+      "time": "Vừa xong"
+    },
+    "item2": {
+      "title": "Hóa đơn điện tử đầu vào (#008491)",
+      "desc": "Khớp mã Tổng cục Thuế (NĐ 123) → Ghi Sổ Hàng hóa (S2)",
+      "amount": "Hợp lệ NĐ 123",
+      "tag": "Khớp mã 100%",
+      "time": "4s trước"
+    },
+    "item3": {
+      "title": "Khách thanh toán quét mã VietQR",
+      "desc": "Tự động cân đối Sổ Tiền gửi ngân hàng (S5-HKD)",
+      "amount": "+8.200.000đ",
+      "tag": "Đã khớp ngân hàng",
+      "time": "9s trước"
+    },
+    "item4": {
+      "title": "Đối soát sổ quỹ & tiền mặt cuối ngày",
+      "desc": "Tự động cân bằng Sổ Tiền mặt (S4-HKD) & Chi phí (S3)",
+      "amount": "Cân đối 100%",
+      "tag": "Chuẩn TT88",
+      "time": "15s trước"
+    }
   },
   "products": {
     "title": "Hệ Thống Tính Năng Cốt Lõi Của A-Sổ",

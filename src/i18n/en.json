@@ -13,21 +13,63 @@
     "cta2": "Explore Features"
   },
   "trust": {
-    "badge1": "Circular 88/2021/TT-BTC Standardized",
-    "badge2": "Decree 123 E-Invoicing Engine",
-    "badge3": "Bank-Grade AES-256 & E2EE Encryption",
-    "badge4": "Google Cloud Run Infrastructure SLA 99.9%"
+    "badge1": "Circular 88/2021/TT-BTC Standardized (7/7 Ledgers)",
+    "badge2": "Decree 123/2020/ND-CP E-Invoicing Engine",
+    "infraTitle": "Enterprise Security & Cloud Infrastructure Standards",
+    "infra1": "Bank-Grade Financial Encryption AES-256 & E2EE",
+    "infra1Sub": "Zero-trust data security for all fiscal records",
+    "infra2": "Google Cloud Run Infrastructure SLA 99.9%",
+    "infra2Sub": "Self-healing auto-scaling cloud with 24/7 uptime",
+    "infra3": "Tax Authority Portal Sync",
+    "infra3Sub": "Real-time Decree 123 verification against tax servers",
+    "infra4": "Multi-Zone Automated Cloud Backups",
+    "infra4Sub": "Zero data loss guarantee with rapid disaster recovery"
   },
   "mockup": {
-    "title": "A-SỔ COMMAND CENTER — REALTIME TAX TELEMETRY",
-    "status": "A-SỔ ENGINE RUNNING // ONLINE",
-    "terminalFeed": "Realtime Accounting & Tax Audit Stream",
-    "auditReady": "Tax-Audit Certified",
-    "complianceScore": "100% Circular 88 Ready",
-    "ledgerSync": "7 Mandatory Ledgers Synchronized",
-    "item1": "POS #04: Retail transaction +1,450,000 VND -> Logged to Ledger S1 (Revenue)",
-    "item2": "E-Invoice #008491 (Decree 123) -> Reconciled against Ledger S2 (Inventory)",
-    "item3": "VietQR Payment +8,200,000 VND -> Balanced with Ledger S5 (Bank Deposits)"
+    "windowTitle": "A-Sổ Cloud Dashboard",
+    "storeContext": "Demo Store: Artisan Bakery & Cafe",
+    "status": "Auto-Ingesting & Ledger Syncing",
+    "feedHeader": "Live Transactions & Automated Ledger Feed",
+    "feedLiveBadge": "Real-time",
+    "complianceScore": "100% Circular 88 & Decree 123 Compliant",
+    "auditReady": "Instant Audit-Ready & Tax Report Status",
+    "exportBtn": "Export 7 Ledgers (Excel / XML)",
+    "ledgerProgressTitle": "7 Mandatory Accounting Ledgers Status",
+    "ledger1": "Revenue Ledger (S1-HKD)",
+    "ledger1Status": "Revenue locked & reconciled",
+    "ledger2": "Goods & Expense Ledgers (S2, S3-HKD)",
+    "ledger2Status": "100% Decree 123 matched",
+    "ledger3": "Cash & Bank Ledgers (S4, S5)",
+    "ledger3Status": "Balanced with VietQR & POS",
+    "securityReassurance": "Financial records secured with multi-layer encryption & auto-cloud backup",
+    "item1": {
+      "title": "Counter Retail Sale (POS Terminal #04)",
+      "desc": "Auto-recorded into Revenue Ledger (S1-HKD)",
+      "amount": "+1,450,000 VND",
+      "tag": "Logged to S1",
+      "time": "Just now"
+    },
+    "item2": {
+      "title": "Incoming Supplier E-Invoice (#008491)",
+      "desc": "Tax Authority verified (Decree 123) -> Logged to S2",
+      "amount": "Decree 123 Valid",
+      "tag": "Tax Validated",
+      "time": "4s ago"
+    },
+    "item3": {
+      "title": "VietQR Customer Payment",
+      "desc": "Auto-balanced with Bank Deposit Ledger (S5-HKD)",
+      "amount": "+8,200,000 VND",
+      "tag": "Bank Matched",
+      "time": "9s ago"
+    },
+    "item4": {
+      "title": "End-of-Day Cashflow Reconciliation",
+      "desc": "Balanced Cash Ledger (S4) & Expense Ledger (S3)",
+      "amount": "100% Balanced",
+      "tag": "Circular 88 Ready",
+      "time": "15s ago"
+    }
   },
   "products": {
     "title": "A-Sổ Core Architecture",
