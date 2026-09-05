@@ -3,14 +3,14 @@
     "home": "Home",
     "about": "About",
     "contact": "Contact",
-    "demo": "Request Demo"
+    "demo": "Experience A-Sổ"
   },
   "hero": {
-    "pre": "ENTERPRISE AI & FINTECH PLATFORM",
-    "title": "Next-Gen Financial Infrastructure & Enterprise AI",
-    "subtitle": "B2B SaaS platform automating tax compliance, autonomous AI marketing, and intelligent document processing for Southeast Asian enterprises.",
-    "cta": "Request Technical Demo",
-    "cta2": "Explore Product Suite"
+    "pre": "AUTOMATED TAX LEDGER & REVENUE COMPLIANCE",
+    "title": "A-Sổ — Automated Circular 88 Tax Ledger & Revenue Platform",
+    "subtitle": "Comprehensive automation for the 7 mandatory accounting ledgers, Decree 123 e-invoice reconciliation, and real-time cashflow management for Vietnamese SMEs and household businesses.",
+    "cta": "Get Started with A-Sổ",
+    "cta2": "Explore Features"
   },
   "trust": {
     "badge1": "Circular 88/2021/TT-BTC Standardized",
@@ -19,74 +19,74 @@
     "badge4": "Google Cloud Run Infrastructure SLA 99.9%"
   },
   "mockup": {
-    "title": "ARCHONIC COMMAND CENTER — REALTIME TELEMETRY",
-    "status": "ENGINE ACTIVE // RUNNING",
-    "terminalFeed": "Realtime Audit & Compliance Stream",
+    "title": "A-SỔ COMMAND CENTER — REALTIME TAX TELEMETRY",
+    "status": "A-SỔ ENGINE RUNNING // ONLINE",
+    "terminalFeed": "Realtime Accounting & Tax Audit Stream",
     "auditReady": "Tax-Audit Certified",
     "complianceScore": "100% Circular 88 Ready",
     "ledgerSync": "7 Mandatory Ledgers Synchronized",
-    "item1": "POS #04: Retail transaction +1,450,000 VND -> Logged to Ledger S1",
-    "item2": "E-Invoice #008491 (Decree 123) -> Matched with tax authority code",
-    "item3": "VisionCore OCR: Scanned warehouse invoice -> Extracted in 0.84s"
+    "item1": "POS #04: Retail transaction +1,450,000 VND -> Logged to Ledger S1 (Revenue)",
+    "item2": "E-Invoice #008491 (Decree 123) -> Reconciled against Ledger S2 (Inventory)",
+    "item3": "VietQR Payment +8,200,000 VND -> Balanced with Ledger S5 (Bank Deposits)"
   },
   "products": {
-    "title": "Core Product Ecosystem",
-    "bridge": {
-      "name": "Archonic Bridge",
-      "tagline": "Tax-Ready Revenue & Compliance Engine",
-      "desc": "Automated revenue logging and e-invoice reconciliation architected to Vietnamese Circular 88 & Decree 123 regulatory standards. Automatically maintains 7 mandatory ledgers.",
-      "tag": "CIRCULAR 88 & DECREE 123"
+    "title": "A-Sổ Core Architecture",
+    "module1": {
+      "name": "7 Mandatory Accounting Ledgers",
+      "tagline": "Circular 88/2021/TT-BTC Standardized",
+      "desc": "Automates all 7 mandatory books: Revenue (S1-HKD), Inventory (S2-HKD), Expenses (S3-HKD), Cash on Hand (S4-HKD), Bank Deposits (S5-HKD), Tax Liabilities (S6-HKD), and Payroll (S7-HKD). Audit-ready 24/7.",
+      "tag": "7/7 CIRCULAR 88 LEDGERS"
     },
-    "howdoi": {
-      "name": "HowDoI",
-      "tagline": "AI Marketing & Video Automation",
-      "desc": "Autonomous multi-channel video generation pipeline and AI-driven growth execution. Enterprise-scale content production without operational overhead.",
-      "tag": "AUTO AI PIPELINE"
+    "module2": {
+      "name": "Automated E-Invoice Reconciliation",
+      "tagline": "Direct Decree 123/2020/ND-CP Integration",
+      "desc": "Extracts and cross-references input and output e-invoices directly from tax authorities. Validates verification codes against ledgers, eliminating tax penalty risks.",
+      "tag": "DECREE 123 CERTIFIED"
     },
-    "visioncore": {
-      "name": "VisionCore",
-      "tagline": "Edge OCR & Document Intelligence",
-      "desc": "On-premise and edge LLM deployments extracting invoice data in <1.2s. Zero financial data leakage with air-gapped processing options.",
-      "tag": "EDGE AI SCANNER < 1.2S"
+    "module3": {
+      "name": "Omni-Channel Cashflow & POS Bridge",
+      "tagline": "Realtime Transaction Synchronization",
+      "desc": "Ingests transactional feeds from retail POS terminals, banking QR codes, and corporate accounts. Automatically logs revenue without manual data entry.",
+      "tag": "AUTOMATED CASHFLOW BRIDGE"
     }
   },
   "metrics": {
-    "title": "Enterprise-Grade Engineering Truths",
-    "stat1": { "value": "99.9%", "label": "Cloud Run Microservices SLA" },
-    "stat2": { "value": "< 1.2s", "label": "Edge OCR Invoice Extraction" },
+    "title": "A-Sổ Engineering & Compliance Truths",
+    "stat1": { "value": "7/7", "label": "Mandatory Circular 88 Ledgers" },
+    "stat2": { "value": "< 1.2s", "label": "E-Invoice Cross-Reconciliation" },
     "stat3": { "value": "100%", "label": "Circular 88 & Decree 123 Compliant" },
     "stat4": { "value": "E2EE", "label": "End-to-End Encrypted Financial Ledger" }
   },
   "about": {
     "title": "About Archonic",
     "mission": "Engineering Mission",
-    "missionText": "Archonic engineers mission-critical financial software and enterprise AI infrastructure for emerging Asian markets. We empower SMEs and commercial establishments with regulatory-grade software previously confined to tier-1 financial institutions.",
+    "missionText": "Archonic builds regulatory-grade financial infrastructure and automation for emerging Asian economies. We empower millions of SMEs and household businesses through our flagship A-Sổ platform.",
     "vision": "Vision: Forbes Asia 100 to Watch",
-    "visionText": "Positioning Archonic as a scalable Fintech and AI infrastructure platform across Southeast Asia, bridging informal retail revenues into standardized digital ledgers ready for compliance and institutional credit.",
+    "visionText": "Positioning Archonic as Southeast Asia's benchmark tax infrastructure provider, establishing A-Sổ as the primary ledger bridge for compliant commerce.",
     "approach": "AI-Native Autonomous Studio",
-    "approachText": "Archonic is an AI-Native engineering organization. Our platform is built on self-healing cloud architectures, rigorous microservice isolation, and automated validation pipelines—ensuring institutional uptime and guaranteed SLAs."
+    "approachText": "Archonic is an AI-Native engineering organization. The A-Sổ platform is built on self-healing cloud architectures, rigorous microservice isolation, and automated validation pipelines—ensuring institutional uptime and guaranteed SLAs."
   },
   "contact": {
     "title": "Technical Consultation & Integrations",
-    "subtitle": "Ready to modernize your financial compliance and document processing pipelines? Connect directly with our enterprise team.",
+    "subtitle": "Ready to modernize and automate your tax compliance with A-Sổ? Connect directly with our enterprise team.",
     "name": "Full Name",
     "email": "Work Email",
-    "message": "Integration Requirement (Fintech / OCR / AI)",
+    "message": "Deployment Requirements (Household Business / Retail Chain / SME)",
     "send": "Submit Enterprise Inquiry",
     "phone": "Direct Line",
     "emailLabel": "Technical Inquiries"
   },
   "aiAgent": {
-    "badge": "Archonic Enterprise Sales Engineer AI",
-    "welcome": "Hello! I am the Archonic AI Solutions Architect. Ask me anything about Circular 88 compliance, Archonic Bridge revenue logging, or our <1.2s VisionCore OCR engine.",
-    "prompt1": "What does Circular 88 require for SMEs?",
-    "prompt2": "How does Archonic Bridge log revenue?",
-    "prompt3": "How does VisionCore OCR protect data?",
-    "inputPlaceholder": "Ask a technical or regulatory question...",
+    "badge": "Archonic A-Sổ Sales Engineer AI",
+    "welcome": "Hello! I am the Archonic A-Sổ Solutions Architect. Ask me anything about automating the 7 Circular 88 ledgers, Decree 123 e-invoicing, or deployment pricing for A-Sổ.",
+    "prompt1": "What 7 ledgers does A-Sổ automate for TT 88?",
+    "prompt2": "How does A-Sổ reconcile Decree 123 e-invoices?",
+    "prompt3": "How do I deploy A-Sổ for my business?",
+    "inputPlaceholder": "Ask a question about A-Sổ or tax regulations...",
     "send": "Send"
   },
   "footer": {
-    "tagline": "Next-Gen Financial Infrastructure & Enterprise AI.",
+    "tagline": "A-Sổ — Automated tax ledger & revenue compliance infrastructure.",
     "rights": "© 2026 Archonic. All rights reserved. Compliant with Circular 88 & Decree 123."
   }
 }

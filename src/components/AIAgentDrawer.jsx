@@ -35,32 +35,32 @@ export default function AIAgentDrawer() {
 
   const knowledgeBase = {
     tt88: {
-      keywords: ['88', 'thông tư', 'circular', 'hộ kinh doanh', 'household', 'thuế', 'tax'],
-      vi: 'Thông tư 88/2021/TT-BTC quy định chế độ kế toán cho hộ kinh doanh & cá nhân kinh doanh, bao gồm 7 loại sổ kế toán bắt buộc: Sổ doanh thu, Sổ vật liệu/hàng hóa, Sổ chi phí, Sổ tiền mặt, Sổ tài khoản ngân hàng, v.v. Archonic Bridge tự động hóa việc ghi sổ và đồng bộ hóa đơn điện tử theo đúng mẫu biểu này.',
-      en: 'Circular 88/2021/TT-BTC establishes strict accounting standards for Vietnamese household businesses across 7 mandatory ledgers (Revenue, Inventory, Cash, Bank accounts, etc.). Archonic Bridge automatically maps transactions and e-invoices directly into these compliant templates.'
+      keywords: ['88', 'thông tư', 'circular', 'hộ kinh doanh', 'household', 'thuế', 'tax', 'sổ'],
+      vi: 'Thông tư 88/2021/TT-BTC quy định 7 loại sổ kế toán bắt buộc: Sổ doanh thu (S1-HKD), Hàng hóa (S2-HKD), Chi phí (S3-HKD), Tiền mặt (S4-HKD), Tiền gửi (S5-HKD), Thuế (S6-HKD) và Tiền lương (S7-HKD). Nền tảng A-Sổ tự động hóa 100% việc lập, ghi chép và kết xuất 7 loại sổ này theo đúng biểu mẫu pháp lý.',
+      en: 'Circular 88/2021/TT-BTC requires 7 mandatory accounting books: Revenue (S1), Inventory (S2), Expenses (S3), Cash (S4), Bank (S5), Tax (S6), and Payroll (S7). The A-Sổ platform automates 100% of these 7 books to certified regulatory standards.'
     },
-    bridge: {
-      keywords: ['bridge', 'archonic', 'doanh thu', 'revenue', 'tính năng', 'feature'],
-      vi: 'Archonic Bridge là Cầu nối Doanh thu & Tuân thủ Thuế: Kết nối dữ liệu máy POS, tài khoản ngân hàng và hệ thống hóa đơn điện tử (NĐ 123) thành sổ sách kế toán sẵn sàng thanh tra thuế. Giảm 90% thời gian hạch toán thủ công.',
-      en: 'Archonic Bridge connects POS terminals, business bank accounts, and Decree 123 e-invoicing portals into an audit-ready tax ledger. It cuts manual book-keeping time by 90% with automated reconciliation.'
+    aso: {
+      keywords: ['a-sổ', 'aso', 'tính năng', 'feature', 'giải pháp', 'archonic'],
+      vi: 'A-Sổ là nền tảng quản trị sổ thuế và tuân thủ doanh thu thế hệ mới của Archonic. A-Sổ kết nối dữ liệu máy POS bán lẻ, tài khoản ngân hàng và hệ thống hóa đơn điện tử thành bộ sổ sách kế toán thuế sẵn sàng thanh tra, giúp hộ kinh doanh và SME tiết kiệm 95% thời gian kế toán.',
+      en: 'A-Sổ is Archonic\'s next-generation tax ledger and revenue compliance platform. It seamlessly connects POS machines, business bank accounts, and e-invoice portals into an audit-ready tax ledger, saving 95% of manual accounting time.'
     },
-    ocr: {
-      keywords: ['ocr', 'visioncore', 'hóa đơn', 'invoice', 'bảo mật', 'security', 'tốc độ'],
-      vi: 'VisionCore là vi dịch vụ OCR biên (Edge OCR) sử dụng mô hình AI xử lý tài liệu cục bộ, tốc độ trích xuất dưới 1.2 giây/hóa đơn. Toàn bộ dữ liệu tài chính nhạy cảm được mã hóa E2EE và xử lý on-premise, không rò rỉ ra ngoài.',
-      en: 'VisionCore is an enterprise Edge OCR microservice delivering sub-1.2s extraction per invoice. All financial data is encrypted end-to-end and processed on edge nodes to prevent cloud leakage.'
+    nd123: {
+      keywords: ['123', 'nghị định', 'hóa đơn', 'invoice', 'đối chiếu', 'e-invoice'],
+      vi: 'A-Sổ đồng bộ trực tiếp với hệ thống hóa đơn điện tử theo Nghị định 123/2020/NĐ-CP. Hệ thống tự động kiểm tra tính hợp lệ của hóa đơn đầu vào/đầu ra, đối chiếu mã cơ quan thuế và khớp với sổ kế toán ngay lập tức.',
+      en: 'A-Sổ synchronizes directly with Decree 123 e-invoicing portals. It automatically verifies input and output e-invoice authenticity, matches tax authority codes, and reconciles entries with your ledgers in real time.'
     },
     demo: {
-      keywords: ['demo', 'giá', 'price', 'liên hệ', 'contact', 'triển khai', 'deploy'],
-      vi: 'Để đặt lịch Demo kỹ thuật hoặc nhận bảng giá giải pháp Archonic Bridge cho chuỗi/doanh nghiệp của bạn, vui lòng bấm nút "Đặt Lịch Demo" hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
-      en: 'To schedule an enterprise technical demo or review pricing models for Archonic Bridge, please click "Request Demo" or contact our hotline directly at 0353600900 (archonic88@gmail.com).'
+      keywords: ['demo', 'giá', 'price', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
+      vi: 'Để đăng ký trải nghiệm A-Sổ hoặc nhận bảng giá giải pháp triển khai cho chuỗi/doanh nghiệp của bạn, vui lòng bấm nút "Trải Nghiệm A-Sổ" hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
+      en: 'To experience A-Sổ or review pricing models for your business/retail chain, please click "Experience A-Sổ" or contact our hotline directly at 0353600900 (archonic88@gmail.com).'
     }
   };
 
   const answerQuestion = (query) => {
     const q = query.toLowerCase();
     let reply = lang === 'vi' 
-      ? 'Cảm ơn bạn đã quan tâm. Hệ thống Archonic cung cấp hạ tầng công nghệ lõi gồm Archonic Bridge (Tuân thủ Thuế), HowDoI (AI Marketing), và VisionCore (Edge OCR). Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn chi tiết.'
-      : 'Thank you for your question. Archonic delivers core enterprise infrastructure: Archonic Bridge (Tax Compliance), HowDoI (AI Growth), and VisionCore (Edge OCR). Please leave your contact details on our Contact page for an enterprise solution architect consult.';
+      ? 'Cảm ơn bạn đã quan tâm. Nền tảng A-Sổ của Archonic chuyên tự động hóa toàn diện 7 loại sổ kế toán Thông tư 88 và đối chiếu hóa đơn điện tử Nghị định 123. Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn triển khai chi tiết.'
+      : 'Thank you for your interest. Archonic\'s A-Sổ platform automates the 7 mandatory Circular 88 ledgers and Decree 123 e-invoice reconciliation. Please leave your details on our Contact page to connect with an A-Sổ solutions specialist.';
 
     for (const item of Object.values(knowledgeBase)) {
       if (item.keywords.some(k => q.includes(k))) {

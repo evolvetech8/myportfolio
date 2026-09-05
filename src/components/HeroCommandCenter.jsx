@@ -24,11 +24,11 @@ export default function HeroCommandCenter() {
     },
     {
       time: '19:24:11',
-      badge: 'VISIONCORE OCR',
+      badge: 'VIETQR AUTO-MATCH',
       color: '#818cf8',
       text: lang === 'vi' 
-        ? 'VisionCore OCR: Trích xuất biên lai nhập hàng kho vận trong 0.84s (Độ khớp 99.8%)' 
-        : 'VisionCore OCR: Processed warehouse receipt in 0.84s (99.8% precision)'
+        ? 'Chuyển khoản VietQR +8.200.000đ → Tự động cân đối Sổ S5-HKD (Tiền gửi ngân hàng)' 
+        : 'VietQR Transaction +8,200,000 VND -> Balanced with Ledger S5 (Bank Deposits)'
     },
     {
       time: '19:24:16',

@@ -1,16 +1,16 @@
 {
   "nav": {
     "home": "Trang Chủ",
-    "about": "Về Chúng Tôi",
+    "about": "Về Archonic",
     "contact": "Liên Hệ",
-    "demo": "Đặt Lịch Demo"
+    "demo": "Trải Nghiệm A-Sổ"
   },
   "hero": {
-    "pre": "HẠ TẦNG ENTERPRISE AI & FINTECH",
-    "title": "Hạ Tầng Tài Chính & AI Doanh Nghiệp Thế Hệ Mới",
-    "subtitle": "Nền tảng SaaS tự động hóa tuân thủ thuế, tiếp thị AI và xử lý tài liệu thông minh cho doanh nghiệp & hộ kinh doanh tại Việt Nam.",
-    "cta": "Đặt Lịch Demo",
-    "cta2": "Khám Phá Giải Pháp"
+    "pre": "NỀN TẢNG SỔ THUẾ & TUÂN THỦ DOANH THU",
+    "title": "A-Sổ — Quản Trị Sổ Thuế & Doanh Thu Chuẩn Thông Tư 88",
+    "subtitle": "Nền tảng tự động hóa toàn diện 7 loại sổ kế toán bắt buộc, đối chiếu hóa đơn điện tử Nghị định 123 và quản trị dòng tiền cho hộ kinh doanh & SME Việt Nam.",
+    "cta": "Trải Nghiệm A-Sổ Ngay",
+    "cta2": "Khám Phá Tính Năng"
   },
   "trust": {
     "badge1": "Chuẩn hoá Thông tư 88/2021/TT-BTC",
@@ -19,74 +19,74 @@
     "badge4": "Hạ tầng Google Cloud Run SLA 99.9%"
   },
   "mockup": {
-    "title": "ARCHONIC COMMAND CENTER — BẢNG ĐIỀU KHIỂN THỜI GIAN THỰC",
-    "status": "HỆ THỐNG ĐANG HOẠT ĐỘNG",
-    "terminalFeed": "Nhật Ký Giao Dịch & Đối Chiếu Thuế Trực Tiếp",
+    "title": "A-SỔ COMMAND CENTER — BẢNG ĐIỀU KHIỂN SỔ THUẾ THỜI GIAN THỰC",
+    "status": "A-SỔ ENGINE RUNNING // ONLINE",
+    "terminalFeed": "Nhật Ký Ghi Sổ Kế Toán & Đối Chiếu Thuế Trực Tiếp",
     "auditReady": "Sẵn Sàng Thanh Tra Thuế",
     "complianceScore": "100% Tuân Thủ TT88",
     "ledgerSync": "Đã Đồng Bộ 7 Loại Sổ Kế Toán",
-    "item1": "POS #04: Doanh thu bán lẻ +1.450.000đ → Tự động ghi Sổ S1-HKD",
-    "item2": "Hóa đơn điện tử #008491 (NĐ 123) → Khớp mã cơ quan thuế hợp lệ",
-    "item3": "VisionCore OCR: Quét biên lai kho vận → Trích xuất trong 0.84s"
+    "item1": "POS #04: Doanh thu bán lẻ +1.450.000đ → Tự động ghi Sổ S1-HKD (Doanh thu)",
+    "item2": "Hóa đơn điện tử #008491 (NĐ 123) → Đối chiếu hợp lệ với Sổ S2-HKD (Hàng hóa)",
+    "item3": "Giao dịch VietQR +8.200.000đ → Tự động cân đối Sổ S5-HKD (Tiền gửi ngân hàng)"
   },
   "products": {
-    "title": "Hệ Sinh Thái Sản Phẩm Cốt Lõi",
-    "bridge": {
-      "name": "Archonic Bridge",
-      "tagline": "Cầu Nối Tuân Thủ Thuế & Doanh Thu",
-      "desc": "Tự động hóa ghi nhận doanh thu và đối chiếu hóa đơn điện tử chuẩn Thông tư 88 & Nghị định 123. Tự động cập nhật 7 loại sổ kế toán bắt buộc.",
-      "tag": "CHUẨN TT88 & NĐ123"
+    "title": "Hệ Thống Tính Năng Cốt Lõi Của A-Sổ",
+    "module1": {
+      "name": "Tự Động Hóa 7 Sổ Kế Toán",
+      "tagline": "Chuẩn Mực Thông tư 88/2021/TT-BTC",
+      "desc": "Tự động lập và cập nhật đầy đủ 7 sổ kế toán bắt buộc: Sổ doanh thu (S1-HKD), Hàng hóa (S2-HKD), Chi phí (S3-HKD), Tiền mặt (S4-HKD), Tiền gửi (S5-HKD), Thuế (S6-HKD), và Lương (S7-HKD). Sẵn sàng thanh tra mọi lúc.",
+      "tag": "7/7 SỔ KẾ TOÁN TT88"
     },
-    "howdoi": {
-      "name": "HowDoI",
-      "tagline": "Tiếp Thị AI & Tự Động Hóa Video",
-      "desc": "Quy trình sản xuất video đa kênh và tự động hóa chiến dịch tăng trưởng bằng trí tuệ nhân tạo. Tối ưu chi phí chuyển đổi khách hàng.",
-      "tag": "AUTO AI PIPELINE"
+    "module2": {
+      "name": "Đối Chiếu Hóa Đơn Điện Tử",
+      "tagline": "Đồng Bộ Trực Tiếp Nghị định 123/2020/NĐ-CP",
+      "desc": "Tự động lấy và đối chiếu hóa đơn điện tử đầu vào & đầu ra từ cơ quan thuế. Xác thực mã tra cứu hợp lệ, liên kết chính xác vào sổ kế toán, triệt tiêu 100% rủi ro phạt thuế.",
+      "tag": "CHUẨN HÓA ĐƠN NĐ123"
     },
-    "visioncore": {
-      "name": "VisionCore",
-      "tagline": "OCR & Trí Tuệ Tài Liệu Biên (Edge OCR)",
-      "desc": "Trích xuất tự động dữ liệu hóa đơn, chứng từ kế toán trong <1.2s. Mô hình AI cục bộ bảo mật cao, không rò rỉ dữ liệu tài chính.",
-      "tag": "EDGE AI SCANNER < 1.2S"
+    "module3": {
+      "name": "Tích Hợp Dòng Tiền & Máy POS",
+      "tagline": "Đồng Bộ Doanh Thu Đa Kênh Tức Thời",
+      "desc": "Cầu nối tự động hút dữ liệu giao dịch từ máy POS bán lẻ, mã thanh toán QR ngân hàng và tài khoản kinh doanh. Tự động ghi sổ quỹ theo thời gian thực mà không cần nhập liệu thủ công.",
+      "tag": "ĐỒNG BỘ DÒNG TIỀN TỰ ĐỘNG"
     }
   },
   "metrics": {
-    "title": "Tiêu Chuẩn Kỹ Thuật Cấp Doanh Nghiệp",
-    "stat1": { "value": "99.9%", "label": "Thời gian hoạt động Cloud Run SLA" },
-    "stat2": { "value": "< 1.2s", "label": "Tốc độ trích xuất hóa đơn Edge OCR" },
+    "title": "Tiêu Chuẩn Kỹ Thuật & Tuân Thủ Của A-Sổ",
+    "stat1": { "value": "7/7", "label": "Sổ kế toán bắt buộc Thông tư 88" },
+    "stat2": { "value": "< 1.2s", "label": "Tốc độ đối chiếu hóa đơn điện tử" },
     "stat3": { "value": "100%", "label": "Chuẩn hóa TT 88 & NĐ 123" },
     "stat4": { "value": "E2EE", "label": "Mã hóa đầu-cuối dữ liệu tài chính" }
   },
   "about": {
     "title": "Về Archonic",
     "mission": "Sứ Mệnh Công Nghệ",
-    "missionText": "Archonic kiến tạo hạ tầng tài chính số và công nghệ tự động hóa chuyên sâu cho thị trường Việt Nam và Đông Nam Á. Chúng tôi cung cấp các giải pháp chuẩn mực doanh nghiệp lớn nhưng tinh gọn và tối ưu chi phí cho hàng triệu SME và hộ kinh doanh.",
+    "missionText": "Archonic kiến tạo hạ tầng tài chính số và công nghệ tự động hóa chuyên sâu cho thị trường Việt Nam và Đông Nam Á. Chúng tôi cung cấp các giải pháp chuẩn mực doanh nghiệp lớn nhưng tinh gọn và tối ưu chi phí cho hàng triệu SME và hộ kinh doanh thông qua giải pháp A-Sổ.",
     "vision": "Tầm Nhìn 2026 - 2030",
-    "visionText": "Định vị Archonic trở thành đơn vị tiên phong trong danh sách Forbes Asia 100 to Watch, cung cấp các nền tảng Fintech và AI tự trị có khả năng tích hợp trực tiếp vào hệ thống quản trị thuế số của khu vực.",
+    "visionText": "Định vị Archonic trở thành đơn vị tiên phong trong danh sách Forbes Asia 100 to Watch, đưa A-Sổ thành giải pháp hạ tầng quản trị sổ thuế số hàng đầu khu vực.",
     "approach": "Kiến Trúc AI-Native & Tự Trị",
-    "approachText": "Archonic là công ty kỹ thuật AI-Native (Autonomous Software Studio). Hệ thống được vận hành trên hạ tầng tự phục hồi (self-healing), kiến trúc microservices bảo mật cao và các pipeline AI kiểm thử tự động, cam kết độ ổn định và tiêu chuẩn dịch vụ (SLA) cao nhất cho khách hàng doanh nghiệp."
+    "approachText": "Archonic là công ty kỹ thuật AI-Native (Autonomous Software Studio). Nền tảng A-Sổ được vận hành trên hạ tầng tự phục hồi (self-healing), kiến trúc microservices bảo mật cao và các pipeline kiểm thử tự động, cam kết độ ổn định và tiêu chuẩn dịch vụ (SLA) cao nhất."
   },
   "contact": {
     "title": "Kết Nối Kỹ Thuật & Hợp Tác",
-    "subtitle": "Sẵn sàng nâng cấp hạ tầng tài chính và tự động hóa doanh nghiệp? Đặt lịch trao đổi kỹ thuật cùng đội ngũ Archonic.",
+    "subtitle": "Sẵn sàng chuẩn hóa sổ sách kế toán thuế cùng A-Sổ? Đặt lịch trao đổi kỹ thuật cùng đội ngũ Archonic.",
     "name": "Họ và Tên",
     "email": "Email Doanh Nghiệp",
-    "message": "Nhu cầu tích hợp (Thuế / AI / OCR)",
+    "message": "Nhu cầu triển khai A-Sổ (Hộ kinh doanh / Chuỗi cửa hàng / SME)",
     "send": "Gửi Yêu Cầu Tư Vấn",
     "phone": "Hotline Hỗ Trợ",
     "emailLabel": "Email Kỹ Thuật"
   },
   "aiAgent": {
-    "badge": "Archonic Sales Engineer AI",
-    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật Archonic. Bạn muốn tìm hiểu về tuân thủ Thông tư 88, Archonic Bridge hay cách tích hợp OCR hóa đơn?",
-    "prompt1": "Thông tư 88 yêu cầu gì với hộ kinh doanh?",
-    "prompt2": "Archonic Bridge hoạt động như thế nào?",
-    "prompt3": "VisionCore OCR xử lý hóa đơn ra sao?",
-    "inputPlaceholder": "Đặt câu hỏi kỹ thuật hoặc pháp lý thuế...",
+    "badge": "Archonic A-Sổ Sales Engineer AI",
+    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật A-Sổ của Archonic. Bạn muốn tìm hiểu cách A-Sổ tự động hóa 7 loại sổ theo Thông tư 88, đối chiếu hóa đơn Nghị định 123 hay bảng giá triển khai?",
+    "prompt1": "A-Sổ hỗ trợ 7 loại sổ nào theo TT 88?",
+    "prompt2": "A-Sổ đối chiếu hóa đơn NĐ 123 ra sao?",
+    "prompt3": "Chi phí và cách bắt đầu dùng A-Sổ?",
+    "inputPlaceholder": "Đặt câu hỏi về A-Sổ hoặc quy định thuế...",
     "send": "Gửi"
   },
   "footer": {
-    "tagline": "Hạ tầng tài chính & AI doanh nghiệp thế hệ mới.",
+    "tagline": "A-Sổ — Hạ tầng quản trị sổ thuế & tuân thủ doanh thu tự động.",
     "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT88 & NĐ123."
   }
 }

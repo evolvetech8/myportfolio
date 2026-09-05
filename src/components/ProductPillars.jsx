@@ -1,5 +1,5 @@
 import { useLanguage } from '../i18n/LanguageContext';
-import { LandmarkIcon, VideoIcon, ScanIcon } from './Icons';
+import { LandmarkIcon, FileTextIcon, LockIcon } from './Icons';
 
 export default function ProductPillars() {
   const { t } = useLanguage();
@@ -9,112 +9,110 @@ export default function ProductPillars() {
       <h2 className="section-title">{t('products.title')}</h2>
       
       <div className="products-grid">
-        {/* Card 1: Archonic Bridge */}
+        {/* Module 1: 7 Sổ Kế Toán TT88 */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
             <div className="product-icon" style={{ color: '#FF7A00' }}>
               <LandmarkIcon size={32} color="#FF7A00" />
             </div>
             <span className="product-pill" style={{ borderColor: 'rgba(255, 122, 0, 0.4)', color: '#FF7A00' }}>
-              {t('products.bridge.tag')}
+              {t('products.module1.tag')}
             </span>
           </div>
           
-          <h3 className="product-name">{t('products.bridge.name')}</h3>
+          <h3 className="product-name">{t('products.module1.name')}</h3>
           <span className="product-tagline" style={{ color: '#FF7A00' }}>
-            {t('products.bridge.tagline')}
+            {t('products.module1.tagline')}
           </span>
-          <p className="product-desc">{t('products.bridge.desc')}</p>
+          <p className="product-desc">{t('products.module1.desc')}</p>
 
-          {/* Micro-UI Preview: Ledger Reconciliation */}
+          {/* Micro-UI: 7 Ledgers Breakdown */}
           <div className="product-micro-ui">
             <div className="micro-header">
               <span className="micro-dot-green"></span>
-              <span>Hóa Đơn Điện Tử ➔ Sổ S1-HKD</span>
+              <span>7 Sổ Kế Toán TT88 (S1-S7) Tự Động</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">HĐĐT #004928</span>
-              <span className="micro-data-val">2.850.000đ</span>
-              <span className="micro-status-tag">ĐÃ ĐỐI CHIẾU</span>
+              <span className="micro-data-key">Sổ Doanh Thu (S1)</span>
+              <span className="micro-data-val">Tự động kết chuyển</span>
+              <span className="micro-status-tag">HOÀN TẤT</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">Sổ Quỹ Tiền Mặt</span>
-              <span className="micro-data-val">Khớp 100%</span>
+              <span className="micro-data-key">Sổ Hàng Hóa & CP (S2, S3)</span>
+              <span className="micro-data-val">Khớp 100% hóa đơn</span>
               <span className="micro-status-tag">TT88 HỢP LỆ</span>
             </div>
           </div>
         </div>
 
-        {/* Card 2: HowDoI */}
+        {/* Module 2: Đối Chiếu Hóa Đơn NĐ123 */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#818cf8' }}>
-              <VideoIcon size={32} color="#818cf8" />
+            <div className="product-icon" style={{ color: '#FF7A00' }}>
+              <FileTextIcon size={32} color="#FF7A00" />
             </div>
-            <span className="product-pill" style={{ borderColor: 'rgba(129, 140, 248, 0.4)', color: '#818cf8' }}>
-              {t('products.howdoi.tag')}
+            <span className="product-pill" style={{ borderColor: 'rgba(255, 122, 0, 0.4)', color: '#FF7A00' }}>
+              {t('products.module2.tag')}
             </span>
           </div>
 
-          <h3 className="product-name">{t('products.howdoi.name')}</h3>
-          <span className="product-tagline" style={{ color: '#818cf8' }}>
-            {t('products.howdoi.tagline')}
+          <h3 className="product-name">{t('products.module2.name')}</h3>
+          <span className="product-tagline" style={{ color: '#FF7A00' }}>
+            {t('products.module2.tagline')}
           </span>
-          <p className="product-desc">{t('products.howdoi.desc')}</p>
+          <p className="product-desc">{t('products.module2.desc')}</p>
 
-          {/* Micro-UI Preview: AI Video Pipeline */}
+          {/* Micro-UI: E-Invoice Matching */}
           <div className="product-micro-ui">
             <div className="micro-header">
-              <span className="micro-dot-purple"></span>
-              <span>AI Multi-Channel Rendering Engine</span>
+              <span className="micro-dot-green"></span>
+              <span>Đồng Bộ Cổng Hóa Đơn Tổng Cục Thuế</span>
             </div>
-            <div className="micro-progress-container">
-              <div className="micro-progress-label">
-                <span>Prompt to 4K Video Pipeline</span>
-                <span style={{ color: '#818cf8' }}>Active (100%)</span>
-              </div>
-              <div className="micro-bar"><div className="micro-bar-fill-purple"></div></div>
+            <div className="micro-data-row">
+              <span className="micro-data-key">HĐĐT Đầu Vào/Ra</span>
+              <span className="micro-data-val">Tự động đối chiếu</span>
+              <span className="micro-status-tag">NĐ 123 CHUẨN</span>
             </div>
-            <div className="micro-tags-row">
-              <span>#TikTok</span>
-              <span>#Reels</span>
-              <span>#YouTubeShorts</span>
-              <span className="micro-tag-auto">AUTO-POST</span>
+            <div className="micro-data-row">
+              <span className="micro-data-key">Mã Cơ Quan Thuế</span>
+              <span className="micro-data-val">Xác thực tức thời</span>
+              <span className="micro-status-tag">KHÔNG LỖI</span>
             </div>
           </div>
         </div>
 
-        {/* Card 3: VisionCore */}
+        {/* Module 3: Tích Hợp Dòng Tiền & POS */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#34d399' }}>
-              <ScanIcon size={32} color="#34d399" />
+            <div className="product-icon" style={{ color: '#FF7A00' }}>
+              <LockIcon size={32} color="#FF7A00" />
             </div>
-            <span className="product-pill" style={{ borderColor: 'rgba(52, 211, 153, 0.4)', color: '#34d399' }}>
-              {t('products.visioncore.tag')}
+            <span className="product-pill" style={{ borderColor: 'rgba(255, 122, 0, 0.4)', color: '#FF7A00' }}>
+              {t('products.module3.tag')}
             </span>
           </div>
 
-          <h3 className="product-name">{t('products.visioncore.name')}</h3>
-          <span className="product-tagline" style={{ color: '#34d399' }}>
-            {t('products.visioncore.tagline')}
+          <h3 className="product-name">{t('products.module3.name')}</h3>
+          <span className="product-tagline" style={{ color: '#FF7A00' }}>
+            {t('products.module3.tagline')}
           </span>
-          <p className="product-desc">{t('products.visioncore.desc')}</p>
+          <p className="product-desc">{t('products.module3.desc')}</p>
 
-          {/* Micro-UI Preview: Laser Scanning Beam */}
-          <div className="product-micro-ui micro-scanner-card">
-            <div className="micro-scanner-beam"></div>
+          {/* Micro-UI: Cashflow & POS Bridge */}
+          <div className="product-micro-ui">
             <div className="micro-header">
               <span className="micro-dot-green"></span>
-              <span>VisionCore Edge OCR Engine (Air-Gapped)</span>
+              <span>Cầu Nối POS & Chuyển Khoản Ngân Hàng</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">Thời gian trích xuất:</span>
-              <span className="micro-data-val" style={{ color: '#34d399', fontWeight: 800 }}>0.82 giây</span>
+              <span className="micro-data-key">Thiết Bị POS / VietQR</span>
+              <span className="micro-data-val">Ghi nhận thời gian thực</span>
+              <span className="micro-status-tag">E2EE AN TOÀN</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">Độ chính xác OCR:</span>
-              <span className="micro-data-val" style={{ color: '#34d399', fontWeight: 800 }}>99.82%</span>
+              <span className="micro-data-key">Sổ Quỹ Tiền Mặt (S4)</span>
+              <span className="micro-data-val">Khớp dòng tiền 100%</span>
+              <span className="micro-status-tag">SẴN SÀNG</span>
             </div>
           </div>
         </div>
