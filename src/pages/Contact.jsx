@@ -27,11 +27,11 @@ export default function Contact() {
 
         <div className="contact-info glass-panel">
           <h3>{t('contact.phone')}</h3>
-          <p style={{ color: 'var(--nano-banana)', fontSize: '24px', fontWeight: 'bold' }}>0353600900</p>
+          <p style={{ color: 'var(--archonic-orange)', fontSize: '24px', fontWeight: 'bold' }}>0353600900</p>
           <h3>{t('contact.emailLabel')}</h3>
-          <p style={{ color: 'var(--nano-banana)', fontSize: '18px' }}>evolvetech8@gmail.com</p>
+          <p style={{ color: 'var(--archonic-amber)', fontSize: '18px' }}>evolvetech8@gmail.com</p>
           <h3>Website</h3>
-          <p style={{ color: 'var(--nano-banana)', fontSize: '18px' }}>evolvetech.biz.vn</p>
+          <p style={{ color: 'var(--archonic-amber)', fontSize: '18px' }}>evolvetech.biz.vn</p>
         </div>
       </div>
     </section>

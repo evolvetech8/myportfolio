@@ -8,20 +8,36 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <span className="footer-logo">EVOLVETECH</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            <img 
+              src="/logo.png" 
+              alt="Archonic Logo" 
+              style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+            />
+            <span style={{ 
+              fontSize: '20px', 
+              fontWeight: 900, 
+              letterSpacing: '1px',
+              background: 'linear-gradient(135deg, #FFA100 0%, #FF6D00 60%, #EA391B 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
+              ARCHONIC
+            </span>
+          </div>
           <p className="footer-tagline">{t('footer.tagline')}</p>
         </div>
         <div className="footer-contact">
           <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <PhoneIcon size={14} color="#FFE135" />
+            <PhoneIcon size={14} color="#FF7A00" />
             <span>0353600900</span>
           </p>
           <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <MailIcon size={14} color="#FFE135" />
+            <MailIcon size={14} color="#FF7A00" />
             <span>evolvetech8@gmail.com</span>
           </p>
           <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <GlobeIcon size={14} color="#FFE135" />
+            <GlobeIcon size={14} color="#FF7A00" />
             <span>evolvetech.biz.vn</span>
           </p>
         </div>

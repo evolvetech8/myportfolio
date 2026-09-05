@@ -12,16 +12,16 @@ export default function ProductPillars() {
         {/* Card 1: Archonic Bridge */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#FFE135' }}>
-              <LandmarkIcon size={32} color="#FFE135" />
+            <div className="product-icon" style={{ color: '#FF7A00' }}>
+              <LandmarkIcon size={32} color="#FF7A00" />
             </div>
-            <span className="product-pill" style={{ borderColor: 'rgba(255, 225, 53, 0.4)', color: '#FFE135' }}>
+            <span className="product-pill" style={{ borderColor: 'rgba(255, 122, 0, 0.4)', color: '#FF7A00' }}>
               {t('products.bridge.tag')}
             </span>
           </div>
           
           <h3 className="product-name">{t('products.bridge.name')}</h3>
-          <span className="product-tagline" style={{ color: '#FFE135' }}>
+          <span className="product-tagline" style={{ color: '#FF7A00' }}>
             {t('products.bridge.tagline')}
           </span>
           <p className="product-desc">{t('products.bridge.desc')}</p>

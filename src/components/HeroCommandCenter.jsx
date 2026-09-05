@@ -9,7 +9,7 @@ export default function HeroCommandCenter() {
     {
       time: '19:24:02',
       badge: 'POS AUTO-INGEST',
-      color: '#FFE135',
+      color: '#FF7A00',
       text: lang === 'vi' 
         ? 'POS #04: Doanh thu bán lẻ +1.450.000đ → Tự động ghi Sổ S1-HKD (Doanh thu)' 
         : 'POS Terminal #04: +1,450,000 VND logged into Ledger S1 (Revenue)'

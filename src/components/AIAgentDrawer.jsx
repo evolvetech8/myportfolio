@@ -108,7 +108,7 @@ export default function AIAgentDrawer() {
         aria-label="Toggle AI Agent"
       >
         <span className="ai-agent-fab-pulse"></span>
-        <span className="ai-agent-fab-icon"><SparklesIcon size={15} color="#FFE135" /></span>
+        <span className="ai-agent-fab-icon"><SparklesIcon size={15} color="#FF7A00" /></span>
         <span className="ai-agent-fab-text">Vertex AI Sales Eng</span>
       </button>
 
