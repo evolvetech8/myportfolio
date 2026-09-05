@@ -9,7 +9,14 @@ import {
   FileTextIcon, 
   LockIcon, 
   DownloadIcon,
-  CloseIcon
+  CloseIcon,
+  MessageSquareIcon,
+  SmartphoneIcon,
+  ZapIcon,
+  SlashCircleIcon,
+  RefreshCwIcon,
+  ArrowRightIcon,
+  CheckIcon
 } from '../components/Icons';
 import VietQRCheckoutModal from '../components/VietQRCheckoutModal';
 
@@ -111,7 +118,7 @@ export default function TrialMVP() {
     setTransactions((prev) => [newTx, ...prev]);
     setS1Ledger((prev) => [newLedgerRow, ...prev]);
     
-    // Only increase taxable revenue if row is taxable!
+    // Only increase taxable revenue if row is taxable
     if (isTaxable) {
       setRevenue((prev) => prev + amount);
     }
@@ -120,8 +127,8 @@ export default function TrialMVP() {
     setJustIngested(true);
     setActiveToast({
       title: isTaxable
-        ? `⚡ Nhận biến động số dư VietQR: +${formattedAmount}đ!`
-        : `🛡️ Phát hiện dòng tiền nội bộ: +${formattedAmount}đ (Không tính thuế)!`,
+        ? `Nhận biến động số dư VietQR: +${formattedAmount}đ`
+        : `Phát hiện dòng tiền nội bộ: +${formattedAmount}đ (Không tính thuế)`,
       sub: isTaxable
         ? `Tự động đối soát ngân hàng & ghi vào Sổ Doanh Thu (S1-HKD).`
         : `A-Sổ đã loại trừ khoản này khỏi doanh thu chịu thuế để bảo vệ bạn.`
@@ -132,7 +139,6 @@ export default function TrialMVP() {
   };
 
   // INLINE MANUAL OVERRIDE (Vulnerability #1 Fix)
-  // Allows the shop owner to toggle any row between Taxable Retail Sales and Non-Taxable Internal Transfer
   const handleToggleRowTaxable = (rowId) => {
     setS1Ledger((prev) => {
       let diff = 0;
@@ -157,7 +163,7 @@ export default function TrialMVP() {
     });
 
     setActiveToast({
-      title: '✓ Đã cập nhật trạng thái phân loại sổ S1',
+      title: 'Đã cập nhật trạng thái phân loại sổ S1',
       sub: 'Số tiền thuế đã được tính toán lại chính xác theo lựa chọn của bạn.'
     });
     setTimeout(() => setActiveToast(null), 3500);
@@ -169,7 +175,7 @@ export default function TrialMVP() {
     if (honeypot) return; // Silent discard for automated bot submissions
 
     if (otpAttempts >= 3) {
-      alert('⚠️ Bạn đã yêu cầu gửi mã quá 3 lần trong phiên này. Vui lòng chờ 10 phút hoặc liên hệ hotline để chống spam OTP.');
+      alert('Thông báo: Bạn đã yêu cầu gửi mã quá 3 lần trong phiên này. Vui lòng chờ 10 phút hoặc liên hệ hotline để bảo vệ OTP.');
       return;
     }
 
@@ -182,7 +188,7 @@ export default function TrialMVP() {
       setCooldown(60); // 60s cooldown
       setAuthStep('otp');
       setActiveToast({
-        title: otpChannel === 'zalo' ? '💬 Đã gửi mã qua Zalo ZNS!' : '📱 Đã gửi mã qua SMS!',
+        title: otpChannel === 'zalo' ? 'Đã gửi mã qua Zalo ZNS' : 'Đã gửi mã qua SMS',
         sub: `Mã OTP đã được gửi tới số: ${phone} (Kênh: ${otpChannel === 'zalo' ? 'Zalo ZNS bảo mật' : 'SMS Brandname'})`
       });
       setTimeout(() => setActiveToast(null), 4000);
@@ -192,13 +198,13 @@ export default function TrialMVP() {
   const handleResendOtp = () => {
     if (cooldown > 0) return;
     if (otpAttempts >= 3) {
-      alert('⚠️ Đã đạt giới hạn 3 lần gửi mã trong 10 phút.');
+      alert('Thông báo: Đã đạt giới hạn 3 lần gửi mã trong 10 phút.');
       return;
     }
     setOtpAttempts((prev) => prev + 1);
     setCooldown(60);
     setActiveToast({
-      title: '✓ Đã gửi lại mã OTP mới',
+      title: 'Đã gửi lại mã OTP mới',
       sub: `Kiểm tra thông báo trên ứng dụng Zalo hoặc tin nhắn SMS của bạn.`
     });
     setTimeout(() => setActiveToast(null), 3500);
@@ -305,7 +311,7 @@ export default function TrialMVP() {
                         className={`channel-pill-btn ${otpChannel === 'zalo' ? 'active' : ''}`}
                         onClick={() => setOtpChannel('zalo')}
                       >
-                        <span className="channel-icon">💬</span>
+                        <MessageSquareIcon size={18} color="#FFA100" />
                         <div className="channel-text">
                           <strong>Zalo ZNS</strong>
                           <span>Khuyên dùng • Nhanh 2s</span>
@@ -316,7 +322,7 @@ export default function TrialMVP() {
                         className={`channel-pill-btn ${otpChannel === 'sms' ? 'active' : ''}`}
                         onClick={() => setOtpChannel('sms')}
                       >
-                        <span className="channel-icon">📱</span>
+                        <SmartphoneIcon size={18} color="#FFA100" />
                         <div className="channel-text">
                           <strong>SMS Tin Nhắn</strong>
                           <span>Mạng viễn thông</span>
@@ -345,12 +351,12 @@ export default function TrialMVP() {
                     className="nano-button auth-submit-btn"
                     disabled={cooldown > 0 || otpAttempts >= 3}
                   >
-                    <span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                       {cooldown > 0 
                         ? `Vui lòng chờ ${cooldown}s...` 
                         : otpAttempts >= 3 
                         ? 'Đã đạt giới hạn gửi mã' 
-                        : 'Nhận Mã OTP & Tiếp Tục ➔'}
+                        : <><span>Nhận Mã OTP & Tiếp Tục</span><ArrowRightIcon size={14} /></>}
                     </span>
                   </button>
 
@@ -387,7 +393,10 @@ export default function TrialMVP() {
                   </div>
 
                   <button type="submit" className="nano-button auth-submit-btn">
-                    <span>Xác Nhận & Vào Dashboard Ngay ➔</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <span>Xác Nhận & Vào Dashboard Ngay</span>
+                      <ArrowRightIcon size={14} />
+                    </span>
                   </button>
 
                   <div className="otp-actions-row">
@@ -404,7 +413,7 @@ export default function TrialMVP() {
                       className="auth-back-btn"
                       onClick={() => setAuthStep('phone')}
                     >
-                      ← Đổi số điện thoại khác
+                      Đổi số điện thoại khác
                     </button>
                   </div>
                 </form>
@@ -422,7 +431,7 @@ export default function TrialMVP() {
               <LandmarkIcon size={48} color="#FFA100" />
             </div>
             <span className="welcome-step-chip">BƯỚC 1 / 2: KHỞI TẠO DÒNG TIỀN</span>
-            <h2 className="welcome-title">Chào Mừng Bạn Đến Với A-Sổ! 🚀</h2>
+            <h2 className="welcome-title">Chào Mừng Bạn Đến Với A-Sổ</h2>
             <p className="welcome-desc">
               Để phần mềm bắt đầu tự động hóa 7 loại sổ kế toán Thông tư 88 và đối chiếu doanh thu thời gian thực, 
               hãy kết nối tài khoản ngân hàng nhận tiền quét mã VietQR tại quầy của bạn.
@@ -490,7 +499,7 @@ export default function TrialMVP() {
                     <div className="acc-val-with-copy">
                       <strong className="acc-val mono">{bankDetails.accountNumber}</strong>
                       <button type="button" onClick={copyAccountNumber} className="copy-btn-mini">
-                        {copiedAccount ? '✓ Đã chép' : 'Chép'}
+                        {copiedAccount ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><CheckIcon size={10} color="currentColor" /> Đã chép</span> : 'Chép'}
                       </button>
                     </div>
                   </div>
@@ -536,7 +545,7 @@ export default function TrialMVP() {
                     className={`magic-btn-fire ${justIngested ? 'magic-pulsing' : ''}`}
                     onClick={() => triggerVietQRTransaction(150000, 'Khách thanh toán 3 ly cà phê')}
                   >
-                    <span className="magic-btn-icon">⚡</span>
+                    <ZapIcon size={15} color="#ffffff" />
                     <span>1. Bán Lẻ: +150.000đ (Vào Sổ S1)</span>
                   </button>
 
@@ -546,7 +555,7 @@ export default function TrialMVP() {
                     onClick={() => triggerVietQRTransaction(5000000, 'Nộp tiền cá nhân sửa chữa quán cà phê')}
                     title="A-Sổ tự động nhận diện từ khóa 'sửa chữa' để không tính thuế oan cho bạn"
                   >
-                    <span className="magic-btn-icon">🛡️</span>
+                    <ShieldIcon size={15} color="#38bdf8" />
                     <span>2. Chuyển Nội Bộ: +5.000.000đ (Miễn Thuế)</span>
                   </button>
 
@@ -555,6 +564,7 @@ export default function TrialMVP() {
                     className="magic-btn-fire secondary"
                     onClick={() => triggerVietQRTransaction(2500000, 'Bàn tiệc sinh nhật #08')}
                   >
+                    <ZapIcon size={15} color="#FFA100" />
                     <span>3. Bán Lẻ Lớn: +2.500.000đ</span>
                   </button>
                 </div>
@@ -644,7 +654,7 @@ export default function TrialMVP() {
                       {s1Ledger.length === 0 ? (
                         <tr>
                           <td colSpan={7} className="empty-ledger-cell">
-                            <span>⚡ Chưa có giao dịch nào. Bấm nút <strong>"Thử Quét VietQR"</strong> bên trái để xem sổ tự động ghi dữ liệu!</span>
+                            <span>Chưa có giao dịch nào. Bấm nút <strong>"Thử Quét VietQR"</strong> bên trái để xem sổ tự động ghi dữ liệu!</span>
                           </td>
                         </tr>
                       ) : (
@@ -678,7 +688,14 @@ export default function TrialMVP() {
                             </td>
                             <td>
                               <span className={`status-verified-pill ${!row.isTaxable ? 'pill-exempt' : ''}`}>
-                                {row.isTaxable ? `✓ ${row.taxStatus}` : 'Miễn tính thuế'}
+                                {row.isTaxable ? (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    <CheckIcon size={11} color="#4ade80" />
+                                    <span>{row.taxStatus}</span>
+                                  </span>
+                                ) : (
+                                  'Miễn tính thuế'
+                                )}
                               </span>
                             </td>
                             <td className="text-center">
@@ -689,7 +706,17 @@ export default function TrialMVP() {
                                 onClick={() => handleToggleRowTaxable(row.id)}
                                 title={row.isTaxable ? 'Bỏ qua dòng này (Không phải doanh thu chịu thuế)' : 'Khôi phục tính thuế cho dòng này'}
                               >
-                                {row.isTaxable ? '🚫 Bỏ qua (Nội bộ)' : '↩ Khôi phục tính thuế'}
+                                {row.isTaxable ? (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    <SlashCircleIcon size={12} color="currentColor" />
+                                    <span>Bỏ qua (Nội bộ)</span>
+                                  </span>
+                                ) : (
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    <RefreshCwIcon size={12} color="currentColor" />
+                                    <span>Khôi phục tính thuế</span>
+                                  </span>
+                                )}
                               </button>
                             </td>
                           </tr>
@@ -704,7 +731,10 @@ export default function TrialMVP() {
                             {new Intl.NumberFormat('vi-VN').format(revenue)}đ
                           </td>
                           <td colSpan={2} className="total-status">
-                            ✓ {s1Ledger.filter(r => !r.isTaxable).length > 0 ? `Đã trừ ${s1Ledger.filter(r => !r.isTaxable).length} dòng nội bộ` : '100% Cân Đối Chuẩn TT88'}
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                              <CheckIcon size={12} color="#4ade80" />
+                              <span>{s1Ledger.filter(r => !r.isTaxable).length > 0 ? `Đã trừ ${s1Ledger.filter(r => !r.isTaxable).length} dòng nội bộ` : '100% Cân Đối Chuẩn TT88'}</span>
+                            </span>
                           </td>
                         </tr>
                       </tfoot>
@@ -795,7 +825,10 @@ export default function TrialMVP() {
               </div>
 
               <button type="submit" className="nano-button modal-submit-btn">
-                <span>Tạo Mã VietQR & Kết Nối Sổ S1 Ngay ➔</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                  <span>Tạo Mã VietQR & Kết Nối Sổ S1 Ngay</span>
+                  <ArrowRightIcon size={14} />
+                </span>
               </button>
             </form>
           </div>
@@ -858,7 +891,10 @@ export default function TrialMVP() {
                     setShowCheckoutModal(true);
                   }}
                 >
-                  <span>Nâng Cấp Gói Tự Động 249k/tháng (Quét VietQR) ➔</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Nâng Cấp Gói Tự Động 249k/tháng (Quét VietQR)</span>
+                    <ArrowRightIcon size={14} />
+                  </span>
                 </button>
                 <button 
                   type="button" 

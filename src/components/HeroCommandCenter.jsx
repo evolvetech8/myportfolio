@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { ShoppingCartIcon, FileTextIcon, QrCodeIcon, LandmarkIcon, DownloadIcon, CheckCircleIcon, SparklesIcon, ShieldIcon } from './Icons';
+import { ShoppingCartIcon, FileTextIcon, QrCodeIcon, LandmarkIcon, DownloadIcon, CheckCircleIcon, SparklesIcon, ShieldIcon, ZapIcon, TrafficLightIcon, BookOpenIcon, CheckIcon } from './Icons';
 
 export default function HeroCommandCenter() {
   const { t } = useLanguage();
@@ -138,7 +138,7 @@ export default function HeroCommandCenter() {
           className={`hcc-tab-btn ${activeTab === 'feed' ? 'active' : ''}`}
           onClick={() => setActiveTab('feed')}
         >
-          <span className="tab-icon">⚡</span>
+          <ZapIcon size={14} color="#FFA100" />
           <span>Nhật Ký Tự Động ({allFeeds.length})</span>
         </button>
         <button
@@ -146,7 +146,7 @@ export default function HeroCommandCenter() {
           className={`hcc-tab-btn ${activeTab === 'traffic' ? 'active' : ''}`}
           onClick={() => setActiveTab('traffic')}
         >
-          <span className="tab-icon">🚦</span>
+          <TrafficLightIcon size={14} color="#4ade80" />
           <span>Cảnh Báo Đèn Giao Thông</span>
         </button>
         <button
@@ -154,7 +154,7 @@ export default function HeroCommandCenter() {
           className={`hcc-tab-btn ${activeTab === 'ledgers' ? 'active' : ''}`}
           onClick={() => setActiveTab('ledgers')}
         >
-          <span className="tab-icon">📑</span>
+          <BookOpenIcon size={14} color="#38bdf8" />
           <span>7 Sổ Kế Toán TT88</span>
         </button>
 
@@ -166,7 +166,7 @@ export default function HeroCommandCenter() {
           title="Bấm để tạo một giao dịch thử nghiệm và xem A-Sổ tự động ghi vào sổ sách"
         >
           <SparklesIcon size={14} color="#FFA100" />
-          <span>{justSimulated ? '⚡ ĐÃ TỰ ĐỘNG GHI VÀO SỔ!' : '+ Thử Tạo 1 Giao Dịch VietQR'}</span>
+          <span>{justSimulated ? 'ĐÃ TỰ ĐỘNG GHI VÀO SỔ' : '+ Thử Tạo 1 Giao Dịch VietQR'}</span>
         </button>
       </div>
 
@@ -372,21 +372,21 @@ export default function HeroCommandCenter() {
                     <td>POS-0482</td>
                     <td>Doanh thu bán lẻ quầy thu ngân ca chiều</td>
                     <td className="amount-col">+1.450.000</td>
-                    <td><span className="verified-pill">✓ Đã ghi sổ tự động</span></td>
+                    <td><span className="verified-pill"><CheckIcon size={11} color="#4ade80" /> Đã ghi sổ tự động</span></td>
                   </tr>
                   <tr>
                     <td>05/09/2026</td>
                     <td>VQR-9912</td>
                     <td>Thanh toán hóa đơn qua mã VietQR Techcombank</td>
                     <td className="amount-col">+8.200.000</td>
-                    <td><span className="verified-pill">✓ Khớp số dư ngân hàng</span></td>
+                    <td><span className="verified-pill"><CheckIcon size={11} color="#4ade80" /> Khớp số dư ngân hàng</span></td>
                   </tr>
                   <tr>
                     <td>04/09/2026</td>
                     <td>HĐĐT-008491</td>
                     <td>Nhập nguyên vật liệu làm bánh (Nghị định 123)</td>
                     <td className="amount-col">-3.120.000</td>
-                    <td><span className="verified-pill">✓ Khớp mã Tổng cục Thuế</span></td>
+                    <td><span className="verified-pill"><CheckIcon size={11} color="#4ade80" /> Khớp mã Tổng cục Thuế</span></td>
                   </tr>
                 </tbody>
               </table>
