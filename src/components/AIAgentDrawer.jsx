@@ -51,8 +51,8 @@ export default function AIAgentDrawer() {
     },
     demo: {
       keywords: ['demo', 'giá', 'price', 'liên hệ', 'contact', 'triển khai', 'deploy'],
-      vi: 'Để đặt lịch Demo kỹ thuật hoặc nhận bảng giá giải pháp Archonic Bridge cho chuỗi/doanh nghiệp của bạn, vui lòng bấm nút "Đặt Lịch Demo" hoặc liên hệ Hotline: 0353600900 (Email: evolvetech8@gmail.com).',
-      en: 'To schedule an enterprise technical demo or review pricing models for Archonic Bridge, please click "Request Demo" or contact our hotline directly at 0353600900 (evolvetech8@gmail.com).'
+      vi: 'Để đặt lịch Demo kỹ thuật hoặc nhận bảng giá giải pháp Archonic Bridge cho chuỗi/doanh nghiệp của bạn, vui lòng bấm nút "Đặt Lịch Demo" hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
+      en: 'To schedule an enterprise technical demo or review pricing models for Archonic Bridge, please click "Request Demo" or contact our hotline directly at 0353600900 (archonic88@gmail.com).'
     }
   };
 

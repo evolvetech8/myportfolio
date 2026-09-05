@@ -34,7 +34,7 @@ export default function Footer() {
           </p>
           <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <MailIcon size={14} color="#FF7A00" />
-            <span>evolvetech8@gmail.com</span>
+            <span>archonic88@gmail.com</span>
           </p>
           <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <GlobeIcon size={14} color="#FF7A00" />

@@ -29,7 +29,7 @@ export default function Contact() {
           <h3>{t('contact.phone')}</h3>
           <p style={{ color: 'var(--archonic-orange)', fontSize: '24px', fontWeight: 'bold' }}>0353600900</p>
           <h3>{t('contact.emailLabel')}</h3>
-          <p style={{ color: 'var(--archonic-amber)', fontSize: '18px' }}>evolvetech8@gmail.com</p>
+          <p style={{ color: 'var(--archonic-amber)', fontSize: '18px' }}>archonic88@gmail.com</p>
           <h3>Website</h3>
           <p style={{ color: 'var(--archonic-amber)', fontSize: '18px' }}>evolvetech.biz.vn</p>
         </div>
