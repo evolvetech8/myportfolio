@@ -17,10 +17,14 @@ export default function TrialMVP() {
   const { lang } = useLanguage();
   const isEn = lang === 'en';
 
-  // Phase 1: Authentication State
+  // Phase 1: Authentication State with SMS OTP Burn Rate Protection & Zalo ZNS
   const [authStep, setAuthStep] = useState('phone'); // 'phone' | 'otp' | 'ready'
   const [phone, setPhone] = useState('0988123456');
+  const [otpChannel, setOtpChannel] = useState('zalo'); // 'zalo' (ZNS) | 'sms'
   const [otp, setOtp] = useState(['1', '2', '3', '4', '5', '6']);
+  const [cooldown, setCooldown] = useState(0);
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [honeypot, setHoneypot] = useState('');
 
   // Phase 1: Bank Connection State
   const [isBankConnected, setIsBankConnected] = useState(false);
@@ -33,7 +37,7 @@ export default function TrialMVP() {
     storeName: 'Tiệm Cà Phê & Bánh Mộc'
   });
 
-  // Phase 2 & 3: Live Ingestion & Ledger State
+  // Phase 2 & 3: Live Ingestion & S1-HKD Ledger State with Manual Override
   const [revenue, setRevenue] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [s1Ledger, setS1Ledger] = useState([]);
@@ -44,6 +48,15 @@ export default function TrialMVP() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState(false);
+
+  // Cooldown countdown timer for OTP rate limiting
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setInterval(() => setCooldown((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   const topBanks = [
     { code: 'MB', name: 'MBBank (Ngân Hàng Quân Đội)' },
@@ -56,10 +69,17 @@ export default function TrialMVP() {
     { code: 'STB', name: 'Sacombank (Sài Gòn Thương Tín)' }
   ];
 
-  // Helper to trigger the "Magic Trick" (real-time ingestion)
+  // Helper to trigger the "Magic Trick" (real-time ingestion) with Smart Internal Detection
   const triggerVietQRTransaction = (amount = 150000, note = 'Khách thanh toán đồ uống tại quầy') => {
     const txId = `VQR-${Date.now().toString().slice(-6)}`;
     const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
+
+    // Smart keyword detection for internal transfers / non-sales money
+    const lowerNote = note.toLowerCase();
+    const isInternalKeyword = /(noi bo|chuyen khoan noi bo|rut tien|nop tien|vay|tra no|hoan tien|sua chua|von chu so huu|nap tien|chuyen tien cho)/.test(lowerNote);
+
+    const isRetailAuto = amount < 20000000 && !isInternalKeyword;
+    const isTaxable = isRetailAuto;
 
     const newTx = {
       id: txId,
@@ -72,41 +92,116 @@ export default function TrialMVP() {
       gateway: 'Napas 247 VietQR'
     };
 
-    // Phase 3: Automated categorization trigger (< 20M VND -> Retail Sales S1-HKD)
-    const isRetailAuto = amount < 20000000;
     const newLedgerRow = {
       id: `S1-${Date.now().toString().slice(-6)}`,
+      rawAmount: amount,
       date: new Date().toLocaleDateString('vi-VN'),
       voucherNo: txId,
       description: `${note} — ${bankDetails.storeName}`,
-      category: isRetailAuto ? 'Bán lẻ' : 'Cần kiểm tra HĐĐT',
-      retailRevenue: isRetailAuto ? amount : 0,
-      formattedRetail: isRetailAuto ? `${formattedAmount}đ` : '0đ',
-      taxStatus: isRetailAuto ? 'Khớp 100% CQT' : 'Cần HĐĐT NĐ123',
+      category: isTaxable ? 'Bán lẻ' : 'Dòng tiền nội bộ (Bỏ qua)',
+      isTaxable: isTaxable,
+      overrideReason: isInternalKeyword ? 'Phát hiện từ khóa dòng tiền nội bộ (Không tính thuế)' : null,
+      retailRevenue: isTaxable ? amount : 0,
+      formattedRetail: isTaxable ? `${formattedAmount}đ` : '0đ',
+      taxStatus: isTaxable ? 'Khớp 100% CQT' : 'Miễn thuế',
       standard: 'TT88/2021/TT-BTC'
     };
 
-    // Update state synchronously to simulate real-time Supabase Realtime subscription
+    // Update transactions & ledger
     setTransactions((prev) => [newTx, ...prev]);
     setS1Ledger((prev) => [newLedgerRow, ...prev]);
-    setRevenue((prev) => prev + amount);
+    
+    // Only increase taxable revenue if row is taxable!
+    if (isTaxable) {
+      setRevenue((prev) => prev + amount);
+    }
 
-    // Audio / Visual Haptic Chime
+    // Audio / Visual Haptic Feedback
     setJustIngested(true);
     setActiveToast({
-      title: `⚡ Nhận biến động số dư VietQR: +${formattedAmount}đ!`,
-      sub: `Tự động đối soát ngân hàng & ghi vào Sổ Doanh Thu (S1-HKD).`
+      title: isTaxable
+        ? `⚡ Nhận biến động số dư VietQR: +${formattedAmount}đ!`
+        : `🛡️ Phát hiện dòng tiền nội bộ: +${formattedAmount}đ (Không tính thuế)!`,
+      sub: isTaxable
+        ? `Tự động đối soát ngân hàng & ghi vào Sổ Doanh Thu (S1-HKD).`
+        : `A-Sổ đã loại trừ khoản này khỏi doanh thu chịu thuế để bảo vệ bạn.`
     });
 
     setTimeout(() => setJustIngested(false), 2400);
     setTimeout(() => setActiveToast(null), 4500);
   };
 
+  // INLINE MANUAL OVERRIDE (Vulnerability #1 Fix)
+  // Allows the shop owner to toggle any row between Taxable Retail Sales and Non-Taxable Internal Transfer
+  const handleToggleRowTaxable = (rowId) => {
+    setS1Ledger((prev) => {
+      let diff = 0;
+      const updated = prev.map((row) => {
+        if (row.id === rowId) {
+          const nextTaxable = !row.isTaxable;
+          diff = nextTaxable ? row.rawAmount : -row.rawAmount;
+          return {
+            ...row,
+            isTaxable: nextTaxable,
+            category: nextTaxable ? 'Bán lẻ' : 'Dòng tiền nội bộ (Bỏ qua)',
+            formattedRetail: nextTaxable ? `${new Intl.NumberFormat('vi-VN').format(row.rawAmount)}đ` : '0đ',
+            taxStatus: nextTaxable ? 'Khớp 100% CQT' : 'Miễn thuế',
+            overrideReason: nextTaxable ? null : 'Chủ hộ kinh doanh bỏ qua (Không phải doanh thu chịu thuế)'
+          };
+        }
+        return row;
+      });
+
+      setRevenue((prevRev) => Math.max(0, prevRev + diff));
+      return updated;
+    });
+
+    setActiveToast({
+      title: '✓ Đã cập nhật trạng thái phân loại sổ S1',
+      sub: 'Số tiền thuế đã được tính toán lại chính xác theo lựa chọn của bạn.'
+    });
+    setTimeout(() => setActiveToast(null), 3500);
+  };
+
+  // OTP Request with Rate-Limiting & ZNS (Vulnerability #3 Fix)
   const handlePhoneSubmit = (e) => {
     e.preventDefault();
-    if (phone.trim().length >= 9) {
-      setAuthStep('otp');
+    if (honeypot) return; // Silent discard for automated bot submissions
+
+    if (otpAttempts >= 3) {
+      alert('⚠️ Bạn đã yêu cầu gửi mã quá 3 lần trong phiên này. Vui lòng chờ 10 phút hoặc liên hệ hotline để chống spam OTP.');
+      return;
     }
+
+    if (cooldown > 0) {
+      return;
+    }
+
+    if (phone.trim().length >= 9) {
+      setOtpAttempts((prev) => prev + 1);
+      setCooldown(60); // 60s cooldown
+      setAuthStep('otp');
+      setActiveToast({
+        title: otpChannel === 'zalo' ? '💬 Đã gửi mã qua Zalo ZNS!' : '📱 Đã gửi mã qua SMS!',
+        sub: `Mã OTP đã được gửi tới số: ${phone} (Kênh: ${otpChannel === 'zalo' ? 'Zalo ZNS bảo mật' : 'SMS Brandname'})`
+      });
+      setTimeout(() => setActiveToast(null), 4000);
+    }
+  };
+
+  const handleResendOtp = () => {
+    if (cooldown > 0) return;
+    if (otpAttempts >= 3) {
+      alert('⚠️ Đã đạt giới hạn 3 lần gửi mã trong 10 phút.');
+      return;
+    }
+    setOtpAttempts((prev) => prev + 1);
+    setCooldown(60);
+    setActiveToast({
+      title: '✓ Đã gửi lại mã OTP mới',
+      sub: `Kiểm tra thông báo trên ứng dụng Zalo hoặc tin nhắn SMS của bạn.`
+    });
+    setTimeout(() => setActiveToast(null), 3500);
   };
 
   const handleOtpSubmit = (e) => {
@@ -167,7 +262,7 @@ export default function TrialMVP() {
 
       <div className="trial-container">
         {/* ========================================================================= */}
-        {/* PHASE 1: 60-SECOND ONBOARDING (PHONE AUTH ONLY)                           */}
+        {/* PHASE 1: 60-SECOND ONBOARDING (WITH SMS BURN-RATE PROTECTION & ZALO ZNS)  */}
         {/* ========================================================================= */}
         {authStep !== 'ready' && (
           <div className="trial-auth-wrapper">
@@ -183,13 +278,53 @@ export default function TrialMVP() {
                 </h1>
                 <p className="auth-desc">
                   {authStep === 'phone'
-                    ? 'Chỉ cần Số Điện Thoại nhận mã OTP. Tuyệt đối không yêu cầu tạo mật khẩu phức tạp hay thông tin thẻ tín dụng.'
-                    : `Mã OTP gồm 6 chữ số đã được gửi tới số điện thoại: ${phone}`}
+                    ? 'Đăng nhập bảo mật qua Số Điện Thoại. Tích hợp Zalo ZNS tiết kiệm chi phí và cơ chế chống bot spam.'
+                    : `Mã xác thực gồm 6 chữ số đã được gửi tới số: ${phone}`}
                 </p>
               </div>
 
               {authStep === 'phone' ? (
                 <form onSubmit={handlePhoneSubmit} className="auth-form">
+                  {/* Honeypot field for anti-bot protection */}
+                  <input 
+                    type="text" 
+                    name="contact_verification_hp"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    style={{ display: 'none' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+
+                  {/* Zalo ZNS vs SMS Channel Selector */}
+                  <div className="form-group">
+                    <label className="form-label">Phương Thức Nhận Mã OTP:</label>
+                    <div className="channel-selector-row">
+                      <button 
+                        type="button" 
+                        className={`channel-pill-btn ${otpChannel === 'zalo' ? 'active' : ''}`}
+                        onClick={() => setOtpChannel('zalo')}
+                      >
+                        <span className="channel-icon">💬</span>
+                        <div className="channel-text">
+                          <strong>Zalo ZNS</strong>
+                          <span>Khuyên dùng • Nhanh 2s</span>
+                        </div>
+                      </button>
+                      <button 
+                        type="button" 
+                        className={`channel-pill-btn ${otpChannel === 'sms' ? 'active' : ''}`}
+                        onClick={() => setOtpChannel('sms')}
+                      >
+                        <span className="channel-icon">📱</span>
+                        <div className="channel-text">
+                          <strong>SMS Tin Nhắn</strong>
+                          <span>Mạng viễn thông</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="form-group">
                     <label className="form-label">Số Điện Thoại / Zalo Của Bạn:</label>
                     <div className="phone-input-wrap">
@@ -204,17 +339,35 @@ export default function TrialMVP() {
                       />
                     </div>
                   </div>
-                  <button type="submit" className="nano-button auth-submit-btn">
-                    <span>Nhận Mã OTP & Tiếp Tục ➔</span>
+
+                  <button 
+                    type="submit" 
+                    className="nano-button auth-submit-btn"
+                    disabled={cooldown > 0 || otpAttempts >= 3}
+                  >
+                    <span>
+                      {cooldown > 0 
+                        ? `Vui lòng chờ ${cooldown}s...` 
+                        : otpAttempts >= 3 
+                        ? 'Đã đạt giới hạn gửi mã' 
+                        : 'Nhận Mã OTP & Tiếp Tục ➔'}
+                    </span>
                   </button>
-                  <span className="auth-foot-note">
-                    🔒 Bảo mật chuẩn cấp ngân hàng. Không lưu dữ liệu trái phép.
-                  </span>
+
+                  <div className="rate-limit-badge-box">
+                    <ShieldIcon size={13} color="#4ade80" />
+                    <span>Bảo vệ chống spam: Giới hạn 3 lần/10 phút • Cooldown 60s</span>
+                  </div>
                 </form>
               ) : (
                 <form onSubmit={handleOtpSubmit} className="auth-form">
                   <div className="form-group">
-                    <label className="form-label">Mã OTP (6 số):</label>
+                    <div className="otp-label-row">
+                      <label className="form-label">Mã OTP (6 số):</label>
+                      <span className="otp-channel-tag">
+                        Qua {otpChannel === 'zalo' ? 'Zalo ZNS' : 'SMS'}
+                      </span>
+                    </div>
                     <div className="otp-boxes-row">
                       {otp.map((digit, idx) => (
                         <input
@@ -232,16 +385,28 @@ export default function TrialMVP() {
                       ))}
                     </div>
                   </div>
+
                   <button type="submit" className="nano-button auth-submit-btn">
                     <span>Xác Nhận & Vào Dashboard Ngay ➔</span>
                   </button>
-                  <button 
-                    type="button" 
-                    className="auth-back-btn"
-                    onClick={() => setAuthStep('phone')}
-                  >
-                    ← Đổi số điện thoại khác
-                  </button>
+
+                  <div className="otp-actions-row">
+                    <button 
+                      type="button" 
+                      className="resend-otp-btn"
+                      onClick={handleResendOtp}
+                      disabled={cooldown > 0}
+                    >
+                      {cooldown > 0 ? `Gửi lại mã (${cooldown}s)` : 'Gửi lại mã OTP'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="auth-back-btn"
+                      onClick={() => setAuthStep('phone')}
+                    >
+                      ← Đổi số điện thoại khác
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
@@ -269,11 +434,11 @@ export default function TrialMVP() {
               </div>
               <div className="wb-item">
                 <CheckCircleIcon size={16} color="#4ade80" />
-                <span>Không cần nhập số tiền hay đối soát sổ tay cuối ngày</span>
+                <span>Có quyền Bỏ qua / Chỉnh sửa các giao dịch nội bộ không phải doanh thu</span>
               </div>
               <div className="wb-item">
                 <CheckCircleIcon size={16} color="#4ade80" />
-                <span>Bảo mật chuẩn Open Banking chỉ đọc (Read-only)</span>
+                <span>Bảo mật chuẩn HMAC-SHA256 chống giả mạo dữ liệu</span>
               </div>
             </div>
             <button 
@@ -356,14 +521,14 @@ export default function TrialMVP() {
                 </div>
               </div>
 
-              {/* The "Magic Trick" Interactive Tester */}
+              {/* The "Magic Trick" Interactive Tester with Multi-Scenario Simulation */}
               <div className="magic-trick-box glass-panel">
                 <div className="magic-header">
                   <SparklesIcon size={18} color="#FFA100" />
-                  <h4 className="magic-title">Trải Nghiệm Dòng Tiền Tự Động (The Magic Trick)</h4>
+                  <h4 className="magic-title">Mô Phỏng Dòng Tiền Thực Tế (The Magic Trick)</h4>
                 </div>
                 <p className="magic-desc">
-                  Bấm nút bên dưới để mô phỏng một khách hàng quét mã VietQR tại quầy. Hệ thống sẽ bắt sự kiện qua Webhook, tự động phân loại và nhảy sổ kế toán ngay tức thì!
+                  Thử nghiệm cả kịch bản <strong>bán lẻ chịu thuế</strong> lẫn <strong>nộp tiền sửa quán / chuyển khoản nội bộ</strong> để chứng kiến A-Sổ thông minh bóc tách thuế:
                 </p>
                 <div className="magic-actions">
                   <button 
@@ -372,14 +537,25 @@ export default function TrialMVP() {
                     onClick={() => triggerVietQRTransaction(150000, 'Khách thanh toán 3 ly cà phê')}
                   >
                     <span className="magic-btn-icon">⚡</span>
-                    <span>Thử Quét VietQR: +150.000đ</span>
+                    <span>1. Bán Lẻ: +150.000đ (Vào Sổ S1)</span>
                   </button>
+
+                  <button 
+                    type="button" 
+                    className="magic-btn-fire internal-btn"
+                    onClick={() => triggerVietQRTransaction(5000000, 'Nộp tiền cá nhân sửa chữa quán cà phê')}
+                    title="A-Sổ tự động nhận diện từ khóa 'sửa chữa' để không tính thuế oan cho bạn"
+                  >
+                    <span className="magic-btn-icon">🛡️</span>
+                    <span>2. Chuyển Nội Bộ: +5.000.000đ (Miễn Thuế)</span>
+                  </button>
+
                   <button 
                     type="button" 
                     className="magic-btn-fire secondary"
                     onClick={() => triggerVietQRTransaction(2500000, 'Bàn tiệc sinh nhật #08')}
                   >
-                    <span>Thử Quét: +2.500.000đ</span>
+                    <span>3. Bán Lẻ Lớn: +2.500.000đ</span>
                   </button>
                 </div>
               </div>
@@ -391,7 +567,7 @@ export default function TrialMVP() {
               <div className="traffic-readiness-widget glass-panel">
                 <div className="trw-top">
                   <div className="trw-stat-col">
-                    <span className="trw-label">Tổng Doanh Thu Tự Động Ghi Sổ:</span>
+                    <span className="trw-label">Doanh Thu Chịu Thuế (S1-HKD):</span>
                     <div className="trw-revenue-val">
                       <span className={`rev-num ${justIngested ? 'rev-glow' : ''}`}>
                         {new Intl.NumberFormat('vi-VN').format(revenue)}
@@ -416,25 +592,28 @@ export default function TrialMVP() {
                 <div className="trw-footer">
                   <div className="trw-footer-item">
                     <CheckCircleIcon size={14} color="#4ade80" />
-                    <span>Bộ lọc tự động: Giao dịch &lt; 20 triệu VND phân loại thẳng vào Sổ S1 (Bán lẻ)</span>
+                    <span>Bộ lọc thông minh: Phân loại tự động & cho phép <strong>Bỏ qua giao dịch nội bộ</strong> bằng 1 click</span>
                   </div>
                   <div className="trw-footer-item">
                     <ShieldIcon size={14} color="#FFA100" />
-                    <span>Tiêu chuẩn pháp lý: Thông tư 88/2021/TT-BTC & Nghị định 123/2020/NĐ-CP</span>
+                    <span>Bảo mật: Xác thực chữ ký HMAC-SHA256 chống Webhook giả mạo</span>
                   </div>
                 </div>
               </div>
 
-              {/* S1-HKD Ledger Table (Circular 88 Standard) */}
+              {/* S1-HKD Ledger Table (Circular 88 Standard with Inline Edit / Ignore Override) */}
               <div className="s1-ledger-box glass-panel">
                 <div className="ledger-box-header">
                   <div>
                     <div className="ledger-tag-row">
                       <span className="ledger-badge-tt88">MẪU SỐ S1-HKD</span>
                       <span className="ledger-badge-legal">THÔNG TƯ 88/2021/TT-BTC</span>
+                      <span className="ledger-badge-compliance">CÓ QUYỀN GHI ĐÈ THUẾ</span>
                     </div>
                     <h3 className="ledger-box-title">Sổ Chi Tiết Doanh Thu Bán Hàng Hóa, Dịch Vụ</h3>
-                    <p className="ledger-box-sub">Tự động đồng bộ từ biến động số dư VietQR 24/7 không cần gõ tay.</p>
+                    <p className="ledger-box-sub">
+                      Tự động phân loại từ VietQR. Bạn có toàn quyền <strong>Bỏ qua / Khôi phục</strong> từng dòng trước khi xuất XML nộp thuế.
+                    </p>
                   </div>
                   
                   {/* PHASE 4: THE UPGRADE WALL TRIGGER */}
@@ -453,32 +632,65 @@ export default function TrialMVP() {
                     <thead>
                       <tr>
                         <th>Ngày Ghi Sổ</th>
-                        <th>Số Hiệu Chứng Từ</th>
+                        <th>Số Chứng Từ</th>
                         <th>Diễn Giải Nghiệp Vụ</th>
                         <th>Phân Loại</th>
-                        <th className="text-right">Doanh Thu Bán Lẻ (đ)</th>
-                        <th>Trạng Thái Đối Soát</th>
+                        <th className="text-right">Doanh Thu Bán Lẻ</th>
+                        <th>Trạng Thái Thuế</th>
+                        <th className="text-center">Thao Tác (Override)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {s1Ledger.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="empty-ledger-cell">
+                          <td colSpan={7} className="empty-ledger-cell">
                             <span>⚡ Chưa có giao dịch nào. Bấm nút <strong>"Thử Quét VietQR"</strong> bên trái để xem sổ tự động ghi dữ liệu!</span>
                           </td>
                         </tr>
                       ) : (
                         s1Ledger.map((row, idx) => (
-                          <tr key={row.id} className={idx === 0 && justIngested ? 'new-row-pulse' : ''}>
+                          <tr 
+                            key={row.id} 
+                            className={`
+                              ${idx === 0 && justIngested ? 'new-row-pulse' : ''} 
+                              ${!row.isTaxable ? 'row-excluded' : ''}
+                            `}
+                          >
                             <td className="mono">{row.date}</td>
                             <td className="mono voucher-col">{row.voucherNo}</td>
-                            <td className="desc-col">{row.description}</td>
-                            <td><span className="category-pill">{row.category}</span></td>
-                            <td className="text-right amount-cell mono">{row.formattedRetail}</td>
+                            <td className="desc-col">
+                              <div>{row.description}</div>
+                              {row.overrideReason && (
+                                <span className="override-reason-hint">↳ {row.overrideReason}</span>
+                              )}
+                            </td>
                             <td>
-                              <span className="status-verified-pill">
-                                ✓ {row.taxStatus}
+                              <span className={`category-pill ${!row.isTaxable ? 'pill-gray' : ''}`}>
+                                {row.category}
                               </span>
+                            </td>
+                            <td className="text-right amount-cell mono">
+                              {row.isTaxable ? (
+                                row.formattedRetail
+                              ) : (
+                                <span className="excluded-amount-strike">0đ (Đã bỏ qua)</span>
+                              )}
+                            </td>
+                            <td>
+                              <span className={`status-verified-pill ${!row.isTaxable ? 'pill-exempt' : ''}`}>
+                                {row.isTaxable ? `✓ ${row.taxStatus}` : 'Miễn tính thuế'}
+                              </span>
+                            </td>
+                            <td className="text-center">
+                              {/* VULNERABILITY #1 FIX: INLINE EDIT / IGNORE TOGGLE */}
+                              <button
+                                type="button"
+                                className={`override-toggle-btn ${row.isTaxable ? 'btn-ignore' : 'btn-restore'}`}
+                                onClick={() => handleToggleRowTaxable(row.id)}
+                                title={row.isTaxable ? 'Bỏ qua dòng này (Không phải doanh thu chịu thuế)' : 'Khôi phục tính thuế cho dòng này'}
+                              >
+                                {row.isTaxable ? '🚫 Bỏ qua (Nội bộ)' : '↩ Khôi phục tính thuế'}
+                              </button>
                             </td>
                           </tr>
                         ))
@@ -487,11 +699,13 @@ export default function TrialMVP() {
                     {s1Ledger.length > 0 && (
                       <tfoot>
                         <tr>
-                          <td colSpan={4} className="total-label">CỘNG DOANH THU THỰC TẾ (S1-HKD):</td>
+                          <td colSpan={4} className="total-label">CỘNG DOANH THU THỰC TẾ CHỊU THUẾ:</td>
                           <td className="text-right total-amount mono">
                             {new Intl.NumberFormat('vi-VN').format(revenue)}đ
                           </td>
-                          <td className="total-status">✓ 100% Cân Đối</td>
+                          <td colSpan={2} className="total-status">
+                            ✓ {s1Ledger.filter(r => !r.isTaxable).length > 0 ? `Đã trừ ${s1Ledger.filter(r => !r.isTaxable).length} dòng nội bộ` : '100% Cân Đối Chuẩn TT88'}
+                          </td>
                         </tr>
                       </tfoot>
                     )}
@@ -611,7 +825,7 @@ export default function TrialMVP() {
                 Sẵn Sàng Nộp Cho Cơ Quan Thuế?
               </h2>
               <p className="upgrade-pitch">
-                Toàn bộ dòng tiền bán lẻ quét mã VietQR đã được A-Sổ tự động kết chuyển vào bộ sổ chuẩn Thông tư 88/2021/TT-BTC.
+                Toàn bộ dòng tiền bán lẻ quét mã VietQR đã được A-Sổ tự động kết chuyển vào bộ sổ chuẩn Thông tư 88/2021/TT-BTC, và đã được loại trừ các khoản chuyển tiền nội bộ.
                 <br /><br />
                 <strong>Nâng cấp lên Gói Tự Động (249k/tháng)</strong> để kích hoạt tính năng <strong>kết xuất file XML/Excel nộp thẳng Cổng Thuế</strong> và mở khóa tính năng <strong>Đối chiếu Hóa đơn điện tử Nghị định 123</strong>.
               </p>

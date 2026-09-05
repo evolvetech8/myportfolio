@@ -4255,3 +4255,206 @@ a:hover { color: var(--archonic-amber); }
     grid-template-columns: 1fr;
   }
 }
+
+/* =============================================
+   PATCH STYLES: COMPLIANCE OVERRIDE & ZNS OTP
+   ============================================= */
+/* Zalo ZNS vs SMS Channel Selector */
+.channel-selector-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.channel-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+
+.channel-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 161, 0, 0.3);
+}
+
+.channel-pill-btn.active {
+  background: rgba(255, 109, 0, 0.12);
+  border-color: var(--archonic-orange);
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(255, 109, 0, 0.25);
+}
+
+.channel-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.channel-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.channel-text strong {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.channel-text span {
+  font-size: 10.5px;
+  color: #FFA100;
+}
+
+.rate-limit-badge-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 6px;
+  font-size: 11px;
+  color: #4ade80;
+  margin-top: 4px;
+}
+
+.otp-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.otp-channel-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFA100;
+  background: rgba(255, 161, 0, 0.12);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.otp-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.resend-otp-btn {
+  background: none;
+  border: none;
+  color: #FFA100;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.resend-otp-btn:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Magic Trick Internal Transfer Button */
+.magic-btn-fire.internal-btn {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(59, 130, 246, 0.25) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #38bdf8;
+  box-shadow: none;
+}
+.magic-btn-fire.internal-btn:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(59, 130, 246, 0.35) 100%);
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3);
+}
+
+.ledger-badge-compliance {
+  font-size: 10px;
+  font-weight: 800;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* S1 Ledger Row Override & Exclusion Styling */
+.row-excluded td {
+  opacity: 0.65;
+  background: rgba(255, 255, 255, 0.01) !important;
+}
+.row-excluded td:hover {
+  opacity: 0.9;
+}
+
+.override-reason-hint {
+  display: block;
+  font-size: 10.5px;
+  color: #fbbf24;
+  margin-top: 3px;
+  font-style: italic;
+}
+
+.category-pill.pill-gray {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #9ca3af;
+}
+
+.excluded-amount-strike {
+  color: #9ca3af !important;
+  text-decoration: line-through;
+  font-size: 12px;
+}
+
+.status-verified-pill.pill-exempt {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+/* Inline Edit / Ignore Override Button */
+.override-toggle-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  white-space: nowrap;
+}
+
+.override-toggle-btn.btn-ignore {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.override-toggle-btn.btn-ignore:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.override-toggle-btn.btn-restore {
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+.override-toggle-btn.btn-restore:hover {
+  background: #4ade80;
+  color: #000000;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}

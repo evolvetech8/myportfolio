@@ -1,6 +1,7 @@
 -- ==============================================================================
--- ARCHONIC A-SỔ 14-DAY TRIAL MVP MIGRATION
+-- ARCHONIC A-SỔ 14-DAY TRIAL MVP MIGRATION (V2 - COMPLIANCE PATCHED)
 -- Circular 88/2021/TT-BTC Automated S1-HKD Ledger & Open Banking Sync
+-- Patched: Manual Edit/Ignore Override & Internal Transfer Exclusion
 -- ==============================================================================
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -28,7 +29,7 @@ CREATE TABLE IF NOT EXISTS public.transactions (
     reference_no VARCHAR(100) UNIQUE NOT NULL,
     amount NUMERIC(15, 2) NOT NULL CHECK (amount > 0),
     bank_brand VARCHAR(50),
-    gateway VARCHAR(50) DEFAULT 'vietqr_sepay', -- 'casso' | 'sepay' | 'vietqr_mock'
+    gateway VARCHAR(50) DEFAULT 'vietqr_sepay',
     content TEXT,
     sender_account VARCHAR(100),
     transaction_time TIMESTAMPTZ DEFAULT NOW(),
@@ -44,27 +45,36 @@ CREATE TABLE IF NOT EXISTS public.ledger_s1_hkd (
     voucher_date DATE NOT NULL DEFAULT CURRENT_DATE,
     voucher_number VARCHAR(50) NOT NULL,
     description TEXT NOT NULL,
-    category VARCHAR(50) DEFAULT 'retail_sales', -- 'Bán lẻ'
+    category VARCHAR(50) DEFAULT 'retail_sales', -- 'retail_sales' | 'internal_transfer' | 'manual_excluded'
+    is_taxable BOOLEAN DEFAULT TRUE,             -- Flag for tax compliance calculations
+    override_reason TEXT,                        -- Merchant override justification
     retail_revenue NUMERIC(15, 2) DEFAULT 0,
     services_revenue NUMERIC(15, 2) DEFAULT 0,
     other_revenue NUMERIC(15, 2) DEFAULT 0,
     tax_reconciliation_status VARCHAR(50) DEFAULT 'MATCHED_100',
     circular_standard VARCHAR(50) DEFAULT 'TT88/2021/TT-BTC',
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. AUTOMATED CATEGORIZATION DATABASE TRIGGER (< 20M VND -> S1-HKD Retail Sales)
+-- 4. AUTOMATED CATEGORIZATION TRIGGER WITH SMART INTERNAL TRANSFER DETECTION
 CREATE OR REPLACE FUNCTION public.fn_auto_categorize_s1_ledger()
 RETURNS TRIGGER AS $$
 DECLARE
     v_voucher_num VARCHAR(50);
+    v_content_lower TEXT;
+    v_is_internal BOOLEAN := FALSE;
 BEGIN
-    -- Format official voucher number: VQR-<ref_prefix>
     v_voucher_num := 'VQR-' || COALESCE(SUBSTRING(NEW.reference_no FROM 1 FOR 8), TO_CHAR(NOW(), 'YYMMDDHH24MI'));
+    v_content_lower := LOWER(COALESCE(NEW.content, ''));
 
-    -- Automatic categorization rule:
-    -- Incoming transfer under 20,000,000 VND is categorized as retail goods sale (Bán lẻ)
-    IF NEW.amount < 20000000 THEN
+    -- Check for internal money transfers / non-sales keywords (e.g. personal deposit, repairs, loan)
+    IF v_content_lower ~* '(noi bo|chuyen khoan noi bo|rut tien|nop tien|vay|tra no|hoan tien|sua chua|von chu so huu|nap tien|chuyen tien cho)' THEN
+        v_is_internal := TRUE;
+    END IF;
+
+    -- If detected as internal transfer, DO NOT log as taxable retail revenue!
+    IF v_is_internal THEN
         INSERT INTO public.ledger_s1_hkd (
             merchant_id,
             transaction_id,
@@ -72,6 +82,39 @@ BEGIN
             voucher_number,
             description,
             category,
+            is_taxable,
+            override_reason,
+            retail_revenue,
+            services_revenue,
+            other_revenue,
+            tax_reconciliation_status,
+            circular_standard
+        ) VALUES (
+            NEW.merchant_id,
+            NEW.id,
+            CURRENT_DATE,
+            v_voucher_num,
+            '[DÒNG TIỀN NỘI BỘ - KHÔNG TÍNH THUẾ] ' || COALESCE(NEW.content, 'Chuyển tiền nội bộ'),
+            'internal_transfer',
+            FALSE,
+            'Phát hiện từ khóa dòng tiền nội bộ (Không phải doanh thu bán lẻ)',
+            0,
+            0,
+            0,
+            'EXCLUDED_NON_TAXABLE',
+            'TT88/2021/TT-BTC'
+        );
+    ELSIF NEW.amount < 20000000 THEN
+        -- Retail sale under 20M VND
+        INSERT INTO public.ledger_s1_hkd (
+            merchant_id,
+            transaction_id,
+            voucher_date,
+            voucher_number,
+            description,
+            category,
+            is_taxable,
+            override_reason,
             retail_revenue,
             services_revenue,
             other_revenue,
@@ -84,6 +127,8 @@ BEGIN
             v_voucher_num,
             COALESCE(NEW.content, 'Doanh thu bán lẻ quét mã VietQR tự động ghi sổ'),
             'retail_sales',
+            TRUE,
+            NULL,
             NEW.amount,
             0,
             0,
@@ -91,7 +136,7 @@ BEGIN
             'TT88/2021/TT-BTC'
         );
     ELSE
-        -- Over 20M transfers require merchant manual review (anti-money-laundering / invoice threshold)
+        -- Large transaction >= 20M VND requires invoice attachment
         INSERT INTO public.ledger_s1_hkd (
             merchant_id,
             transaction_id,
@@ -99,6 +144,8 @@ BEGIN
             voucher_number,
             description,
             category,
+            is_taxable,
+            override_reason,
             retail_revenue,
             services_revenue,
             other_revenue,
@@ -111,6 +158,8 @@ BEGIN
             v_voucher_num,
             COALESCE(NEW.content, 'Giao dịch trên 20 triệu - Cần đính kèm HĐĐT Nghị định 123'),
             'high_value_review',
+            TRUE,
+            'Giá trị giao dịch >= 20.000.000đ, cần kiểm tra HĐĐT',
             NEW.amount,
             0,
             0,
@@ -129,7 +178,28 @@ AFTER INSERT ON public.transactions
 FOR EACH ROW
 EXECUTE FUNCTION public.fn_auto_categorize_s1_ledger();
 
--- 5. ROW LEVEL SECURITY (RLS) POLICIES
+-- 5. FUNCTION TO ALLOW MERCHANT INLINE MANUAL OVERRIDE
+CREATE OR REPLACE FUNCTION public.fn_override_s1_entry(
+    p_entry_id UUID,
+    p_is_taxable BOOLEAN,
+    p_category VARCHAR(50),
+    p_reason TEXT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE public.ledger_s1_hkd
+    SET 
+        is_taxable = p_is_taxable,
+        category = p_category,
+        override_reason = p_reason,
+        retail_revenue = CASE WHEN p_is_taxable THEN (SELECT amount FROM public.transactions WHERE id = transaction_id) ELSE 0 END,
+        tax_reconciliation_status = CASE WHEN p_is_taxable THEN 'MATCHED_100' ELSE 'EXCLUDED_NON_TAXABLE' END,
+        updated_at = NOW()
+    WHERE id = p_entry_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 6. ROW LEVEL SECURITY & REALTIME
 ALTER TABLE public.merchants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ledger_s1_hkd ENABLE ROW LEVEL SECURITY;
@@ -146,5 +216,4 @@ CREATE POLICY "Merchants view own S1 ledger"
     ON public.ledger_s1_hkd FOR SELECT
     USING (merchant_id = auth.uid());
 
--- 6. ENABLE SUPABASE REALTIME REPLICATION
 ALTER PUBLICATION supabase_realtime ADD TABLE public.transactions, public.ledger_s1_hkd;
