@@ -1,5 +1,6 @@
 import Hero from '../components/Hero';
 import ProductPillars from '../components/ProductPillars';
+import Pricing from '../components/Pricing';
 import Metrics from '../components/Metrics';
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <>
       <Hero />
       <ProductPillars />
+      <Pricing />
       <Metrics />
     </>
   );

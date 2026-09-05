@@ -2,6 +2,7 @@
   "nav": {
     "home": "Trang Chủ",
     "about": "Về Archonic",
+    "pricing": "Bảng Giá",
     "contact": "Liên Hệ",
     "demo": "Trải Nghiệm A-Sổ"
   },
@@ -90,6 +91,92 @@
       "tagline": "Đồng Bộ Doanh Thu Đa Kênh Tức Thời",
       "desc": "Cầu nối tự động hút dữ liệu giao dịch từ máy POS bán lẻ, mã thanh toán QR ngân hàng và tài khoản kinh doanh. Tự động ghi sổ quỹ theo thời gian thực mà không cần nhập liệu thủ công.",
       "tag": "ĐỒNG BỘ DÒNG TIỀN TỰ ĐỘNG"
+    }
+  },
+  "pricing": {
+    "title": "Bảng Giá Dịch Vụ A-Sổ",
+    "subtitle": "Đầu tư vào tự động hóa không chạm — Triệt tiêu 100% rủi ro phạt thuế và giải phóng hoàn toàn thời gian nhập liệu thủ công.",
+    "trialBannerTitle": "Dùng Thử 14 Ngày Miễn Phí — Tự Động Ghi Sổ Ngay Lập Tức",
+    "trialBannerDesc": "Chỉ cần kết nối 1 tài khoản ngân hàng hoặc quét 1 mã VietQR. Trực tiếp nhìn thấy giao dịch tự động điền vào Sổ Doanh thu (S1-HKD) mà không cần gõ một con số nào.",
+    "trialCta": "Bắt Đầu Dùng Thử 14 Ngày Miễn Phí",
+    "billingMonthly": "Thanh toán hàng tháng",
+    "billingAnnual": "Thanh toán hàng năm",
+    "saveBadge": "Tiết kiệm 20%",
+    "monthUnit": "đ / tháng",
+    "annualNote": "Thanh toán theo năm",
+    "starter": {
+      "name": "Gói Khởi Điểm (Starter)",
+      "target": "Dành cho quán cafe nhỏ, tiệm ăn, salon, hộ kinh doanh cá thể",
+      "badge": "TIẾT KIỆM HƠN MISA 30%",
+      "priceAnnual": "149.000",
+      "priceMonthly": "189.000",
+      "billedAnnualText": "1.788.000đ / năm (Tiết kiệm 20%)",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
+      "desc": "Giải pháp tự động hóa 7 sổ TT88 chi phí tối ưu, rẻ hơn nhiều so với gói 2.4 triệu/năm của MISA mà lại dễ dùng vượt trội.",
+      "cta": "Bắt Đầu Dùng Thử 14 Ngày",
+      "features": [
+        "Kết nối 1 tài khoản ngân hàng (Hút giao dịch VietQR tự động)",
+        "Tự động lập đầy đủ 7 Sổ Kế Toán Thông tư 88/2021/TT-BTC",
+        "Xuất file XML & Excel chuẩn cơ quan thuế chỉ với 1 click",
+        "Báo cáo doanh thu & dòng tiền cơ bản",
+        "Hỗ trợ kỹ thuật qua Email & Zalo giờ hành chính"
+      ]
+    },
+    "pro": {
+      "name": "Gói Tự Động (Pro)",
+      "target": "Dành cho hộ kinh doanh tiêu chuẩn, phòng khám, nhà hàng, bán lẻ",
+      "badge": "PHỔ BIẾN NHẤT — 90% LỰA CHỌN",
+      "isPopular": true,
+      "priceAnnual": "249.000",
+      "priceMonthly": "319.000",
+      "billedAnnualText": "2.988.000đ / năm (Tiết kiệm 20%)",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
+      "desc": "Không bao giờ phải đối chiếu hóa đơn đỏ bằng tay. Tự động đồng bộ Cổng Thuế và cảnh báo rủi ro tức thời.",
+      "cta": "Trải Nghiệm Gói Tự Động 14 Ngày",
+      "features": [
+        "Bao gồm tất cả tính năng của Gói Khởi Điểm",
+        "Đồng bộ Hóa Đơn Điện Tử Nghị Định 123 với Cổng Tổng cục Thuế",
+        "Bảng Cảnh Báo Thuế 'Đèn Giao Thông' (Xanh / Vàng / Đỏ)",
+        "Kết nối Đa Ngân Hàng & Đa mã VietQR quầy thu ngân",
+        "Tự động cân đối Sổ S4 (Tiền mặt) & S5 (Tiền gửi) với dòng tiền",
+        "Ưu tiên hỗ trợ kỹ thuật 24/7 & Hỗ trợ rà soát trước kỳ quyết toán"
+      ]
+    },
+    "advanced": {
+      "name": "Gói Toàn Diện (Advanced)",
+      "target": "Bán lẻ quy mô lớn, siêu thị mini, chuỗi cửa hàng & nhiều chứng từ giấy",
+      "badge": "QUẢN LÝ CHUỖI & VISION AI",
+      "priceAnnual": "399.000",
+      "priceMonthly": "499.000",
+      "billedAnnualText": "4.788.000đ / năm (Tiết kiệm 20%)",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
+      "desc": "Quét bóc tách hóa đơn giấy bằng AI và quản lý hợp nhất số liệu cho chuỗi nhiều chi nhánh.",
+      "cta": "Bắt Đầu Gói Toàn Diện 14 Ngày",
+      "features": [
+        "Bao gồm tất cả tính năng của Gói Tự Động (Pro)",
+        "Quét hóa đơn & chứng từ giấy bằng Vision AI (Edge OCR <1.2s)",
+        "AI tự bóc tách NCC, MST, số tiền vào Sổ Chi Phí (S3-HKD)",
+        "Quản lý đa chi nhánh / Đa điểm bán trên cùng 1 giao diện",
+        "Cầu nối API tích hợp máy POS bán lẻ & phần mềm quản lý kho",
+        "Chuyên viên tư vấn thuế 1-kèm-1 hỗ trợ thanh tra thực tế"
+      ]
+    },
+    "guarantees": {
+      "item1": "Dùng thử đầy đủ tính năng 14 ngày không cần thẻ tín dụng",
+      "item2": "Hỗ trợ xuất hóa đơn GTGT đầy đủ cho chi phí doanh nghiệp",
+      "item3": "Cam kết bảo mật dữ liệu cấp ngân hàng mã hóa AES-256",
+      "item4": "Hỗ trợ chuyển đổi dữ liệu miễn phí từ MISA / KiotViet trong 30 phút"
+    },
+    "faq": {
+      "title": "Câu Hỏi Thường Gặp Về Bảng Giá",
+      "q1": "Tôi có cần nhập thẻ tín dụng khi đăng ký dùng thử 14 ngày không?",
+      "a1": "Hoàn toàn không cần thẻ tín dụng. Bạn chỉ cần số điện thoại hoặc email là có thể kích hoạt dùng thử ngay. Trong 14 ngày, bạn được trải nghiệm toàn diện luồng tự động hút dữ liệu ngân hàng vào sổ S1-HKD hoàn toàn miễn phí.",
+      "q2": "Tại sao thanh toán theo năm lại được 90% hộ kinh doanh lựa chọn?",
+      "a2": "Thanh toán theo năm giúp bạn tiết kiệm 20% chi phí, đồng thời Archonic sẽ xuất 1 hóa đơn điện tử hợp lệ trọn gói cả năm giúp bạn thuận tiện đưa vào chi phí hợp lý của hộ kinh doanh/doanh nghiệp.",
+      "q3": "Dữ liệu tài khoản ngân hàng của tôi có an toàn không?",
+      "a3": "Tuyệt đối an toàn. A-Sổ chỉ kết nối Open Banking / VietQR ở chế độ chỉ đọc (Read-Only) để nhận biến động số dư phục vụ ghi sổ kế toán. A-Sổ hoàn toàn không có quyền rút tiền hay can thiệp vào tài khoản ngân hàng của bạn.",
+      "q4": "Tôi đang dùng sổ giấy hoặc MISA/KiotViet, có chuyển sang A-Sổ được không?",
+      "a4": "Có. Đội ngũ chuyên viên Archonic sẽ hỗ trợ 'White-Glove Onboarding' miễn phí: chuyển dữ liệu danh mục hàng hóa, số dư đầu kỳ từ phần mềm cũ sang A-Sổ trong vòng 30 phút."
     }
   },
   "metrics": {

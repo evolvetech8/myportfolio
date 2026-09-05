@@ -2,6 +2,7 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "pricing": "Pricing",
     "contact": "Contact",
     "demo": "Experience A-Sổ"
   },
@@ -90,6 +91,92 @@
       "tagline": "Realtime Transaction Synchronization",
       "desc": "Ingests transactional feeds from retail POS terminals, banking QR codes, and corporate accounts. Automatically logs revenue without manual data entry.",
       "tag": "AUTOMATED CASHFLOW BRIDGE"
+    }
+  },
+  "pricing": {
+    "title": "A-Sổ Transparent Pricing",
+    "subtitle": "Invest in zero-touch automation — eliminate tax penalty exposure and liberate your business from manual data entry.",
+    "trialBannerTitle": "14-Day Free Trial — Instant Automated Ledger Ingestion",
+    "trialBannerDesc": "Connect your bank account or scan one VietQR in 60 seconds. Watch your transactions automatically populate the S1-HKD ledger without typing a single number.",
+    "trialCta": "Start 14-Day Free Trial",
+    "billingMonthly": "Monthly billing",
+    "billingAnnual": "Annual billing",
+    "saveBadge": "Save 20%",
+    "monthUnit": "VND / month",
+    "annualNote": "Billed annually",
+    "starter": {
+      "name": "Starter Tier",
+      "target": "For micro-businesses, cafes, diners, single-chair salons, and local vendors",
+      "badge": "SAVE 30% VS MISA",
+      "priceAnnual": "149,000",
+      "priceMonthly": "189,000",
+      "billedAnnualText": "1,788,000 VND / year (Save 20%)",
+      "billedMonthlyText": "Flexible month-to-month billing",
+      "desc": "Automates fundamental Circular 88 tax ledgers. 30% lower cost than MISA's base tier with far simpler automation.",
+      "cta": "Start 14-Day Trial",
+      "features": [
+        "1 Bank connection for automated VietQR transaction ingestion",
+        "Generates all 7 mandatory Circular 88/2021/TT-BTC ledgers",
+        "Standard XML & Excel 1-click tax export",
+        "Essential revenue and cashflow reports",
+        "Business-hours support via Email and Zalo"
+      ]
+    },
+    "pro": {
+      "name": "Pro Tier",
+      "target": "For standard household businesses, clinics, restaurants, and growing retailers",
+      "badge": "MOST POPULAR — 90% ADOPTION",
+      "isPopular": true,
+      "priceAnnual": "249,000",
+      "priceMonthly": "319,000",
+      "billedAnnualText": "2,988,000 VND / year (Save 20%)",
+      "billedMonthlyText": "Flexible month-to-month billing",
+      "desc": "Never manually reconcile a tax invoice again. Realtime sync with General Department of Taxation and instant hazard alerts.",
+      "cta": "Experience Pro Tier 14-Day Trial",
+      "features": [
+        "Everything in Starter Tier included",
+        "Decree 123 E-Invoice sync with General Department of Taxation",
+        "Traffic Light Tax Warning Dashboard (Green / Amber / Red)",
+        "Multi-bank & multi-counter QR code connections",
+        "Automated balancing of S4 (Cash) and S5 (Bank) with real cashflow",
+        "Priority 24/7 technical support & pre-audit reconciliation review"
+      ]
+    },
+    "advanced": {
+      "name": "Advanced Tier",
+      "target": "For high-volume retailers, mini-supermarkets, multi-branch chains & physical invoices",
+      "badge": "MULTI-BRANCH & VISION AI",
+      "priceAnnual": "399,000",
+      "priceMonthly": "499,000",
+      "billedAnnualText": "4,788,000 VND / year (Save 20%)",
+      "billedMonthlyText": "Flexible month-to-month billing",
+      "desc": "Extracts physical paper receipts with Vision AI and consolidates multi-store financial operations seamlessly.",
+      "cta": "Start Advanced Tier 14-Day Trial",
+      "features": [
+        "Everything in Pro Tier included",
+        "Vision AI (Edge OCR <1.2s) for physical paper receipts & supplier slips",
+        "AI extracts vendor, tax ID & amount into Expense Ledger (S3-HKD)",
+        "Multi-branch & multi-store centralized management",
+        "Dedicated API bridge for retail POS and ERP inventory integration",
+        "1-on-1 dedicated tax specialist for on-site audit support"
+      ]
+    },
+    "guarantees": {
+      "item1": "Full-featured 14-day trial without credit card",
+      "item2": "Compliant VAT invoices issued for corporate tax deduction",
+      "item3": "Bank-grade AES-256 financial data encryption",
+      "item4": "Free white-glove onboarding and data migration from MISA/KiotViet"
+    },
+    "faq": {
+      "title": "Frequently Asked Pricing Questions",
+      "q1": "Do I need a credit card to sign up for the 14-day free trial?",
+      "a1": "No credit card required. Simply register with your phone number or email. You get full access to automated bank ledger ingestion for 14 days completely risk-free.",
+      "q2": "Why should I choose annual billing over monthly billing?",
+      "a2": "Over 90% of Vietnamese businesses choose annual billing to save 20% on subscription costs and receive a single, compliant VAT invoice for simple tax deduction.",
+      "q3": "Is my financial data secure when connecting bank accounts?",
+      "a3": "Bank connections utilize read-only Open Banking and VietQR webhooks encrypted with AES-256 bank-grade cryptography. A-Sổ cannot execute transfers or alter your accounts.",
+      "q4": "Do you support data migration from legacy tools like MISA or KiotViet?",
+      "a4": "Yes. Our team provides complimentary white-glove onboarding, importing opening balances and product lists within 30 minutes."
     }
   },
   "metrics": {

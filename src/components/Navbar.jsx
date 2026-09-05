@@ -28,6 +28,7 @@ export default function Navbar() {
         <div className="navbar-links">
           <Link to="/">{t('nav.home')}</Link>
           <Link to="/about">{t('nav.about')}</Link>
+          <Link to="/pricing">{t('nav.pricing')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
           <button className="lang-toggle" onClick={toggleLang} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <GlobeIcon size={13} color="currentColor" />

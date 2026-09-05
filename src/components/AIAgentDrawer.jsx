@@ -49,10 +49,15 @@ export default function AIAgentDrawer() {
       vi: 'A-Sổ đồng bộ trực tiếp với hệ thống hóa đơn điện tử theo Nghị định 123/2020/NĐ-CP. Hệ thống tự động kiểm tra tính hợp lệ của hóa đơn đầu vào/đầu ra, đối chiếu mã cơ quan thuế và khớp với sổ kế toán ngay lập tức.',
       en: 'A-Sổ synchronizes directly with Decree 123 e-invoicing portals. It automatically verifies input and output e-invoice authenticity, matches tax authority codes, and reconciles entries with your ledgers in real time.'
     },
+    pricing: {
+      keywords: ['giá', 'bảng giá', 'chi phí', 'tiền', 'gói', 'starter', 'pro', 'advanced', 'misa', 'price', 'pricing', 'cost'],
+      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) — Tự động 7 sổ TT88, kết nối 1 ngân hàng, rẻ hơn MISA 30%.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) — Tích hợp Cổng Thuế NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) — Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 14 ngày MIỄN PHÍ không cần thẻ tín dụng!',
+      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) — 7 TT88 ledgers, 1 bank sync, 30% cheaper than MISA.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) — Decree 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) — Vision AI receipt scanning & multi-branch management.\nAll plans include a 14-Day Risk-Free Trial without credit card required!'
+    },
     demo: {
-      keywords: ['demo', 'giá', 'price', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
-      vi: 'Để đăng ký trải nghiệm A-Sổ hoặc nhận bảng giá giải pháp triển khai cho chuỗi/doanh nghiệp của bạn, vui lòng bấm nút "Trải Nghiệm A-Sổ" hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
-      en: 'To experience A-Sổ or review pricing models for your business/retail chain, please click "Experience A-Sổ" or contact our hotline directly at 0353600900 (archonic88@gmail.com).'
+      keywords: ['demo', 'dùng thử', 'trial', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
+      vi: 'A-Sổ có chính sách Dùng Thử 14 Ngày Miễn Phí: chỉ cần liên kết ngân hàng hoặc quét 1 mã VietQR, bạn sẽ thấy dòng tiền tự động đổ vào sổ S1-HKD ngay lập tức. Vui lòng bấm "Trải Nghiệm A-Sổ" trên thanh menu hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
+      en: 'A-Sổ provides a 14-Day Free Trial: connect your bank account or scan one VietQR, and watch transactions auto-populate Ledger S1 instantly. Click "Experience A-Sổ" on the top navigation or contact Hotline: 0353600900 (archonic88@gmail.com).'
     }
   };
 
