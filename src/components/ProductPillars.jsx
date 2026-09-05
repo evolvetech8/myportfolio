@@ -1,4 +1,5 @@
 import { useLanguage } from '../i18n/LanguageContext';
+import { LandmarkIcon, VideoIcon, ScanIcon } from './Icons';
 
 export default function ProductPillars() {
   const { t } = useLanguage();
@@ -11,7 +12,9 @@ export default function ProductPillars() {
         {/* Card 1: Archonic Bridge */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#FFE135' }}>🏛️</div>
+            <div className="product-icon" style={{ color: '#FFE135' }}>
+              <LandmarkIcon size={32} color="#FFE135" />
+            </div>
             <span className="product-pill" style={{ borderColor: 'rgba(255, 225, 53, 0.4)', color: '#FFE135' }}>
               {t('products.bridge.tag')}
             </span>
@@ -45,7 +48,9 @@ export default function ProductPillars() {
         {/* Card 2: HowDoI */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#818cf8' }}>🎬</div>
+            <div className="product-icon" style={{ color: '#818cf8' }}>
+              <VideoIcon size={32} color="#818cf8" />
+            </div>
             <span className="product-pill" style={{ borderColor: 'rgba(129, 140, 248, 0.4)', color: '#818cf8' }}>
               {t('products.howdoi.tag')}
             </span>
@@ -82,7 +87,9 @@ export default function ProductPillars() {
         {/* Card 3: VisionCore */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
-            <div className="product-icon" style={{ color: '#34d399' }}>👁️</div>
+            <div className="product-icon" style={{ color: '#34d399' }}>
+              <ScanIcon size={32} color="#34d399" />
+            </div>
             <span className="product-pill" style={{ borderColor: 'rgba(52, 211, 153, 0.4)', color: '#34d399' }}>
               {t('products.visioncore.tag')}
             </span>

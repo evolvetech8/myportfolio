@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { SparklesIcon, CloseIcon } from './Icons';
 
 export default function AIAgentDrawer() {
   const { t, lang } = useLanguage();
@@ -107,7 +108,7 @@ export default function AIAgentDrawer() {
         aria-label="Toggle AI Agent"
       >
         <span className="ai-agent-fab-pulse"></span>
-        <span className="ai-agent-fab-icon">⚡</span>
+        <span className="ai-agent-fab-icon"><SparklesIcon size={15} color="#FFE135" /></span>
         <span className="ai-agent-fab-text">Vertex AI Sales Eng</span>
       </button>
 
@@ -122,7 +123,9 @@ export default function AIAgentDrawer() {
                 <span className="ai-drawer-subtitle">Google Cloud Run & Vertex AI Node</span>
               </div>
             </div>
-            <button className="ai-drawer-close" onClick={() => setIsOpen(false)}>✕</button>
+            <button className="ai-drawer-close" onClick={() => setIsOpen(false)} aria-label="Close AI Agent">
+              <CloseIcon size={14} color="var(--text-secondary)" />
+            </button>
           </div>
 
           <div className="ai-drawer-body">
