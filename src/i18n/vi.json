@@ -1,0 +1,72 @@
+{
+  "nav": {
+    "home": "Trang Chủ",
+    "about": "Về Chúng Tôi",
+    "contact": "Liên Hệ",
+    "demo": "Đặt Lịch Demo"
+  },
+  "hero": {
+    "pre": "HẠ TẦNG ENTERPRISE AI & FINTECH",
+    "title": "Hạ Tầng Tài Chính & AI Doanh Nghiệp Thế Hệ Mới",
+    "subtitle": "Nền tảng SaaS tự động hóa tuân thủ thuế, tiếp thị AI và xử lý tài liệu thông minh cho doanh nghiệp & hộ kinh doanh tại Việt Nam.",
+    "cta": "Đặt Lịch Demo",
+    "cta2": "Khám Phá Giải Pháp"
+  },
+  "products": {
+    "title": "Hệ Sinh Thái Sản Phẩm",
+    "bridge": {
+      "name": "Archonic Bridge",
+      "tagline": "Cầu Nối Tuân Thủ Thuế & Doanh Thu",
+      "desc": "Tự động hóa ghi nhận doanh thu và đối chiếu hóa đơn điện tử chuẩn Thông tư 88/2021/TT-BTC & Nghị định 123/2020/NĐ-CP. Giải pháp kế toán - thuế tinh gọn cho hộ kinh doanh và SME."
+    },
+    "howdoi": {
+      "name": "HowDoI",
+      "tagline": "Tiếp Thị AI & Tự Động Hóa Video",
+      "desc": "Quy trình sản xuất video đa kênh và tự động hóa chiến dịch tăng trưởng bằng trí tuệ nhân tạo. Tối ưu chi phí chuyển đổi khách hàng ở quy mô lớn."
+    },
+    "visioncore": {
+      "name": "VisionCore",
+      "tagline": "OCR & Trí Tuệ Tài Liệu Biên (Edge OCR)",
+      "desc": "Trích xuất tự động dữ liệu hóa đơn, chứng từ kế toán và biên lai chỉ trong <1.2 giây với mô hình AI cục bộ bảo mật cao, không rò rỉ dữ liệu tài chính."
+    }
+  },
+  "metrics": {
+    "title": "Tiêu Chuẩn Kỹ Thuật Cấp Doanh Nghiệp",
+    "stat1": { "value": "99.9%", "label": "Thời gian hoạt động Cloud Run SLA" },
+    "stat2": { "value": "< 1.2s", "label": "Tốc độ trích xuất hóa đơn Edge OCR" },
+    "stat3": { "value": "100%", "label": "Chuẩn hóa TT 88 & NĐ 123" },
+    "stat4": { "value": "E2EE", "label": "Mã hóa đầu-cuối dữ liệu tài chính" }
+  },
+  "about": {
+    "title": "Về EvolveTech",
+    "mission": "Sứ Mệnh Công Nghệ",
+    "missionText": "EvolveTech kiến tạo hạ tầng tài chính số và công nghệ tự động hóa chuyên sâu cho thị trường Việt Nam và Đông Nam Á. Chúng tôi cung cấp các giải pháp chuẩn mực doanh nghiệp lớn nhưng tinh gọn và tối ưu chi phí cho hàng triệu SME và hộ kinh doanh.",
+    "vision": "Tầm Nhìn 2026 - 2030",
+    "visionText": "Định vị EvolveTech trở thành đơn vị tiên phong trong danh sách Forbes Asia 100 to Watch, cung cấp các nền tảng Fintech và AI tự trị có khả năng tích hợp trực tiếp vào hệ thống quản trị thuế số của khu vực.",
+    "approach": "Kiến Trúc AI-Native & Tự Trị",
+    "approachText": "EvolveTech là công ty kỹ thuật AI-Native (Autonomous Software Studio). Hệ thống được vận hành trên hạ tầng tự phục hồi (self-healing), kiến trúc microservices bảo mật cao và các pipeline AI kiểm thử tự động, cam kết độ ổn định và tiêu chuẩn dịch vụ (SLA) cao nhất cho khách hàng doanh nghiệp."
+  },
+  "contact": {
+    "title": "Kết Nối Kỹ Thuật & Hợp Tác",
+    "subtitle": "Sẵn sàng nâng cấp hạ tầng tài chính và tự động hóa doanh nghiệp? Đặt lịch trao đổi kỹ thuật cùng đội ngũ EvolveTech.",
+    "name": "Họ và Tên",
+    "email": "Email Doanh Nghiệp",
+    "message": "Nhu cầu tích hợp (Thuế / AI / OCR)",
+    "send": "Gửi Yêu Cầu Tư Vấn",
+    "phone": "Hotline Hỗ Trợ",
+    "emailLabel": "Email Kỹ Thuật"
+  },
+  "aiAgent": {
+    "badge": "EvolveTech Sales Engineer AI",
+    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật EvolveTech. Bạn muốn tìm hiểu về tuân thủ Thông tư 88, Archonic Bridge hay cách tích hợp OCR hóa đơn?",
+    "prompt1": "Thông tư 88 yêu cầu gì với hộ kinh doanh?",
+    "prompt2": "Archonic Bridge hoạt động như thế nào?",
+    "prompt3": "VisionCore OCR xử lý hóa đơn ra sao?",
+    "inputPlaceholder": "Đặt câu hỏi kỹ thuật hoặc pháp lý thuế...",
+    "send": "Gửi"
+  },
+  "footer": {
+    "tagline": "Hạ tầng tài chính & AI doanh nghiệp thế hệ mới.",
+    "rights": "© 2026 EvolveTech. All rights reserved. Tiêu chuẩn tuân thủ TT88 & NĐ123."
+  }
+}
