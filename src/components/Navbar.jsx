@@ -34,7 +34,7 @@ export default function Navbar() {
             <GlobeIcon size={13} color="currentColor" />
             <span>{lang === 'vi' ? 'EN' : 'VI'}</span>
           </button>
-          <Link to="/contact" className="nano-button">{t('nav.demo')}</Link>
+          <Link to="/trial" className="nano-button">{t('nav.demo')}</Link>
         </div>
       </div>
     </nav>
