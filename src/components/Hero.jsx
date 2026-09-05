@@ -8,6 +8,10 @@ export default function Hero() {
 
   return (
     <section className="hero">
+      {/* Dynamic Ambient Aurora Background Glows */}
+      <div className="hero-aurora-glow hero-glow-1" aria-hidden="true"></div>
+      <div className="hero-aurora-glow hero-glow-2" aria-hidden="true"></div>
+
       <div className="hero-inner">
         <span className="hero-pre">{t('hero.pre')}</span>
         <h1 className="hero-title">{t('hero.title')}</h1>
