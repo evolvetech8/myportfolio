@@ -107,12 +107,12 @@
     "starter": {
       "name": "Gói Khởi Điểm (Starter)",
       "target": "Dành cho quán cafe nhỏ, tiệm ăn, salon, hộ kinh doanh cá thể",
-      "badge": "TIẾT KIỆM HƠN MISA 30%",
+      "badge": "TIẾT KIỆM 30% CHI PHÍ",
       "priceAnnual": "149.000",
       "priceMonthly": "189.000",
       "billedAnnualText": "1.788.000đ / năm (Tiết kiệm 20%)",
-      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
-      "desc": "Giải pháp tự động hóa 7 sổ TT88 chi phí tối ưu, rẻ hơn nhiều so với gói 2.4 triệu/năm của MISA mà lại dễ dùng vượt trội.",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
+      "desc": "Tiết kiệm 30% so với các phần mềm kế toán truyền thống. Tự động hóa 7 sổ TT88 không cần nhập tay.",
       "cta": "Bắt Đầu Dùng Thử 14 Ngày",
       "features": [
         "Kết nối 1 tài khoản ngân hàng (Hút giao dịch VietQR tự động)",
@@ -130,7 +130,7 @@
       "priceAnnual": "249.000",
       "priceMonthly": "319.000",
       "billedAnnualText": "2.988.000đ / năm (Tiết kiệm 20%)",
-      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
       "desc": "Không bao giờ phải đối chiếu hóa đơn đỏ bằng tay. Tự động đồng bộ Cổng Thuế và cảnh báo rủi ro tức thời.",
       "cta": "Trải Nghiệm Gói Tự Động 14 Ngày",
       "features": [
@@ -149,7 +149,7 @@
       "priceAnnual": "399.000",
       "priceMonthly": "499.000",
       "billedAnnualText": "4.788.000đ / năm (Tiết kiệm 20%)",
-      "billedMonthlyText": "Thanh toán từng tháng linh hoạt",
+      "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
       "desc": "Quét bóc tách hóa đơn giấy bằng AI và quản lý hợp nhất số liệu cho chuỗi nhiều chi nhánh.",
       "cta": "Bắt Đầu Gói Toàn Diện 14 Ngày",
       "features": [
@@ -165,7 +165,7 @@
       "item1": "Dùng thử đầy đủ tính năng 14 ngày không cần thẻ tín dụng",
       "item2": "Hỗ trợ xuất hóa đơn GTGT đầy đủ cho chi phí doanh nghiệp",
       "item3": "Cam kết bảo mật dữ liệu cấp ngân hàng mã hóa AES-256",
-      "item4": "Hỗ trợ chuyển đổi dữ liệu miễn phí từ MISA / KiotViet trong 30 phút"
+      "item4": "Hỗ trợ chuyển đổi dữ liệu miễn phí từ phần mềm cũ & sổ tay trong 30 phút"
     },
     "faq": {
       "title": "Câu Hỏi Thường Gặp Về Bảng Giá",
@@ -175,8 +175,41 @@
       "a2": "Thanh toán theo năm giúp bạn tiết kiệm 20% chi phí, đồng thời Archonic sẽ xuất 1 hóa đơn điện tử hợp lệ trọn gói cả năm giúp bạn thuận tiện đưa vào chi phí hợp lý của hộ kinh doanh/doanh nghiệp.",
       "q3": "Dữ liệu tài khoản ngân hàng của tôi có an toàn không?",
       "a3": "Tuyệt đối an toàn. A-Sổ chỉ kết nối Open Banking / VietQR ở chế độ chỉ đọc (Read-Only) để nhận biến động số dư phục vụ ghi sổ kế toán. A-Sổ hoàn toàn không có quyền rút tiền hay can thiệp vào tài khoản ngân hàng của bạn.",
-      "q4": "Tôi đang dùng sổ giấy hoặc MISA/KiotViet, có chuyển sang A-Sổ được không?",
+      "q4": "Tôi đang dùng sổ sách giấy hoặc phần mềm cũ, có chuyển sang A-Sổ được không?",
       "a4": "Có. Đội ngũ chuyên viên Archonic sẽ hỗ trợ 'White-Glove Onboarding' miễn phí: chuyển dữ liệu danh mục hàng hóa, số dư đầu kỳ từ phần mềm cũ sang A-Sổ trong vòng 30 phút."
+    },
+    "checkout": {
+      "modalTitle": "Kích Hoạt Tài Khoản A-Sổ Qua VietQR",
+      "modalSubtitle": "Quét mã VietQR bằng bất kỳ ứng dụng ngân hàng hoặc ví điện tử (Vietcombank, MBBank, Techcombank, Momo, ZaloPay...)",
+      "step1Title": "Thông Tin Đăng Ký",
+      "businessName": "Tên Hộ Kinh Doanh / Cửa Hàng",
+      "businessNamePlaceholder": "Ví dụ: Tiệm Bánh & Cà Phê Mộc",
+      "phone": "Số Điện Thoại / Zalo Nhận Kích Hoạt",
+      "phonePlaceholder": "Ví dụ: 0912345678",
+      "email": "Email Nhận Hóa Đơn VAT (Tùy chọn)",
+      "emailPlaceholder": "kinhdoanh@example.com",
+      "nextBtn": "Tạo Mã VietQR Thanh Toán",
+      "step2Title": "Quét Mã VietQR Thanh Toán Tức Thì",
+      "bankLabel": "Ngân Hàng Thụ Hưởng",
+      "bankName": "Vietcombank (VCB) - Chi nhánh TP.HCM",
+      "accountNumber": "Số Tài Khoản",
+      "accountNumberVal": "0353600900",
+      "accountHolder": "Chủ Tài Khoản",
+      "accountHolderVal": "CONG TY TNHH ARCHONIC",
+      "amount": "Số Tiền Thanh Toán",
+      "transferContent": "Cú Pháp Chuyển Khoản (Hệ thống tự động kích hoạt)",
+      "copyBtn": "Sao chép",
+      "copiedBtn": "Đã chép!",
+      "waitingWebhook": "Đang chờ nhận biến động số dư qua Webhook tự động...",
+      "webhookNote": "Hệ thống tự động kích hoạt tài khoản trong vòng 30 giây ngay sau khi xác nhận chuyển khoản.",
+      "confirmPaidBtn": "Tôi Đã Quét Mã Chuyển Khoản Xong",
+      "trialModeTitle": "Kích Hoạt Dùng Thử 14 Ngày Miễn Phí",
+      "trialModeDesc": "Tài khoản của bạn sẽ được kích hoạt ngay lập tức. Sau 14 ngày, bạn có thể quyết định tiếp tục hoặc hủy mà không phát sinh bất kỳ khoản phí nào.",
+      "activateTrialBtn": "Kích Hoạt Dùng Thử Ngay (0đ)",
+      "successTitle": "Kích Hoạt Thành Công!",
+      "successDesc": "Chào mừng bạn đến với nền tảng A-Sổ. Đội ngũ kỹ thuật đang gửi thông tin đăng nhập và hướng dẫn kết nối máy POS/VietQR đến số điện thoại của bạn.",
+      "openDashboardBtn": "Truy Cập Bảng Quản Trị A-Sổ",
+      "close": "Đóng"
     }
   },
   "metrics": {

@@ -1350,6 +1350,14 @@ a:hover { color: var(--archonic-amber); }
   align-items: baseline;
   gap: 6px;
 }
+.price-original {
+  font-size: 20px;
+  font-weight: 600;
+  color: #71717a;
+  text-decoration: line-through;
+  margin-right: 6px;
+  opacity: 0.8;
+}
 .price-currency {
   font-size: 40px;
   font-weight: 900;
@@ -1509,5 +1517,407 @@ a:hover { color: var(--archonic-amber); }
     font-size: 34px;
   }
 }
+
+/* =============================================
+   DYNAMIC VIETQR CHECKOUT MODAL SYSTEM
+   ============================================= */
+.vietqr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vietqr-modal {
+  width: 100%;
+  max-width: 680px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: #111116;
+  border: 1px solid rgba(255, 109, 0, 0.4);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 109, 0, 0.2);
+  text-align: left;
+}
+
+.vietqr-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.vietqr-close-btn:hover {
+  background: rgba(255, 109, 0, 0.2);
+  border-color: var(--archonic-orange);
+}
+
+.vietqr-modal-header {
+  margin-bottom: 22px;
+}
+.vietqr-badge-strip {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.vietqr-brand-pill {
+  font-size: 11px;
+  font-weight: 800;
+  background: #005baa;
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.vietqr-instant-pill {
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+.vietqr-modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+.vietqr-modal-sub {
+  font-size: 13.5px;
+  color: #b4b4c6;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Step 1 Form */
+.vietqr-plan-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+.summary-plan-name {
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 15px;
+  display: block;
+}
+.summary-cycle {
+  font-size: 12px;
+  color: #a1a1aa;
+}
+.summary-price {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--archonic-amber);
+}
+
+.vietqr-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.mode-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #9ca3af;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mode-btn.active {
+  border-color: var(--archonic-orange);
+  background: rgba(255, 109, 0, 0.1);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.vietqr-field-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vietqr-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+.vietqr-input {
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+.vietqr-input:focus {
+  border-color: var(--archonic-orange);
+  box-shadow: 0 0 10px rgba(255, 109, 0, 0.25);
+}
+.vietqr-submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Step 2 QR Split */
+.vietqr-split {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.vietqr-image-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.vietqr-frame {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  width: 230px;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.vietqr-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.vietqr-scan-hint {
+  font-size: 11px;
+  color: #a1a1aa;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.vietqr-details-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vietqr-info-row {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.syntax-row {
+  background: rgba(255, 109, 0, 0.06);
+  border-color: rgba(255, 109, 0, 0.35);
+}
+.info-label {
+  font-size: 10.5px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.info-value {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+}
+.info-val-copy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.highlight-num {
+  font-family: ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFA100;
+}
+.highlight-amount {
+  font-size: 16px;
+  font-weight: 900;
+  color: #4ade80;
+}
+.highlight-syntax {
+  font-family: ui-monospace, monospace;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+.copy-pill-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.copy-pill-btn:hover {
+  background: var(--archonic-orange);
+  color: #ffffff;
+}
+.syntax-copy {
+  background: var(--archonic-gradient);
+  border: none;
+}
+
+.vietqr-webhook-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 8px;
+  margin: 4px 0;
+}
+.webhook-beacon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  animation: beacon-pulse 1.8s infinite;
+  flex-shrink: 0;
+}
+.webhook-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.webhook-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #4ade80;
+}
+.webhook-sub {
+  font-size: 10px;
+  color: #a1a1aa;
+}
+.confirm-paid-btn {
+  width: 100%;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+/* Step 3 Success */
+.vietqr-success-wrap {
+  text-align: center;
+  padding: 20px 0;
+}
+.success-icon-box {
+  margin-bottom: 16px;
+}
+.success-heading {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+.success-desc {
+  font-size: 14px;
+  color: #b4b4c6;
+  max-width: 500px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+.success-order-box {
+  padding: 16px 20px;
+  border-radius: 10px;
+  max-width: 420px;
+  margin: 0 auto 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #d1d5db;
+}
+.order-status-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.success-action-btn {
+  padding: 13px 32px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .vietqr-modal {
+    padding: 24px 18px;
+  }
+  .vietqr-split {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .vietqr-details-col {
+    width: 100%;
+  }
+}
+
 
 

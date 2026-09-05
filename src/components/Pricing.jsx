@@ -1,12 +1,23 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
-import { Link } from 'react-router-dom';
-import { CheckCircleIcon, ShieldIcon, SparklesIcon, FileTextIcon, LockIcon } from './Icons';
+import { CheckCircleIcon, ShieldIcon, SparklesIcon, LockIcon } from './Icons';
+import VietQRCheckoutModal from './VietQRCheckoutModal';
 
 export default function Pricing({ isStandalone = false }) {
   const { t } = useLanguage();
   const [billingCycle, setBillingCycle] = useState('annual'); // 'annual' | 'monthly'
   const [openFaq, setOpenFaq] = useState(null);
+
+  // VietQR Checkout Modal State
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [checkoutPlan, setCheckoutPlan] = useState('pro');
+  const [isTrialMode, setIsTrialMode] = useState(false);
+
+  const openCheckout = (planId, trial = false) => {
+    setCheckoutPlan(planId);
+    setIsTrialMode(trial);
+    setIsCheckoutOpen(true);
+  };
 
   const tiers = [
     {
@@ -83,9 +94,13 @@ export default function Pricing({ isStandalone = false }) {
             </div>
             <p className="trial-hook-desc">{t('pricing.trialBannerDesc')}</p>
           </div>
-          <Link to="/contact?trial=true" className="nano-button trial-hook-cta">
+          <button
+            type="button"
+            className="nano-button trial-hook-cta"
+            onClick={() => openCheckout('pro', true)}
+          >
             {t('pricing.trialCta')}
-          </Link>
+          </button>
         </div>
 
         {/* Billing Toggle (Monthly vs. Annual) */}
@@ -118,6 +133,7 @@ export default function Pricing({ isStandalone = false }) {
             const billedText = billingCycle === 'annual'
               ? t(`pricing.${tier.id}.billedAnnualText`)
               : t(`pricing.${tier.id}.billedMonthlyText`);
+            const monthlyBaseline = t(`pricing.${tier.id}.priceMonthly`);
 
             return (
               <div
@@ -145,6 +161,11 @@ export default function Pricing({ isStandalone = false }) {
 
                 <div className="pricing-card-price">
                   <div className="price-row">
+                    {billingCycle === 'annual' && (
+                      <span className="price-original">
+                        {monthlyBaseline}đ
+                      </span>
+                    )}
                     <span className="price-currency">{price}</span>
                     <span className="price-unit">{t('pricing.monthUnit')}</span>
                   </div>
@@ -154,12 +175,13 @@ export default function Pricing({ isStandalone = false }) {
                 <p className="tier-desc">{t(`pricing.${tier.id}.desc`)}</p>
 
                 <div className="tier-cta-wrap">
-                  <Link
-                    to={`/contact?plan=${tier.id}&billing=${billingCycle}`}
+                  <button
+                    type="button"
+                    onClick={() => openCheckout(tier.id, false)}
                     className={`tier-cta-btn ${tier.isPopular ? 'nano-button' : 'tier-cta-secondary'}`}
                   >
                     {t(`pricing.${tier.id}.cta`)}
-                  </Link>
+                  </button>
                 </div>
 
                 <div className="tier-divider"></div>
@@ -224,6 +246,15 @@ export default function Pricing({ isStandalone = false }) {
           </div>
         </div>
       </div>
+
+      {/* Dynamic VietQR Checkout Modal */}
+      <VietQRCheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        selectedPlan={checkoutPlan}
+        billingCycle={billingCycle}
+        isTrial={isTrialMode}
+      />
     </section>
   );
 }

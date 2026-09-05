@@ -107,13 +107,13 @@
     "starter": {
       "name": "Starter Tier",
       "target": "For micro-businesses, cafes, diners, single-chair salons, and local vendors",
-      "badge": "SAVE 30% VS MISA",
+      "badge": "SAVE 30% ON SOFTWARE",
       "priceAnnual": "149,000",
       "priceMonthly": "189,000",
       "billedAnnualText": "1,788,000 VND / year (Save 20%)",
-      "billedMonthlyText": "Flexible month-to-month billing",
-      "desc": "Automates fundamental Circular 88 tax ledgers. 30% lower cost than MISA's base tier with far simpler automation.",
-      "cta": "Start 14-Day Trial",
+      "billedMonthlyText": "Flexible month-to-month billing • Cancel anytime",
+      "desc": "Save 30% compared to traditional accounting software. Automates 7 TT88 ledgers without manual data entry.",
+      "cta": "Start 14-Day Free Trial",
       "features": [
         "1 Bank connection for automated VietQR transaction ingestion",
         "Generates all 7 mandatory Circular 88/2021/TT-BTC ledgers",
@@ -130,7 +130,7 @@
       "priceAnnual": "249,000",
       "priceMonthly": "319,000",
       "billedAnnualText": "2,988,000 VND / year (Save 20%)",
-      "billedMonthlyText": "Flexible month-to-month billing",
+      "billedMonthlyText": "Flexible month-to-month billing • Cancel anytime",
       "desc": "Never manually reconcile a tax invoice again. Realtime sync with General Department of Taxation and instant hazard alerts.",
       "cta": "Experience Pro Tier 14-Day Trial",
       "features": [
@@ -149,7 +149,7 @@
       "priceAnnual": "399,000",
       "priceMonthly": "499,000",
       "billedAnnualText": "4,788,000 VND / year (Save 20%)",
-      "billedMonthlyText": "Flexible month-to-month billing",
+      "billedMonthlyText": "Flexible month-to-month billing • Cancel anytime",
       "desc": "Extracts physical paper receipts with Vision AI and consolidates multi-store financial operations seamlessly.",
       "cta": "Start Advanced Tier 14-Day Trial",
       "features": [
@@ -165,7 +165,7 @@
       "item1": "Full-featured 14-day trial without credit card",
       "item2": "Compliant VAT invoices issued for corporate tax deduction",
       "item3": "Bank-grade AES-256 financial data encryption",
-      "item4": "Free white-glove onboarding and data migration from MISA/KiotViet"
+      "item4": "Free white-glove onboarding and data migration from legacy tools"
     },
     "faq": {
       "title": "Frequently Asked Pricing Questions",
@@ -175,8 +175,41 @@
       "a2": "Over 90% of Vietnamese businesses choose annual billing to save 20% on subscription costs and receive a single, compliant VAT invoice for simple tax deduction.",
       "q3": "Is my financial data secure when connecting bank accounts?",
       "a3": "Bank connections utilize read-only Open Banking and VietQR webhooks encrypted with AES-256 bank-grade cryptography. A-Sổ cannot execute transfers or alter your accounts.",
-      "q4": "Do you support data migration from legacy tools like MISA or KiotViet?",
+      "q4": "Do you support data migration from legacy tools or paper records?",
       "a4": "Yes. Our team provides complimentary white-glove onboarding, importing opening balances and product lists within 30 minutes."
+    },
+    "checkout": {
+      "modalTitle": "Activate A-Sổ Account via VietQR",
+      "modalSubtitle": "Scan the dynamic VietQR with any banking app or e-wallet (Vietcombank, MBBank, Techcombank, Momo, ZaloPay...)",
+      "step1Title": "Merchant Registration",
+      "businessName": "Business / Store Name",
+      "businessNamePlaceholder": "e.g., Artisan Bakery & Cafe",
+      "phone": "Phone / Zalo for Account Activation",
+      "phonePlaceholder": "e.g., 0912345678",
+      "email": "VAT Invoice Email (Optional)",
+      "emailPlaceholder": "finance@example.com",
+      "nextBtn": "Generate Dynamic VietQR",
+      "step2Title": "Instant VietQR Payment Authorization",
+      "bankLabel": "Beneficiary Bank",
+      "bankName": "Vietcombank (VCB) - HCMC Branch",
+      "accountNumber": "Account Number",
+      "accountNumberVal": "0353600900",
+      "accountHolder": "Account Holder",
+      "accountHolderVal": "CONG TY TNHH ARCHONIC",
+      "amount": "Exact Amount Due",
+      "transferContent": "Transfer Syntax (Mandatory for auto-webhook)",
+      "copyBtn": "Copy",
+      "copiedBtn": "Copied!",
+      "waitingWebhook": "Awaiting automated banking webhook signal...",
+      "webhookNote": "Your account will be auto-provisioned within 30 seconds of transfer confirmation.",
+      "confirmPaidBtn": "I Have Completed The QR Transfer",
+      "trialModeTitle": "Activate 14-Day Free Trial",
+      "trialModeDesc": "Your account will be activated immediately with full ledger features. Zero fees charged.",
+      "activateTrialBtn": "Activate 14-Day Free Trial (0 VND)",
+      "successTitle": "Activation Successful!",
+      "successDesc": "Welcome to A-Sổ! Our onboarding engineers are dispatching your login credentials and VietQR ledger hook instructions to your phone.",
+      "openDashboardBtn": "Access A-Sổ Dashboard",
+      "close": "Close"
     }
   },
   "metrics": {
