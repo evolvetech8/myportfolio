@@ -58,17 +58,17 @@
     "stat4": { "value": "E2EE", "label": "Mã hóa đầu-cuối dữ liệu tài chính" }
   },
   "about": {
-    "title": "Về EvolveTech",
+    "title": "Về Archonic",
     "mission": "Sứ Mệnh Công Nghệ",
-    "missionText": "EvolveTech kiến tạo hạ tầng tài chính số và công nghệ tự động hóa chuyên sâu cho thị trường Việt Nam và Đông Nam Á. Chúng tôi cung cấp các giải pháp chuẩn mực doanh nghiệp lớn nhưng tinh gọn và tối ưu chi phí cho hàng triệu SME và hộ kinh doanh.",
+    "missionText": "Archonic kiến tạo hạ tầng tài chính số và công nghệ tự động hóa chuyên sâu cho thị trường Việt Nam và Đông Nam Á. Chúng tôi cung cấp các giải pháp chuẩn mực doanh nghiệp lớn nhưng tinh gọn và tối ưu chi phí cho hàng triệu SME và hộ kinh doanh.",
     "vision": "Tầm Nhìn 2026 - 2030",
-    "visionText": "Định vị EvolveTech trở thành đơn vị tiên phong trong danh sách Forbes Asia 100 to Watch, cung cấp các nền tảng Fintech và AI tự trị có khả năng tích hợp trực tiếp vào hệ thống quản trị thuế số của khu vực.",
+    "visionText": "Định vị Archonic trở thành đơn vị tiên phong trong danh sách Forbes Asia 100 to Watch, cung cấp các nền tảng Fintech và AI tự trị có khả năng tích hợp trực tiếp vào hệ thống quản trị thuế số của khu vực.",
     "approach": "Kiến Trúc AI-Native & Tự Trị",
-    "approachText": "EvolveTech là công ty kỹ thuật AI-Native (Autonomous Software Studio). Hệ thống được vận hành trên hạ tầng tự phục hồi (self-healing), kiến trúc microservices bảo mật cao và các pipeline AI kiểm thử tự động, cam kết độ ổn định và tiêu chuẩn dịch vụ (SLA) cao nhất cho khách hàng doanh nghiệp."
+    "approachText": "Archonic là công ty kỹ thuật AI-Native (Autonomous Software Studio). Hệ thống được vận hành trên hạ tầng tự phục hồi (self-healing), kiến trúc microservices bảo mật cao và các pipeline AI kiểm thử tự động, cam kết độ ổn định và tiêu chuẩn dịch vụ (SLA) cao nhất cho khách hàng doanh nghiệp."
   },
   "contact": {
     "title": "Kết Nối Kỹ Thuật & Hợp Tác",
-    "subtitle": "Sẵn sàng nâng cấp hạ tầng tài chính và tự động hóa doanh nghiệp? Đặt lịch trao đổi kỹ thuật cùng đội ngũ EvolveTech.",
+    "subtitle": "Sẵn sàng nâng cấp hạ tầng tài chính và tự động hóa doanh nghiệp? Đặt lịch trao đổi kỹ thuật cùng đội ngũ Archonic.",
     "name": "Họ và Tên",
     "email": "Email Doanh Nghiệp",
     "message": "Nhu cầu tích hợp (Thuế / AI / OCR)",
@@ -77,8 +77,8 @@
     "emailLabel": "Email Kỹ Thuật"
   },
   "aiAgent": {
-    "badge": "EvolveTech Sales Engineer AI",
-    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật EvolveTech. Bạn muốn tìm hiểu về tuân thủ Thông tư 88, Archonic Bridge hay cách tích hợp OCR hóa đơn?",
+    "badge": "Archonic Sales Engineer AI",
+    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật Archonic. Bạn muốn tìm hiểu về tuân thủ Thông tư 88, Archonic Bridge hay cách tích hợp OCR hóa đơn?",
     "prompt1": "Thông tư 88 yêu cầu gì với hộ kinh doanh?",
     "prompt2": "Archonic Bridge hoạt động như thế nào?",
     "prompt3": "VisionCore OCR xử lý hóa đơn ra sao?",
@@ -87,6 +87,6 @@
   },
   "footer": {
     "tagline": "Hạ tầng tài chính & AI doanh nghiệp thế hệ mới.",
-    "rights": "© 2026 EvolveTech. All rights reserved. Tiêu chuẩn tuân thủ TT88 & NĐ123."
+    "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT88 & NĐ123."
   }
 }

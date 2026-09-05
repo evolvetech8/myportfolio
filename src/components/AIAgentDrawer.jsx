@@ -59,8 +59,8 @@ export default function AIAgentDrawer() {
   const answerQuestion = (query) => {
     const q = query.toLowerCase();
     let reply = lang === 'vi' 
-      ? 'Cảm ơn bạn đã quan tâm. Hệ thống EvolveTech cung cấp hạ tầng công nghệ lõi gồm Archonic Bridge (Tuân thủ Thuế), HowDoI (AI Marketing), và VisionCore (Edge OCR). Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn chi tiết.'
-      : 'Thank you for your question. EvolveTech delivers core enterprise infrastructure: Archonic Bridge (Tax Compliance), HowDoI (AI Growth), and VisionCore (Edge OCR). Please leave your contact details on our Contact page for an enterprise solution architect consult.';
+      ? 'Cảm ơn bạn đã quan tâm. Hệ thống Archonic cung cấp hạ tầng công nghệ lõi gồm Archonic Bridge (Tuân thủ Thuế), HowDoI (AI Marketing), và VisionCore (Edge OCR). Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn chi tiết.'
+      : 'Thank you for your question. Archonic delivers core enterprise infrastructure: Archonic Bridge (Tax Compliance), HowDoI (AI Growth), and VisionCore (Edge OCR). Please leave your contact details on our Contact page for an enterprise solution architect consult.';
 
     for (const item of Object.values(knowledgeBase)) {
       if (item.keywords.some(k => q.includes(k))) {
