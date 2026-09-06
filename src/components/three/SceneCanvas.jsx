@@ -49,13 +49,20 @@ const SceneContent = () => {
     };
   }, []);
 
-  // Pause rendering when tab is hidden
   if (!isVisible) return null;
 
   return (
     <>
-      <ambientLight intensity={0.2} />
+      {/* Solid deep space background color */}
+      <color attach="background" args={['#030306']} />
+      
+      {/* Soft ambient light */}
+      <ambientLight intensity={0.4} />
+
+      {/* Floating deep space bokeh dots */}
       <ParticleField scrollProgress={progress} />
+
+      {/* The Vesper Wavy Particle Torus Ribbon */}
       <VesperOrb scrollProgress={progress} />
     </>
   );
@@ -77,7 +84,7 @@ const SceneCanvasComponent = () => {
           left: 0, 
           width: '100%', 
           height: '100%', 
-          backgroundColor: '#040407', 
+          backgroundColor: '#030306', 
           zIndex: 0 
         }} 
       />
@@ -85,16 +92,7 @@ const SceneCanvasComponent = () => {
   }
 
   return (
-    <Canvas
-      camera={{ position: [0, 0, 7.5], fov: 48 }}
-      dpr={[1, 1.5]}
-      gl={{ 
-        antialias: true, 
-        alpha: true, 
-        powerPreference: 'high-performance',
-        stencil: false,
-        depth: false
-      }}
+    <div
       style={{
         position: 'fixed',
         top: 0,
@@ -102,13 +100,26 @@ const SceneCanvasComponent = () => {
         width: '100vw',
         height: '100vh',
         zIndex: 0,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        backgroundColor: '#030306',
+        overflow: 'hidden',
       }}
     >
-      <Suspense fallback={null}>
-        <SceneContent />
-      </Suspense>
-    </Canvas>
+      <Canvas
+        camera={{ position: [0, 0, 7.0], fov: 45 }}
+        dpr={[1, 2]}
+        gl={{ 
+          antialias: true, 
+          alpha: false, // Opaque WebGL canvas prevents browser compositor whiteout!
+          powerPreference: 'high-performance',
+        }}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <Suspense fallback={null}>
+          <SceneContent />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 };
 

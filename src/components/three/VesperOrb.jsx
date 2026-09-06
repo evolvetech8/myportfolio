@@ -3,221 +3,147 @@ import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 /**
- * VesperOrb — Inspired by GetLayers "Vesper"
- * A living, breathing cloud of mint and violet light that breathes as an orb,
- * expands into a spiral galaxy upon scroll, and responds fluidly to mouse movement.
+ * VesperOrb — Faithfully replicates the Vesper signature 3D Wavy Particle Torus.
+ * Reference: https://storage.getlayers.ai/templates/vesper-06e69bbad0.webp
+ *
+ * Parametric undulating torus ribbon of 16,200 round glowing particles with
+ * smooth gradient from Electric Mint (#00f5d4) to Azure Blue (#3b82f6) to Neon Violet (#a855f7).
  */
 const VesperOrb = ({ scrollProgress = 0 }) => {
   const pointsRef = useRef();
-  const innerGlowRef = useRef();
-  const outerGlowRef = useRef();
   const groupRef = useRef();
   const { pointer } = useThree();
 
-  const particleCount = 15000;
+  const uSteps = 180;
+  const vSteps = 90;
+  const particleCount = uSteps * vSteps; // 16,200 points
 
-  // Generate multi-layered celestial particle system:
-  // Layer 1: Dense mint/cyan nucleus
-  // Layer 2: Spiral galaxy arms with mint-to-violet gradients
-  // Layer 3: Ethereal neural filaments and outer starlight
-  const [positions, colors, sizes, meta] = useMemo(() => {
+  // Soft circular particle texture so points render as anti-aliased luminous glowing beads (no squares!)
+  const circleTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    grad.addColorStop(0.3, 'rgba(255, 255, 255, 0.85)');
+    grad.addColorStop(0.65, 'rgba(255, 255, 255, 0.25)');
+    grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    return texture;
+  }, []);
+
+  // Pre-calculate parametric angles (u, v) and gradient vertex colors
+  const [positions, colors, angles] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
     const col = new Float32Array(particleCount * 3);
-    const sz = new Float32Array(particleCount);
-    
-    // Custom metadata array to track initial math parameters per particle:
-    // [radius, theta, phi, arm, speed, layer, baseOpacity]
-    const metadata = [];
+    const ang = new Float32Array(particleCount * 2);
 
-    const colorMint = new THREE.Color('#00f5d4');     // Electric Mint
-    const colorCyan = new THREE.Color('#2dd4bf');     // Soft Seafoam Cyan
-    const colorViolet = new THREE.Color('#8b5cf6');   // Electric Violet
-    const colorPurple = new THREE.Color('#a855f7');   // Neon Purple
-    const colorMagenta = new THREE.Color('#d946ef');  // Iridescent Magenta
-    const colorStar = new THREE.Color('#f8fafc');     // Pure Starlight
+    const cMint = new THREE.Color('#00f5d4');   // Electric Mint (Top/Left)
+    const cCyan = new THREE.Color('#06b6d4');   // Pure Cyan
+    const cBlue = new THREE.Color('#3b82f6');   // Azure Blue
+    const cViolet = new THREE.Color('#8b5cf6'); // Electric Violet
+    const cPurple = new THREE.Color('#c084fc'); // Neon Purple (Bottom/Right)
     const tempColor = new THREE.Color();
 
-    const armsCount = 3;
+    let idx = 0;
+    for (let i = 0; i < uSteps; i++) {
+      const u = (i / uSteps) * Math.PI * 2;
+      const uRatio = i / uSteps; // 0.0 to 1.0 around the ring
 
-    for (let i = 0; i < particleCount; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const arm = Math.floor(Math.random() * armsCount);
-      const armOffset = (arm * (2 * Math.PI)) / armsCount;
-
-      let layer = 1;
-      let r, theta, phi, speed;
-
-      if (i < 4500) {
-        // LAYER 1: Core Nucleus (dense, luminous mint & cyan)
-        layer = 1;
-        r = 0.3 + Math.pow(Math.random(), 2) * 1.5;
-        theta = u * 2 * Math.PI;
-        phi = Math.acos(2 * v - 1);
-        speed = 0.8 + Math.random() * 0.6;
-
-        // Gradient from pure mint to bright cyan
-        tempColor.lerpColors(colorMint, colorCyan, Math.random());
-        sz[i] = 0.02 + Math.random() * 0.035;
-      } else if (i < 12000) {
-        // LAYER 2: Spiral Galaxy Arms (mint transitioning to electric violet & magenta)
-        layer = 2;
-        const distRatio = Math.random();
-        r = 1.2 + distRatio * 3.2;
-        
-        // Logarithmic spiral math
-        const spiralAngle = Math.log(r + 0.1) * 2.8 + armOffset;
-        theta = spiralAngle + (Math.random() - 0.5) * 0.6;
-        phi = Math.PI / 2 + (Math.random() - 0.5) * 0.9 * Math.exp(-r * 0.2); // Flattened disc galaxy
-        speed = 0.4 + Math.random() * 0.5;
-
-        // Gradient from cyan at center to violet and magenta at the outer rim
-        if (distRatio < 0.45) {
-          tempColor.lerpColors(colorCyan, colorViolet, distRatio / 0.45);
-        } else {
-          tempColor.lerpColors(colorViolet, colorMagenta, (distRatio - 0.45) / 0.55);
-        }
-        sz[i] = 0.018 + Math.random() * 0.032;
+      // Interpolate smooth 4-stop gradient matching Vesper reference exactly
+      if (uRatio < 0.25) {
+        tempColor.lerpColors(cMint, cCyan, uRatio / 0.25);
+      } else if (uRatio < 0.55) {
+        tempColor.lerpColors(cCyan, cBlue, (uRatio - 0.25) / 0.3);
+      } else if (uRatio < 0.85) {
+        tempColor.lerpColors(cBlue, cViolet, (uRatio - 0.55) / 0.3);
       } else {
-        // LAYER 3: Neural Filaments & Cosmic Stardust (halo sphere)
-        layer = 3;
-        r = 2.0 + Math.random() * 4.5;
-        theta = u * 2 * Math.PI;
-        phi = Math.acos(2 * v - 1);
-        speed = 0.2 + Math.random() * 0.3;
-
-        // Soft ethereal violet & starlight
-        if (Math.random() > 0.3) {
-          tempColor.lerpColors(colorPurple, colorViolet, Math.random());
-        } else {
-          tempColor.copy(colorStar);
-        }
-        sz[i] = 0.012 + Math.random() * 0.024;
+        tempColor.lerpColors(cViolet, cMint, (uRatio - 0.85) / 0.15);
       }
 
-      // Compute initial Cartesian coordinates
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
+      for (let j = 0; j < vSteps; j++) {
+        const v = (j / vSteps) * Math.PI * 2;
+        ang[idx * 2] = u;
+        ang[idx * 2 + 1] = v;
 
-      pos[i * 3] = x;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = z;
+        // Base initialization
+        pos[idx * 3] = 0;
+        pos[idx * 3 + 1] = 0;
+        pos[idx * 3 + 2] = 0;
 
-      col[i * 3] = tempColor.r;
-      col[i * 3 + 1] = tempColor.g;
-      col[i * 3 + 2] = tempColor.b;
+        col[idx * 3] = tempColor.r;
+        col[idx * 3 + 1] = tempColor.g;
+        col[idx * 3 + 2] = tempColor.b;
 
-      metadata.push({ r, theta, phi, arm, speed, layer, armOffset });
+        idx++;
+      }
     }
 
-    return [pos, col, sz, metadata];
-  }, []);
+    return [pos, col, ang];
+  }, [uSteps, vSteps, particleCount]);
 
   useFrame((state) => {
     if (!pointsRef.current || !groupRef.current) return;
 
     const time = state.clock.getElapsedTime();
-
-    // Rhythmic breathing motion (deep, calm, hypnotic)
-    const breathCycle = Math.sin(time * 1.4);
-    const harmonicBreath = Math.sin(time * 2.8) * 0.3;
-    const breath = 1.0 + (breathCycle + harmonicBreath) * 0.09;
-
-    // As user scrolls, the orb "blows open" into a vast spiral galaxy
-    const expandFactor = 1.0 + scrollProgress * 1.6;
-
     const positionsAttr = pointsRef.current.geometry.attributes.position;
-    const array = positionsAttr.array;
+    const posArray = positionsAttr.array;
 
+    const majorR = 2.4;
+    const minorR = 0.85;
+
+    // Fluid undulation waves propagating around the parametric ring
     for (let i = 0; i < particleCount; i++) {
-      const idx = i * 3;
-      const m = meta[i];
+      const u = angles[i * 2];
+      const v = angles[i * 2 + 1];
 
-      // Dynamic orbital motion with harmonic waves
-      let currentR = m.r * breath;
-      let currentTheta = m.theta + time * 0.08 * m.speed;
-      let currentPhi = m.phi;
+      const wave = Math.sin(u * 4.0 + time * 1.2) * 0.28
+                 + Math.cos(v * 3.0 + time * 1.4) * 0.16
+                 + Math.sin(u * 2.0 - v * 2.0 + time * 1.8) * 0.18;
 
-      if (m.layer === 1) {
-        // Core breathes and pulsates
-        currentR *= (1.0 + Math.sin(time * 2.2 + m.r * 5.0) * 0.08);
-      } else if (m.layer === 2) {
-        // Spiral galaxy arms uncoil and expand with scroll
-        currentR *= expandFactor;
-        currentTheta += scrollProgress * 1.2;
-        // Subtle vertical wave
-        currentPhi += Math.sin(time * 1.1 + m.r * 2.0) * 0.04;
-      } else {
-        // Neural filaments oscillate gently in 3D
-        currentR *= (1.0 + scrollProgress * 1.2);
-        currentTheta += Math.cos(time * 0.5 + m.phi) * 0.03;
-      }
+      const currentR = majorR + wave;
+      const current_r = minorR * (1.0 + 0.22 * Math.sin(u * 3.0 + time * 0.9));
 
-      const x = currentR * Math.sin(currentPhi) * Math.cos(currentTheta);
-      const y = currentR * Math.sin(currentPhi) * Math.sin(currentTheta);
-      const z = currentR * Math.cos(currentPhi);
+      const x = (currentR + current_r * Math.cos(v)) * Math.cos(u);
+      const y = (currentR + current_r * Math.cos(v)) * Math.sin(u);
+      const z = current_r * Math.sin(v) + Math.sin(u * 3.0 + time * 1.1) * 0.32;
 
-      array[idx] = x;
-      array[idx + 1] = y;
-      array[idx + 2] = z;
+      posArray[i * 3] = x;
+      posArray[i * 3 + 1] = y;
+      posArray[i * 3 + 2] = z;
     }
 
     positionsAttr.needsUpdate = true;
 
-    // Smooth mouse parallax with fluid damping
-    const targetRotX = pointer.y * 0.35 + Math.sin(time * 0.15) * 0.1;
-    const targetRotY = pointer.x * 0.45 + time * 0.05;
-    const targetRotZ = Math.cos(time * 0.12) * 0.08;
+    // Vesper signature 3D tilt: looking diagonally into the ring hole
+    const baseRotX = -0.55;
+    const baseRotY = 0.35 + time * 0.05;
+    const baseRotZ = -0.22;
+
+    const targetRotX = baseRotX + pointer.y * 0.25;
+    const targetRotY = baseRotY + pointer.x * 0.3;
 
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.05);
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.05);
-    groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotZ, 0.05);
+    groupRef.current.rotation.z = baseRotZ;
 
-    // Scroll trajectory: orb shifts slightly to create depth framing
-    const targetY = scrollProgress * -1.8 + 0.2;
-    const targetZ = scrollProgress * -2.5;
-    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.06);
-    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.06);
+    // Scroll adaptation: scales slightly and glides deeper into space
+    const targetScale = 1.0 - scrollProgress * 0.35;
+    groupRef.current.scale.setScalar(THREE.MathUtils.lerp(groupRef.current.scale.x, Math.max(targetScale, 0.45), 0.08));
 
-    // Pulse volumetric core glow meshes
-    if (innerGlowRef.current) {
-      const glowScale = (1.1 + Math.sin(time * 1.4) * 0.15) * (1.0 + scrollProgress * 0.5);
-      innerGlowRef.current.scale.setScalar(glowScale);
-    }
-    if (outerGlowRef.current) {
-      const outerScale = (1.8 + Math.cos(time * 1.1) * 0.2) * (1.0 + scrollProgress * 0.8);
-      outerGlowRef.current.scale.setScalar(outerScale);
-    }
+    const targetY = scrollProgress * -1.5;
+    const targetZ = scrollProgress * -2.0;
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.08);
+    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.08);
   });
 
   return (
-    <group ref={groupRef} position={[0, 0.2, 0]}>
-      {/* Inner Bioluminescent Volumetric Sheen (Mint Core) */}
-      <mesh ref={innerGlowRef}>
-        <sphereGeometry args={[1.0, 32, 32]} />
-        <meshBasicMaterial
-          color="#00f5d4"
-          transparent
-          opacity={0.07}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Outer Ethereal Volumetric Aura (Violet Sheen) */}
-      <mesh ref={outerGlowRef}>
-        <sphereGeometry args={[1.7, 32, 32]} />
-        <meshBasicMaterial
-          color="#8b5cf6"
-          transparent
-          opacity={0.04}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* 15,000 High-Precision Mint & Violet Living Points */}
+    <group ref={groupRef} position={[0.2, 0.1, 0]}>
       <points ref={pointsRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -232,27 +158,22 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
             array={colors}
             itemSize={3}
           />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleCount}
-            array={sizes}
-            itemSize={1}
-          />
         </bufferGeometry>
         <pointsMaterial
+          map={circleTexture}
           vertexColors
           transparent
-          opacity={0.88}
+          opacity={0.92}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
           sizeAttenuation
-          size={1}
+          size={0.042}
         />
       </points>
 
-      {/* Dynamic Colored Point Lights for Scene Illumination */}
-      <pointLight color="#00f5d4" intensity={2.5} distance={10} position={[0, 0, 0]} />
-      <pointLight color="#8b5cf6" intensity={2.0} distance={12} position={[2, -1, 1]} />
+      {/* Subtle Mint & Violet Ambient Core Lights */}
+      <pointLight color="#00f5d4" intensity={2.0} distance={10} position={[-2, 2, 2]} />
+      <pointLight color="#8b5cf6" intensity={2.0} distance={10} position={[2, -2, -1]} />
     </group>
   );
 };

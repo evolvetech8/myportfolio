@@ -1,83 +1,75 @@
 import React, { useMemo, useRef } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 /**
- * ParticleField — Cosmic Mint & Violet Stardust (Vesper Aesthetic)
- * 7,000 gentle celestial particles floating in deep space with harmonic drift and parallax.
+ * ParticleField — Subtle Cosmic Bokeh Dots (Vesper Aesthetic)
+ * ~260 soft, out-of-focus background particles floating in the deep void.
  */
 const ParticleField = ({ scrollProgress = 0 }) => {
   const pointsRef = useRef();
-  const materialRef = useRef();
-  const { pointer } = useThree();
+  const particleCount = 260;
 
-  const particleCount = 7000;
+  // Soft circular bokeh texture
+  const circleTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    grad.addColorStop(0.4, 'rgba(255, 255, 255, 0.5)');
+    grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    return texture;
+  }, []);
 
-  const [positions, colors, sizes] = useMemo(() => {
+  const [positions, colors, scales] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
     const col = new Float32Array(particleCount * 3);
-    const size = new Float32Array(particleCount);
-    
-    const colorMint = new THREE.Color('#00f5d4');
-    const colorCyan = new THREE.Color('#38bdf8');
-    const colorViolet = new THREE.Color('#8b5cf6');
-    const colorIndigo = new THREE.Color('#6366f1');
-    const colorWhite = new THREE.Color('#f1f5f9');
+    const sc = new Float32Array(particleCount);
+
+    const cTeal = new THREE.Color('#2dd4bf');
+    const cViolet = new THREE.Color('#8b5cf6');
+    const cWhite = new THREE.Color('#e2e8f0');
     const tempColor = new THREE.Color();
 
     for (let i = 0; i < particleCount; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 4.0 + Math.cbrt(Math.random()) * 20; // Expansive field around the orb
-      
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
+      // Distribute in a wide frustum volume behind the main subject
+      pos[i * 3] = (Math.random() - 0.5) * 16;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 12;
+      pos[i * 3 + 2] = -2.0 - Math.random() * 8; // deeper into the screen
 
-      pos[i * 3] = x;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = z;
-
-      const seed = Math.random();
-      if (seed < 0.35) {
-        tempColor.lerpColors(colorMint, colorCyan, Math.random());
-      } else if (seed < 0.75) {
-        tempColor.lerpColors(colorViolet, colorIndigo, Math.random());
+      const rand = Math.random();
+      if (rand < 0.45) {
+        tempColor.copy(cViolet);
+      } else if (rand < 0.8) {
+        tempColor.copy(cTeal);
       } else {
-        tempColor.copy(colorWhite);
+        tempColor.copy(cWhite);
       }
 
       col[i * 3] = tempColor.r;
       col[i * 3 + 1] = tempColor.g;
       col[i * 3 + 2] = tempColor.b;
 
-      size[i] = 0.01 + Math.random() * 0.025;
+      sc[i] = 0.5 + Math.random() * 1.5;
     }
-    
-    return [pos, col, size];
-  }, []);
+
+    return [pos, col, sc];
+  }, [particleCount]);
 
   useFrame((state) => {
-    if (!pointsRef.current || !materialRef.current) return;
-
+    if (!pointsRef.current) return;
     const time = state.clock.getElapsedTime();
-    
-    // Smooth slow cosmic drift
-    pointsRef.current.rotation.y = time * 0.018 + scrollProgress * 0.3;
-    pointsRef.current.rotation.x = Math.sin(time * 0.012) * 0.05;
 
-    // Fluid mouse parallax
-    const targetX = pointer.x * 0.4;
-    const targetY = pointer.y * 0.4 - scrollProgress * 2.0;
-
-    pointsRef.current.position.x = THREE.MathUtils.lerp(pointsRef.current.position.x, targetX, 0.04);
-    pointsRef.current.position.y = THREE.MathUtils.lerp(pointsRef.current.position.y, targetY, 0.04);
-
-    // Dynamic breathing opacity
-    const currentOpacity = 0.5 + Math.sin(time * 0.8) * 0.12;
-    materialRef.current.opacity = currentOpacity;
+    // Gentle organic floating motion
+    pointsRef.current.rotation.y = time * 0.01 + scrollProgress * 0.15;
+    pointsRef.current.position.y = Math.sin(time * 0.2) * 0.2 - scrollProgress * 1.0;
   });
 
   return (
@@ -95,21 +87,16 @@ const ParticleField = ({ scrollProgress = 0 }) => {
           array={colors}
           itemSize={3}
         />
-        <bufferAttribute
-          attach="attributes-size"
-          count={particleCount}
-          array={sizes}
-          itemSize={1}
-        />
       </bufferGeometry>
       <pointsMaterial
-        ref={materialRef}
+        map={circleTexture}
         vertexColors
         transparent
+        opacity={0.65}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
         sizeAttenuation
-        size={1}
+        size={0.065}
       />
     </points>
   );
