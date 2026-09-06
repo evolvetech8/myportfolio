@@ -56,7 +56,13 @@ export default function AccountantWorkspace() {
 
   // RBAC & Plan State
   const [currentRole, setCurrentRole] = useState('firm_owner'); // 'firm_owner' | 'senior_accountant' | 'junior_accountant'
-  const [currentPlan, setCurrentPlan] = useState('pro_studio');
+  const [currentPlan, setCurrentPlan] = useState('starter');
+
+  // Persona Target View State (Resolves User Persona Alignment)
+  // 'huong': Chị Nguyễn Thị Hương (Kế toán dịch vụ tự do, 38 tuổi, Bình Thạnh HCMC, 22 hộ, Gói Khởi Nghiệp 490k)
+  // 'tuan': Anh Trần Văn Tuấn (Chủ đại lý thuế An Bình, 42 tuổi, Cầu Giấy HN, 5 nhân sự, 90 hộ, Gói Pro Studio 1.490k)
+  const [personaMode, setPersonaMode] = useState('huong');
+  const [staffFilter, setStaffFilter] = useState('all'); // 'all' | 'trang' | 'duc' | 'linh'
 
   // Partial-Failure Bulk Runner State
   const [bulkExecutionModal, setBulkExecutionModal] = useState({
@@ -89,8 +95,30 @@ export default function AccountantWorkspace() {
   const [csvUploadData, setCsvUploadData] = useState(null);
   const [csvParsing, setCsvParsing] = useState(false);
 
-  // Accountant Mock Portfolio: 12 clients representing 38 total HKDs
+  // Accountant Mock Portfolio: Representing clients of Huong and Tuan
   const [clients, setClients] = useState([
+    {
+      id: 'hkd-lan',
+      name: 'Quán Phở Lan (Cô Phạm Thị Lan)',
+      mst: '0108877662-001',
+      owner: 'Cô Phạm Thị Lan (52 tuổi)',
+      industry: 'F&B (Ăn uống, Giải khát)',
+      address: '18 Võ Văn Tần, Quận 3, TP. Hồ Chí Minh',
+      taxRegime: 'group2',
+      taxRate: '4.5%',
+      revenue: 1500000000,
+      totalBankInflow: 1750000000,
+      excludedFlow: 250000000, // Tiền con gái gửi về từ nước ngoài không tính thuế
+      estimatedTax: 67500000,
+      status: 'current',
+      statusNote: 'Đã bóc tách 250M tiền con gửi không tính thuế • Bắt buộc HĐĐT-MTT (NĐ 70)',
+      connection: 'VietQR VCB (Real-time)',
+      nd70Warning: true,
+      lastSync: 'Hôm nay 08:30',
+      assignedStaff: 'trang',
+      assignedStaffName: 'Kế toán Trang',
+      phone: '0903456789'
+    },
     {
       id: 'hkd-01',
       name: 'Tiệm Cà Phê & Bánh Mộc',
@@ -108,7 +136,10 @@ export default function AccountantWorkspace() {
       statusNote: '2 giao dịch nội bộ lớn (> 10M) cần xác nhận',
       connection: 'VietQR MBBank (Real-time)',
       nd70Warning: true,
-      lastSync: 'Hôm nay 09:45'
+      lastSync: 'Hôm nay 09:45',
+      assignedStaff: 'duc',
+      assignedStaffName: 'Kế toán Đức',
+      phone: '0988123456'
     },
     {
       id: 'hkd-02',
@@ -317,9 +348,11 @@ export default function AccountantWorkspace() {
         (industryFilter === 'retail' && c.industry.includes('Bán lẻ')) ||
         (industryFilter === 'service' && (c.industry.includes('Dịch vụ') || c.industry.includes('Sản xuất')));
 
-      return matchQuery && matchRegime && matchStatus && matchIndustry;
+      const matchStaff = staffFilter === 'all' || c.assignedStaff === staffFilter;
+
+      return matchQuery && matchRegime && matchStatus && matchIndustry && matchStaff;
     });
-  }, [clients, searchQuery, regimeFilter, statusFilter, industryFilter]);
+  }, [clients, searchQuery, regimeFilter, statusFilter, industryFilter, staffFilter]);
 
   // Toggle single client selection
   const toggleSelectClient = (id) => {
@@ -591,19 +624,155 @@ export default function AccountantWorkspace() {
         </div>
       )}
 
-      {/* Top Banner: Accountant Firm Command Center */}
+      {/* 3 CORE PERSONAS EXPERIENCE SWITCHER (Resolves User Persona Alignment) */}
+      <div className="persona-selector-bar glass-panel" style={{
+        margin: '0 0 16px',
+        padding: '12px 18px',
+        borderRadius: '12px',
+        background: 'rgba(15, 23, 42, 0.75)',
+        border: '1px solid rgba(0, 245, 212, 0.25)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <UsersIcon size={16} color="#00f5d4" />
+          <span style={{ fontSize: '12px', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Trải Nghiệm Theo Chân Dung Khách Hàng (Persona View):
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Persona 1: Chị Hương (High-Volume Wedge, 30-40k bookkeepers) */}
+          <button
+            type="button"
+            onClick={() => {
+              setPersonaMode('huong');
+              setCurrentPlan('starter');
+              setCurrentRole('firm_owner');
+              setStaffFilter('all');
+              showToast('Đã chuyển sang góc nhìn Chị Hương!', 'Kế toán tự do (22 hộ) • Giao diện tinh gọn, tự động hóa VietQR, không làm thêm cuối tuần.');
+            }}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '20px',
+              background: personaMode === 'huong' ? '#00f5d4' : 'rgba(255, 255, 255, 0.05)',
+              color: personaMode === 'huong' ? '#05101a' : '#cbd5e1',
+              border: personaMode === 'huong' ? '1px solid #00f5d4' : '1px solid rgba(255, 255, 255, 0.1)',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <span>Chị Hương (Kế toán tự do • 22 hộ)</span>
+            <span style={{
+              fontSize: '10px',
+              padding: '1px 6px',
+              borderRadius: '10px',
+              background: personaMode === 'huong' ? 'rgba(5, 16, 26, 0.2)' : 'rgba(0, 245, 212, 0.15)',
+              color: personaMode === 'huong' ? '#05101a' : '#00f5d4'
+            }}>
+              490k/tháng
+            </span>
+          </button>
+
+          {/* Persona 2: Anh Tuấn (High-Revenue Studio, 3-5k firms) */}
+          <button
+            type="button"
+            onClick={() => {
+              setPersonaMode('tuan');
+              setCurrentPlan('pro_studio');
+              setCurrentRole('firm_owner');
+              showToast('Đã chuyển sang góc nhìn Anh Tuấn!', 'Chủ đại lý thuế An Bình (90 hộ, 5 nhân sự) • Dashboard tập trung, kiểm soát Junior QC, tiết kiệm 40% phí MISA.');
+            }}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '20px',
+              background: personaMode === 'tuan' ? '#00f5d4' : 'rgba(255, 255, 255, 0.05)',
+              color: personaMode === 'tuan' ? '#05101a' : '#cbd5e1',
+              border: personaMode === 'tuan' ? '1px solid #00f5d4' : '1px solid rgba(255, 255, 255, 0.1)',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <span>Anh Tuấn (Chủ đại lý thuế • 90 hộ)</span>
+            <span style={{
+              fontSize: '10px',
+              padding: '1px 6px',
+              borderRadius: '10px',
+              background: personaMode === 'tuan' ? 'rgba(5, 16, 26, 0.2)' : 'rgba(56, 189, 248, 0.15)',
+              color: personaMode === 'tuan' ? '#05101a' : '#38bdf8'
+            }}>
+              1.490k/tháng
+            </span>
+          </button>
+
+          {/* Persona 3: Cô Lan (End-Client Retention Lever) */}
+          <button
+            type="button"
+            onClick={() => {
+              const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
+              setPreviewPortalClient(lanClient);
+            }}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '20px',
+              background: 'rgba(245, 158, 11, 0.15)',
+              color: '#fbbf24',
+              border: '1px solid rgba(245, 158, 11, 0.4)',
+              fontSize: '12px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <EyeIcon size={13} color="#fbbf24" />
+            <span>Cô Lan (Chủ Hộ Phở Lan • 1.5 tỷ/năm)</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Top Banner: Dynamically tailored to Huong vs Tuan */}
       <div className="cpa-header-bar glass-panel">
         <div className="cpa-header-left">
           <div className="cpa-firm-icon">
-            <BuildingIcon size={24} color="#FFA100" />
+            <BuildingIcon size={24} color={personaMode === 'huong' ? '#00f5d4' : '#FFA100'} />
           </div>
           <div>
             <div className="cpa-title-row">
-              <h1 className="cpa-firm-title">Văn Phòng Dịch Vụ Kế Toán &amp; Đại Lý Thuế An Bình</h1>
-              <span className="cpa-pro-chip">MULTI-TENANT CPA STUDIO</span>
+              <h1 className="cpa-firm-title">
+                {personaMode === 'huong' 
+                  ? 'Góc Làm Việc Kế Toán Tự Do • Chị Nguyễn Thị Hương' 
+                  : 'Văn Phòng Dịch Vụ Kế Toán & Đại Lý Thuế An Bình • Anh Trần Văn Tuấn'}
+              </h1>
+              <span className="cpa-pro-chip" style={{
+                background: personaMode === 'huong' ? 'rgba(0, 245, 212, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                color: personaMode === 'huong' ? '#00f5d4' : '#38bdf8'
+              }}>
+                {personaMode === 'huong' ? 'GÓI KHỞI NGHIỆP • 490.000Đ/THÁNG' : 'GÓI PRO STUDIO • 1.490.000Đ/THÁNG'}
+              </span>
             </div>
             <p className="cpa-firm-sub">
-              Không gian quản trị kế toán thuế tập trung cho <strong>38 Hộ Kinh Doanh</strong> theo chuẩn Thông tư 152/2025/TT-BTC &amp; Nghị định 70/2025/NĐ-CP.
+              {personaMode === 'huong' ? (
+                <span>
+                  Quản lý <strong>22 Hộ Kinh Doanh</strong> (Bình Thạnh, TP.HCM) • Tự động hóa thu chi VietQR • <strong>Không bao giờ làm bù cuối tuần</strong>.
+                </span>
+              ) : (
+                <span>
+                  Bảng điều khiển tập trung <strong>90 Hộ Kinh Doanh</strong> (Cầu Giấy, Hà Nội) • Giám sát 3 Kế toán viên trẻ (Đức, Trang, Linh) • <strong>Tiết kiệm 40% chi phí MISA</strong>.
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -621,22 +790,24 @@ export default function AccountantWorkspace() {
             }}
           >
             <UploadCloudIcon size={14} color="currentColor" />
-            <span>Di Cư MISA / Excel</span>
+            <span>{personaMode === 'huong' ? 'Nhập Nhanh MISA / Excel' : 'Di Cư MISA / Excel (30 Phút)'}</span>
           </button>
 
-          <button 
-            type="button" 
-            className="cpa-btn-action"
-            onClick={() => setShowAuditModal(true)}
-            style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: '#cbd5e1'
-            }}
-          >
-            <ShieldIcon size={14} color="currentColor" />
-            <span>Nhật Ký Kiểm Toán</span>
-          </button>
+          {personaMode === 'tuan' && (
+            <button 
+              type="button" 
+              className="cpa-btn-action"
+              onClick={() => setShowAuditModal(true)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#cbd5e1'
+              }}
+            >
+              <ShieldIcon size={14} color="currentColor" />
+              <span>Nhật Ký Kiểm Toán (Audit Trail)</span>
+            </button>
+          )}
 
           <button 
             type="button" 
@@ -649,24 +820,26 @@ export default function AccountantWorkspace() {
             }}
           >
             <SparklesIcon size={14} color="#00f5d4" />
-            <span>Gói Cước: Pro Studio</span>
+            <span>{personaMode === 'huong' ? 'Gói Khởi Nghiệp (490k)' : 'Gói Pro Studio (1.490k)'}</span>
           </button>
 
-          <button 
-            type="button" 
-            className="cpa-btn-action"
-            onClick={() => setShowAuthModal(true)}
-            style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              color: '#cbd5e1'
-            }}
-          >
-            <LockIcon size={14} color="#38bdf8" />
-            <span>
-              Quyền: {currentRole === 'firm_owner' ? 'Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Kế Toán Chính (Senior)' : 'Trợ Lý (Junior)'}
-            </span>
-          </button>
+          {personaMode === 'tuan' && (
+            <button 
+              type="button" 
+              className="cpa-btn-action"
+              onClick={() => setShowAuthModal(true)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#cbd5e1'
+              }}
+            >
+              <LockIcon size={14} color="#38bdf8" />
+              <span>
+                Quyền: {currentRole === 'firm_owner' ? 'Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Kế Toán Chính (Senior)' : 'Trợ Lý (Junior)'}
+              </span>
+            </button>
+          )}
 
           <button 
             type="button" 
@@ -690,6 +863,94 @@ export default function AccountantWorkspace() {
           </button>
         </div>
       </div>
+
+      {/* Persona-Specific Focus Widget (Tailored for Huong vs Tuan) */}
+      {personaMode === 'huong' ? (
+        <div className="huong-focus-banner" style={{
+          margin: '0 0 20px',
+          padding: '16px 20px',
+          background: 'rgba(0, 245, 212, 0.04)',
+          border: '1px solid rgba(0, 245, 212, 0.3)',
+          borderRadius: '12px',
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '16px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <CalendarIcon size={24} color="#00f5d4" style={{ flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>
+                Hạn Nộp Tờ Khai Quý 1/2026: Còn 54 Ngày (Đã hoàn tất 18/22 hộ)
+              </div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '3px' }}>
+                Tự động đối soát VietQR hàng ngày giúp chị Hương không bị dồn việc cuối tuần và tự tin báo cáo cho chủ hộ.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '16px' }}>
+            <ShieldIcon size={24} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#fbbf24' }}>
+                Trợ Lý Phân Nhóm Thông Tư 152
+              </div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '3px' }}>
+                Dưới 500M -&gt; Mẫu S1a (Miễn thuế) • Trên 500M -&gt; Mẫu S2a (Thuế % doanh thu). Không lo nhầm lẫn khi khách tăng doanh thu.
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="tuan-focus-banner" style={{
+          margin: '0 0 20px',
+          padding: '16px 20px',
+          background: 'rgba(56, 189, 248, 0.04)',
+          border: '1px solid rgba(56, 189, 248, 0.3)',
+          borderRadius: '12px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <UsersIcon size={20} color="#38bdf8" />
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>
+                Kiểm Soát Chất Lượng Kế Toán Viên Trẻ (Junior QC - 3 Nhân Sự Phụ Trách 90 Hộ):
+              </span>
+            </div>
+            <span style={{ fontSize: '12px', color: '#00f5d4', fontWeight: 700 }}>
+              Tiết kiệm 40% chi phí bản quyền so với MISA (Chỉ 1.490.000đ/tháng)
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { id: 'all', label: 'Tất Cả 90 Hộ Kinh Doanh', count: 90 },
+              { id: 'trang', label: 'Kế toán Trang (28 hộ)', count: 28 },
+              { id: 'duc', label: 'Kế toán Đức (32 hộ)', count: 32 },
+              { id: 'linh', label: 'Kế toán Linh (30 hộ)', count: 30 }
+            ].map(s => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setStaffFilter(s.id)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  background: staffFilter === s.id ? '#38bdf8' : 'rgba(255, 255, 255, 0.04)',
+                  color: staffFilter === s.id ? '#05101a' : '#cbd5e1',
+                  border: staffFilter === s.id ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.08)',
+                  fontSize: '12px',
+                  fontWeight: staffFilter === s.id ? 700 : 500,
+                  cursor: 'pointer'
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Scope Disclaimer & Strategic Positioning Banner (Resolves Blockers 10-12) */}
       <div className="cpa-scope-banner glass-panel" style={{

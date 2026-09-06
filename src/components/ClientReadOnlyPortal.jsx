@@ -413,30 +413,80 @@ export default function ClientReadOnlyPortal({ client, onClose, onOpenFullLedger
             <div className="portal-content-scroll">
               {activeTab === 'summary' && (
                 <div className="portal-summary-pane">
-                  {/* KPI Metric Cards */}
+                  {/* Persona Lan Reassurance Banner */}
+                  <div style={{
+                    background: 'rgba(245, 158, 11, 0.08)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    marginBottom: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    flexWrap: 'wrap'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <ShieldIcon size={24} color="#fbbf24" style={{ flexShrink: 0 }} />
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>
+                          Báo Cáo Thuế Dành Cho {client.owner} ({client.name})
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '2px' }}>
+                          Phụ trách kế toán: <strong style={{ color: '#00f5d4' }}>Chị Nguyễn Thị Hương</strong> • Cô chỉ cần theo dõi doanh thu và số thuế, toàn bộ hồ sơ kê khai với Cục Thuế đã có chị Hương lo trọn gói.
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowContactModal(true)}
+                      style={{
+                        background: '#00f5d4',
+                        color: '#05101a',
+                        border: 'none',
+                        borderRadius: '8px',
+                        padding: '8px 16px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      <PhoneIcon size={13} />
+                      <span>Nhắn Zalo Cho Chị Hương (Báo Tiền Riêng)</span>
+                    </button>
+                  </div>
+
+                  {/* 3 Core Clarity Metric Cards Tailored for Lan */}
                   <div className="portal-kpi-grid">
-                    <div className="portal-kpi-card glass-panel">
-                      <div className="kpi-label">Doanh Thu Lũy Kế 2026</div>
-                      <div className="kpi-value highlight-cyan">{fmt(client.annualRevenue)}</div>
-                      <div className="kpi-subtext">Đã đối soát từ dòng tiền VietQR &amp; máy POS</div>
+                    <div className="portal-kpi-card glass-panel" style={{ borderLeft: '3px solid #00f5d4' }}>
+                      <div className="kpi-label">Tiền Bán Hàng Lũy Kế 2026</div>
+                      <div className="kpi-value highlight-cyan">{fmt(client.annualRevenue || 1500000000)}</div>
+                      <div className="kpi-subtext">Doanh thu bán hàng thực tế qua quét mã VietQR &amp; POS</div>
                     </div>
 
-                    <div className="portal-kpi-card glass-panel">
-                      <div className="kpi-label">Thuế Tạm Tính Quý 1/2026</div>
-                      <div className="kpi-value highlight-amber">{fmt(client.estimatedTax)}</div>
-                      <div className="kpi-subtext">Tính theo tỷ lệ ngành {client.industry} (TT152)</div>
+                    <div className="portal-kpi-card glass-panel" style={{ borderLeft: '3px solid #fbbf24' }}>
+                      <div className="kpi-label">Thuế Dự Kiến Phải Đóng</div>
+                      <div className="kpi-value highlight-amber">{fmt(client.estimatedTax || 67500000)}</div>
+                      <div className="kpi-subtext">Chị Hương đã tính sẵn theo thuế suất {client.taxRate || '4.5%'} (TT152)</div>
                     </div>
 
-                    <div className="portal-kpi-card glass-panel">
-                      <div className="kpi-label">Hóa Đơn Hợp Lệ Đã Xuất</div>
-                      <div className="kpi-value">{client.invoicesIssued} hóa đơn</div>
-                      <div className="kpi-subtext">Khớp 100% mã CQT theo Nghị định 123 &amp; 70</div>
+                    <div className="portal-kpi-card glass-panel" style={{ borderLeft: '3px solid #4ade80' }}>
+                      <div className="kpi-label">Tiền Con Gửi &amp; Tiền Riêng (ĐÃ TÁCH MIỄN THUẾ)</div>
+                      <div className="kpi-value highlight-green">{fmt(client.excludedFlow || 250000000)}</div>
+                      <div className="kpi-subtext" style={{ color: '#4ade80' }}>
+                        Đã loại trừ theo Điều 4 TT152 • Cục Thuế KHÔNG tính thuế khoản này
+                      </div>
                     </div>
 
-                    <div className="portal-kpi-card glass-panel">
-                      <div className="kpi-label">Kỳ Kế Toán Hiện Tại</div>
-                      <div className="kpi-value highlight-green">Đã Khóa &amp; Ký Số</div>
-                      <div className="kpi-subtext">Kế toán trưởng đã chốt số liệu Quý 1/2026</div>
+                    <div className="portal-kpi-card glass-panel" style={{ borderLeft: '3px solid #38bdf8' }}>
+                      <div className="kpi-label">Hóa Đơn Máy Tính Tiền (NĐ 70)</div>
+                      <div className="kpi-value">{client.invoicesIssued || 156} hóa đơn</div>
+                      <div className="kpi-subtext">Đã truyền dữ liệu lên Cục Thuế • Không lo bị phạt</div>
                     </div>
                   </div>
 
