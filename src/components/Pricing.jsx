@@ -59,7 +59,7 @@ export default function Pricing({ isStandalone = false }) {
       capacity: 'Tối đa 50 hộ kinh doanh',
       isPopular: true,
       badge: 'Phổ biến nhất',
-      ctaText: 'Dùng thử 14 ngày miễn phí',
+      ctaText: 'Dùng thử 30 ngày miễn phí',
       features: [
         'Mọi tính năng gói Khởi Nghiệp',
         'Bộ 4 sổ TT152 Nhóm 3 (S2b, S2c, S2d, S2e)',

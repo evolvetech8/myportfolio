@@ -231,12 +231,12 @@ export default function About() {
           </h2>
           <p className="cta-banner-desc">
             {isEn
-              ? 'Join forward-thinking retail owners and SMEs modernizing with A-Sổ. Start your 14-day risk-free trial today.'
-              : 'Đồng hành cùng hàng ngàn hộ kinh doanh và SME tiên phong chuẩn hóa sổ sách với A-Sổ. Dùng thử 14 ngày miễn phí ngay hôm nay.'}
+              ? 'Join forward-thinking retail owners and SMEs modernizing with A-Sổ. Start your 30-day risk-free trial today.'
+              : 'Đồng hành cùng hàng ngàn hộ kinh doanh và SME tiên phong chuẩn hóa sổ sách với A-Sổ. Dùng thử 30 ngày miễn phí ngay hôm nay.'}
           </p>
           <div className="cta-banner-actions">
             <Link to="/pricing" className="nano-button cta-primary-btn">
-              {isEn ? 'Start 14-Day Free Trial' : 'Bắt Đầu Dùng Thử 14 Ngày (0đ)'}
+              {isEn ? 'Start 30-Day Free Trial' : 'Bắt Đầu Dùng Thử 30 Ngày (0đ)'}
             </Link>
             <Link to="/contact" className="cta-secondary-btn">
               {isEn ? 'Contact Engineering Team' : 'Liên Hệ Đội Ngũ Kỹ Thuật'}

@@ -51,13 +51,13 @@ export default function AIAgentDrawer() {
     },
     pricing: {
       keywords: ['giá', 'bảng giá', 'chi phí', 'tiền', 'gói', 'starter', 'pro', 'advanced', 'price', 'pricing', 'cost'],
-      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) - Tự động sổ kế toán Thông tư 152/2025/TT-BTC, kết nối 1 ngân hàng, tiết kiệm 30% chi phí so với phần mềm truyền thống.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) - Tích hợp Cổng Thuế NĐ70 & NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) - Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 14 ngày MIỄN PHÍ quét VietQR không cần thẻ tín dụng!',
-      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) - Circular 152/2025 ledgers, 1 bank sync, saves 30% vs traditional legacy tools.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) - Decree 70 & 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) - Vision AI receipt scanning & multi-branch management.\nAll plans include a 14-Day Risk-Free Trial without credit card required!'
+      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) - Tự động sổ kế toán Thông tư 152/2025/TT-BTC, kết nối 1 ngân hàng, tiết kiệm 30% chi phí so với phần mềm truyền thống.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) - Tích hợp Cổng Thuế NĐ70 & NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) - Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 30 ngày MIỄN PHÍ quét VietQR không cần thẻ tín dụng!',
+      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) - Circular 152/2025 ledgers, 1 bank sync, saves 30% vs traditional legacy tools.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) - Decree 70 & 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) - Vision AI receipt scanning & multi-branch management.\nAll plans include a 30-Day Risk-Free Trial without credit card required!'
     },
     demo: {
       keywords: ['demo', 'dùng thử', 'trial', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
-      vi: 'A-Sổ có chính sách Dùng Thử 14 Ngày Miễn Phí: chỉ cần liên kết ngân hàng hoặc quét 1 mã VietQR, bạn sẽ thấy dòng tiền tự động đổ vào sổ S1a-HKD ngay lập tức. Vui lòng bấm "Trải Nghiệm A-Sổ" trên thanh menu hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
-      en: 'A-Sổ provides a 14-Day Free Trial: connect your bank account or scan one VietQR, and watch transactions auto-populate Ledger S1a instantly. Click "Experience A-Sổ" on the top navigation or contact Hotline: 0353600900 (archonic88@gmail.com).'
+      vi: 'A-Sổ có chính sách Dùng Thử 30 Ngày Miễn Phí: chỉ cần liên kết ngân hàng hoặc quét 1 mã VietQR, bạn sẽ thấy dòng tiền tự động đổ vào sổ S1a-HKD ngay lập tức. Vui lòng bấm "Trải Nghiệm A-Sổ" trên thanh menu hoặc liên hệ Hotline: 0353600900 (Email: archonic88@gmail.com).',
+      en: 'A-Sổ provides a 30-Day Free Trial: connect your bank account or scan one VietQR, and watch transactions auto-populate Ledger S1a instantly. Click "Experience A-Sổ" on the top navigation or contact Hotline: 0353600900 (archonic88@gmail.com).'
     }
   };
 

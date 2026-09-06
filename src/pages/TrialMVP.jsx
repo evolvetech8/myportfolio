@@ -547,9 +547,9 @@ export default function TrialMVP() {
       <div className="trial-top-bar glass-panel">
         <div className="trial-badge-wrap">
           <SparklesIcon size={16} color="#FFA100" />
-          <span className="trial-status-chip">14 NGÀY DÙNG THỬ MIỄN PHÍ</span>
+          <span className="trial-status-chip">30 NGÀY DÙNG THỬ MIỄN PHÍ</span>
           <span className="trial-divider">•</span>
-          <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 152/2025 & NĐ 70/2025</span>
+          <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 152/2025 & NĐ 70/2025 • Trọn vẹn chu kỳ chốt sổ tháng</span>
         </div>
         <div className="trial-top-actions">
           {effectiveClientId && (
@@ -1547,7 +1547,7 @@ export default function TrialMVP() {
                   className="continue-trial-btn"
                   onClick={() => setShowUpgradeModal(false)}
                 >
-                  Tiếp tục dùng thử 14 ngày miễn phí
+                  Tiếp tục dùng thử 30 ngày miễn phí
                 </button>
               </div>
             </div>

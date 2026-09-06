@@ -57,7 +57,7 @@ export default function VietQRCheckoutModal({
   const handleNextToQR = (e) => {
     e.preventDefault();
     if (isTrialMode) {
-      // Direct activation for 14-day trial
+      // Direct activation for 30-day trial
       setStep(3);
     } else {
       setStep(2);
@@ -128,7 +128,7 @@ export default function VietQRCheckoutModal({
                 className={`mode-btn ${isTrialMode ? 'active' : ''}`}
                 onClick={() => setIsTrialMode(true)}
               >
-                <span>Dùng Thử 14 Ngày (0đ)</span>
+                <span>Dùng Thử 30 Ngày (0đ)</span>
               </button>
             </div>
 

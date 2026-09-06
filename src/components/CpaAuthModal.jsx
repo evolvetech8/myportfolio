@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   BuildingIcon, 
   CloseIcon, 
@@ -6,11 +6,25 @@ import {
   UsersIcon, 
   CheckCircleIcon,
   ArrowRightIcon,
-  ShieldIcon
+  ShieldIcon,
+  SparklesIcon
 } from './Icons';
 
-export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChange, onLoginSuccess }) {
-  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register' | 'forgot'
+export default function CpaAuthModal({ 
+  isOpen, 
+  onClose, 
+  currentRole, 
+  onRoleChange, 
+  onLoginSuccess,
+  initialMode = 'login'
+}) {
+  const [authMode, setAuthMode] = useState(initialMode); // 'login' | 'register' | 'forgot'
+
+  useEffect(() => {
+    if (isOpen && initialMode) {
+      setAuthMode(initialMode);
+    }
+  }, [isOpen, initialMode]);
   const [formData, setFormData] = useState({
     firmName: 'Đại lý thuế & Dịch vụ kế toán An Bình',
     taxCode: '0108998877',
@@ -41,7 +55,9 @@ export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChang
         onLoginSuccess({
           email: formData.email,
           firmName: formData.firmName,
-          role: formData.role
+          role: formData.role,
+          isTrial: authMode === 'register',
+          trialDays: authMode === 'register' ? 30 : undefined
         });
       }
       if (onRoleChange) {
@@ -90,7 +106,7 @@ export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChang
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <BuildingIcon size={20} color="#00f5d4" />
             <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#fff' }}>
-              {authMode === 'login' ? 'Đăng Nhập Đại Lý Kế Toán' : authMode === 'register' ? 'Đăng Ký Tài Khoản CPA Firm' : 'Khôi Phục Mật Khẩu'}
+              {authMode === 'login' ? 'Đăng Nhập Đại Lý Kế Toán' : authMode === 'register' ? 'Đăng Ký Tài Khoản CPA Firm (Dùng Thử 30 Ngày)' : 'Khôi Phục Mật Khẩu'}
             </h2>
           </div>
           <button 
@@ -146,7 +162,7 @@ export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChang
               cursor: 'pointer'
             }}
           >
-            Đăng Ký Mới
+            Đăng Ký Mới (30 Ngày Miễn Phí)
           </button>
         </div>
 
@@ -168,6 +184,27 @@ export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChang
 
           {authMode === 'register' && (
             <>
+              <div style={{
+                background: 'rgba(0, 245, 212, 0.08)',
+                border: '1px solid rgba(0, 245, 212, 0.3)',
+                borderRadius: '8px',
+                padding: '12px 14px',
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '10px'
+              }}>
+                <SparklesIcon size={18} color="#00f5d4" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#00f5d4' }}>
+                    Dùng Thử 30 Ngày Miễn Phí (Trọn Vẹn Chu Kỳ Kế Toán Tháng)
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.4 }}>
+                    Kích hoạt ngay không cần thẻ tín dụng. Trọn quyền lập sổ S1a/S2a Thông tư 152/2025/TT-BTC, hút sao kê VietQR tự động và xuất dữ liệu báo cáo thuế.
+                  </div>
+                </div>
+              </div>
+
               <div style={{ marginBottom: '14px' }}>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#cbd5e1', marginBottom: '6px' }}>
                   Tên Công Ty Dịch Vụ Kế Toán / Đại Lý Thuế:
@@ -369,7 +406,7 @@ export default function CpaAuthModal({ isOpen, onClose, currentRole, onRoleChang
                 : authMode === 'login' 
                   ? 'Đăng Nhập Vào Không Gian Kế Toán' 
                   : authMode === 'register' 
-                    ? 'Đăng Ký & Nhận 14 Ngày Dùng Thử Miễn Phí' 
+                    ? 'Đăng Ký & Kích Hoạt 30 Ngày Dùng Thử Miễn Phí' 
                     : 'Gửi Hướng Dẫn Khôi Phục'}
             </span>
           </button>

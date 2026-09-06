@@ -76,8 +76,8 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
         'Thao tác hàng loạt (khoá sổ, xuất báo cáo)',
         'Nhập dữ liệu di cư từ MISA và Excel'
       ],
-      ctaText: 'Dùng thử 14 ngày miễn phí',
-      trialDuration: '14 ngày'
+      ctaText: 'Dùng thử 30 ngày miễn phí',
+      trialDuration: '30 ngày'
     },
     {
       id: 'enterprise',
@@ -503,7 +503,32 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onUpgradeSuccess) {
+                      onUpgradeSuccess(selectedPlan);
+                    }
+                    onClose();
+                  }}
+                  style={{
+                    background: 'rgba(0, 245, 212, 0.12)',
+                    color: '#00f5d4',
+                    border: '1px solid #00f5d4',
+                    borderRadius: '8px',
+                    padding: '12px 20px',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <SparklesIcon size={15} color="#00f5d4" />
+                  <span>Kích Hoạt Dùng Thử 30 Ngày (0đ)</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowQrStep(true)}

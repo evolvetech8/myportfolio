@@ -54,6 +54,7 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
   const [showMigrationModal, setShowMigrationModal] = useState(false);
   const [showAuditModal, setShowAuditModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState('register');
   const [showBillingModal, setShowBillingModal] = useState(false);
 
   // RBAC & Plan State
@@ -910,7 +911,10 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowBillingModal(true)}
+                  onClick={() => {
+                    setAuthModalMode('register');
+                    setShowAuthModal(true);
+                  }}
                   style={{
                     background: 'rgba(0, 245, 212, 0.15)',
                     color: '#00f5d4',
@@ -918,11 +922,31 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
                     padding: '6px 14px',
                     borderRadius: '6px',
                     fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <SparklesIcon size={13} color="#00f5d4" />
+                  <span>Đăng Ký Dùng Thử 30 Ngày</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowBillingModal(true)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: '#cbd5e1',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     cursor: 'pointer'
                   }}
                 >
-                  Xem Gói Khởi Nghiệp (490k/tháng)
+                  Xem Bảng Giá (490k/tháng)
                 </button>
               </div>
             </div>
@@ -1002,6 +1026,29 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
                   }}
                 >
                   Mở Nhật Ký Kiểm Toán (Audit Trail)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode('register');
+                    setShowAuthModal(true);
+                  }}
+                  style={{
+                    background: 'rgba(56, 189, 248, 0.15)',
+                    color: '#38bdf8',
+                    border: '1px solid #38bdf8',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <SparklesIcon size={13} color="#38bdf8" />
+                  <span>Đăng Ký Dùng Thử Pro 30 Ngày</span>
                 </button>
               </div>
             </div>
@@ -1144,6 +1191,24 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
           <button 
             type="button" 
             className="cpa-btn-action"
+            onClick={() => {
+              setAuthModalMode('register');
+              setShowAuthModal(true);
+            }}
+            style={{
+              background: 'linear-gradient(135deg, rgba(0, 245, 212, 0.2), rgba(0, 245, 212, 0.05))',
+              border: '1px solid #00f5d4',
+              color: '#00f5d4',
+              fontWeight: 700
+            }}
+          >
+            <SparklesIcon size={14} color="#00f5d4" />
+            <span>Đăng Ký Dùng Thử 30 Ngày (0đ)</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="cpa-btn-action"
             onClick={() => setShowBillingModal(true)}
             style={{
               background: 'rgba(255, 255, 255, 0.05)',
@@ -1155,23 +1220,26 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
             <span>{personaMode === 'huong' ? 'Gói Khởi Nghiệp (490k)' : 'Gói Pro Studio (1.490k)'}</span>
           </button>
 
-          {personaMode === 'tuan' && (
-            <button 
-              type="button" 
-              className="cpa-btn-action"
-              onClick={() => setShowAuthModal(true)}
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                color: '#cbd5e1'
-              }}
-            >
-              <LockIcon size={14} color="#38bdf8" />
-              <span>
-                Quyền: {currentRole === 'firm_owner' ? 'Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Kế Toán Chính (Senior)' : 'Trợ Lý (Junior)'}
-              </span>
-            </button>
-          )}
+          <button 
+            type="button" 
+            className="cpa-btn-action"
+            onClick={() => {
+              setAuthModalMode('login');
+              setShowAuthModal(true);
+            }}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1'
+            }}
+          >
+            <LockIcon size={14} color="#38bdf8" />
+            <span>
+              {personaMode === 'tuan' 
+                ? (currentRole === 'firm_owner' ? 'Quyền: Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Quyền: Kế Toán Chính (Senior)' : 'Quyền: Trợ Lý (Junior)') 
+                : 'Đăng Nhập / Phân Quyền'}
+            </span>
+          </button>
 
           <button 
             type="button" 
@@ -2366,6 +2434,7 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
       <CpaAuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
         currentRole={currentRole}
         onRoleChange={(r) => {
           setCurrentRole(r);

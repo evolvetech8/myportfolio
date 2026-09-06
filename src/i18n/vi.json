@@ -97,9 +97,9 @@
   "pricing": {
     "title": "Bảng Giá Dịch Vụ A-Sổ",
     "subtitle": "Đầu tư vào tự động hóa không chạm — Triệt tiêu 100% rủi ro phạt thuế và giải phóng hoàn toàn thời gian nhập liệu thủ công.",
-    "trialBannerTitle": "Dùng Thử 14 Ngày Miễn Phí — Tự Động Ghi Sổ Ngay Lập Tức",
+    "trialBannerTitle": "Dùng Thử 30 Ngày Miễn Phí — Tự Động Ghi Sổ Ngay Lập Tức",
     "trialBannerDesc": "Chỉ cần kết nối 1 tài khoản ngân hàng hoặc quét 1 mã VietQR. Trực tiếp nhìn thấy giao dịch tự động điền vào Sổ Doanh thu (S1-HKD) mà không cần gõ một con số nào.",
-    "trialCta": "Bắt Đầu Dùng Thử 14 Ngày Miễn Phí",
+    "trialCta": "Bắt Đầu Dùng Thử 30 Ngày Miễn Phí",
     "billingMonthly": "Thanh toán hàng tháng",
     "billingAnnual": "Thanh toán hàng năm",
     "saveBadge": "Tiết kiệm 20%",
@@ -114,7 +114,7 @@
       "billedAnnualText": "1.788.000đ / năm (Tiết kiệm 20%)",
       "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
       "desc": "Tiết kiệm 30% so với các phần mềm kế toán truyền thống. Tự động hóa sổ kế toán Thông tư 152/2025 không cần nhập tay.",
-      "cta": "Bắt Đầu Dùng Thử 14 Ngày",
+      "cta": "Bắt Đầu Dùng Thử 30 Ngày",
       "features": [
         "Kết nối 1 tài khoản ngân hàng (Hút giao dịch VietQR tự động)",
         "Tự động lập đầy đủ Sổ Kế Toán Thông tư 152/2025/TT-BTC",
@@ -133,7 +133,7 @@
       "billedAnnualText": "2.988.000đ / năm (Tiết kiệm 20%)",
       "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
       "desc": "Không bao giờ phải đối chiếu hóa đơn đỏ bằng tay. Tự động đồng bộ Cổng Thuế và cảnh báo rủi ro tức thời.",
-      "cta": "Trải Nghiệm Gói Tự Động 14 Ngày",
+      "cta": "Trải Nghiệm Gói Tự Động 30 Ngày",
       "features": [
         "Bao gồm tất cả tính năng của Gói Khởi Điểm",
         "Đồng bộ Hóa Đơn Điện Tử Nghị Định 123 với Cổng Tổng cục Thuế",
@@ -152,7 +152,7 @@
       "billedAnnualText": "4.788.000đ / năm (Tiết kiệm 20%)",
       "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
       "desc": "Quét bóc tách hóa đơn giấy bằng AI và quản lý hợp nhất số liệu cho chuỗi nhiều chi nhánh.",
-      "cta": "Bắt Đầu Gói Toàn Diện 14 Ngày",
+      "cta": "Bắt Đầu Gói Toàn Diện 30 Ngày",
       "features": [
         "Bao gồm tất cả tính năng của Gói Tự Động (Pro)",
         "Quét hóa đơn & chứng từ giấy bằng Vision AI (Edge OCR <1.2s)",
@@ -163,15 +163,15 @@
       ]
     },
     "guarantees": {
-      "item1": "Dùng thử đầy đủ tính năng 14 ngày không cần thẻ tín dụng",
+      "item1": "Dùng thử đầy đủ tính năng 30 ngày không cần thẻ tín dụng",
       "item2": "Hỗ trợ xuất hóa đơn GTGT đầy đủ cho chi phí doanh nghiệp",
       "item3": "Cam kết bảo mật dữ liệu cấp ngân hàng mã hóa AES-256",
       "item4": "Hỗ trợ chuyển đổi dữ liệu miễn phí từ phần mềm cũ & sổ tay trong 30 phút"
     },
     "faq": {
       "title": "Câu Hỏi Thường Gặp Về Bảng Giá",
-      "q1": "Tôi có cần nhập thẻ tín dụng khi đăng ký dùng thử 14 ngày không?",
-      "a1": "Hoàn toàn không cần thẻ tín dụng. Bạn chỉ cần số điện thoại hoặc email là có thể kích hoạt dùng thử ngay. Trong 14 ngày, bạn được trải nghiệm toàn diện luồng tự động hút dữ liệu ngân hàng vào sổ S1-HKD hoàn toàn miễn phí.",
+      "q1": "Tôi có cần nhập thẻ tín dụng khi đăng ký dùng thử 30 ngày không?",
+      "a1": "Hoàn toàn không cần thẻ tín dụng. Bạn chỉ cần số điện thoại hoặc email là có thể kích hoạt dùng thử ngay. Trong 30 ngày (trọn vẹn chu kỳ quyết toán tháng), bạn được trải nghiệm toàn diện luồng tự động hút dữ liệu ngân hàng vào sổ S1-HKD hoàn toàn miễn phí.",
       "q2": "Tại sao thanh toán theo năm lại được 90% hộ kinh doanh lựa chọn?",
       "a2": "Thanh toán theo năm giúp bạn tiết kiệm 20% chi phí, đồng thời Archonic sẽ xuất 1 hóa đơn điện tử hợp lệ trọn gói cả năm giúp bạn thuận tiện đưa vào chi phí hợp lý của hộ kinh doanh/doanh nghiệp.",
       "q3": "Dữ liệu tài khoản ngân hàng của tôi có an toàn không?",
@@ -204,8 +204,8 @@
       "waitingWebhook": "Đang chờ nhận biến động số dư qua Webhook tự động...",
       "webhookNote": "Hệ thống tự động kích hoạt tài khoản trong vòng 30 giây ngay sau khi xác nhận chuyển khoản.",
       "confirmPaidBtn": "Tôi Đã Quét Mã Chuyển Khoản Xong",
-      "trialModeTitle": "Kích Hoạt Dùng Thử 14 Ngày Miễn Phí",
-      "trialModeDesc": "Tài khoản của bạn sẽ được kích hoạt ngay lập tức. Sau 14 ngày, bạn có thể quyết định tiếp tục hoặc hủy mà không phát sinh bất kỳ khoản phí nào.",
+      "trialModeTitle": "Kích Hoạt Dùng Thử 30 Ngày Miễn Phí",
+      "trialModeDesc": "Tài khoản của bạn sẽ được kích hoạt ngay lập tức. Sau 30 ngày, bạn có thể quyết định tiếp tục hoặc hủy mà không phát sinh bất kỳ khoản phí nào.",
       "activateTrialBtn": "Kích Hoạt Dùng Thử Ngay (0đ)",
       "successTitle": "Kích Hoạt Thành Công!",
       "successDesc": "Chào mừng bạn đến với nền tảng A-Sổ. Đội ngũ kỹ thuật đang gửi thông tin đăng nhập và hướng dẫn kết nối máy POS/VietQR đến số điện thoại của bạn.",

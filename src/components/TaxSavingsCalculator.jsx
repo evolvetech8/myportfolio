@@ -154,7 +154,7 @@ export default function TaxSavingsCalculator() {
             </div>
 
             <a href="#pricing" className="nano-button calc-cta-btn">
-              {isEn ? 'Start 14-Day Free Trial & Save Now' : 'Bắt Đầu Dùng Thử 14 Ngày & Tiết Kiệm Ngay'}
+              {isEn ? 'Start 30-Day Free Trial & Save Now' : 'Bắt Đầu Dùng Thử 30 Ngày & Tiết Kiệm Ngay'}
             </a>
           </div>
         </div>
