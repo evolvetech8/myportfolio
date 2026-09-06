@@ -75,6 +75,43 @@ export default function ClientReadOnlyPortal({ client, onClose, onOpenFullLedger
     <div className="client-portal-overlay">
       <div className="client-portal-modal glass-panel">
         
+        {/* DEMO 3 DEDICATED CALLOUT BANNER */}
+        <div style={{
+          background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%)',
+          borderBottom: '1px solid rgba(245, 158, 11, 0.4)',
+          padding: '10px 18px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '10px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{
+              background: '#fbbf24',
+              color: '#0f172a',
+              padding: '3px 8px',
+              borderRadius: '4px',
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.05em'
+            }}>
+              DEMO 3: CÔ PHẠM THỊ LAN
+            </span>
+            <span style={{ fontSize: '13px', color: '#fef3c7', fontWeight: 600 }}>
+              Chủ Quán Phở Lan (Doanh thu 1.5 tỷ) - Trải Nghiệm Zalo Mobile Dành Cho Khách Hàng
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '11px', color: '#00f5d4', fontWeight: 600, background: 'rgba(0, 245, 212, 0.1)', padding: '2px 8px', borderRadius: '4px' }}>
+              Đã tách 250M tiền con gửi miễn thuế theo Điều 4 TT152
+            </span>
+            <span style={{ fontSize: '11px', color: '#94a3b8' }}>
+              /demo/lan
+            </span>
+          </div>
+        </div>
+
         {/* CPA Firm Header Bar */}
         <div className="portal-cpa-banner">
           <div className="portal-cpa-identity">

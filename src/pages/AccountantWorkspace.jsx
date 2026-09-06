@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { 
   UsersIcon, 
   CalendarIcon, 
@@ -29,8 +29,10 @@ import AuditTrailModal from '../components/AuditTrailModal';
 import CpaAuthModal from '../components/CpaAuthModal';
 import CpaBillingModal from '../components/CpaBillingModal';
 
-export default function AccountantWorkspace() {
+export default function AccountantWorkspace({ initialPersona, initialPortalOpen } = {}) {
   const navigate = useNavigate();
+  const { personaId } = useParams();
+  const [searchParams] = useSearchParams();
 
   // Active Tab: 'portfolio' | 'calendar' | 'import'
   const [activeTab, setActiveTab] = useState('portfolio');
@@ -61,8 +63,12 @@ export default function AccountantWorkspace() {
   // Persona Target View State (Resolves User Persona Alignment)
   // 'huong': Chị Nguyễn Thị Hương (Kế toán dịch vụ tự do, 38 tuổi, Bình Thạnh HCMC, 22 hộ, Gói Khởi Nghiệp 490k)
   // 'tuan': Anh Trần Văn Tuấn (Chủ đại lý thuế An Bình, 42 tuổi, Cầu Giấy HN, 5 nhân sự, 90 hộ, Gói Pro Studio 1.490k)
-  const [personaMode, setPersonaMode] = useState('huong');
+  // 'lan': Cô Phạm Thị Lan (Chủ hộ Quán Phở Lan, 52 tuổi, Quận 3 HCMC, 1.5 tỷ/năm, Retention Lever)
+  const [personaMode, setPersonaMode] = useState(
+    initialPersona === 'lan' || initialPersona === 'tuan' ? initialPersona : 'huong'
+  );
   const [staffFilter, setStaffFilter] = useState('all'); // 'all' | 'trang' | 'duc' | 'linh'
+  const [copiedDemoLink, setCopiedDemoLink] = useState(null);
 
   // Partial-Failure Bulk Runner State
   const [bulkExecutionModal, setBulkExecutionModal] = useState({
@@ -318,6 +324,36 @@ export default function AccountantWorkspace() {
   const showToast = (title, sub) => {
     setActiveToast({ title, sub });
     setTimeout(() => setActiveToast(null), 4500);
+  };
+
+  // Sync Persona from URL param (/demo/huong, /demo/tuan, /demo/lan, or ?persona=...)
+  useEffect(() => {
+    const targetPersona = personaId || searchParams.get('persona') || initialPersona;
+    if (targetPersona === 'lan' || initialPortalOpen) {
+      const lanClient = clients.find((c) => c.id === 'hkd-lan') || clients[0];
+      setPreviewPortalClient(lanClient);
+      setPersonaMode('lan');
+    } else if (targetPersona === 'tuan') {
+      setPersonaMode('tuan');
+      setCurrentPlan('pro_studio');
+      setCurrentRole('firm_owner');
+    } else if (targetPersona === 'huong') {
+      setPersonaMode('huong');
+      setCurrentPlan('starter');
+      setCurrentRole('firm_owner');
+    }
+  }, [personaId, searchParams, initialPersona, initialPortalOpen, clients]);
+
+  const copyDemoLink = (mode) => {
+    const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'https://www.evolvetech.biz.vn';
+    const url = `${origin}/demo/${mode}`;
+    navigator.clipboard?.writeText(url);
+    setCopiedDemoLink(mode);
+    setTimeout(() => setCopiedDemoLink(null), 2500);
+    showToast(
+      'Đã sao chép link Demo ' + (mode === 'huong' ? '1 (Chị Hương)' : mode === 'tuan' ? '2 (Anh Tuấn)' : '3 (Cô Lan)'),
+      'Đường dẫn trực tiếp: ' + url
+    );
   };
 
   // Portfolio KPIs
@@ -624,12 +660,12 @@ export default function AccountantWorkspace() {
         </div>
       )}
 
-      {/* 3 CORE PERSONAS EXPERIENCE SWITCHER (Resolves User Persona Alignment) */}
+      {/* 3 CORE PERSONAS EXPERIENCE SWITCHER */}
       <div className="persona-selector-bar glass-panel" style={{
         margin: '0 0 16px',
         padding: '12px 18px',
         borderRadius: '12px',
-        background: 'rgba(15, 23, 42, 0.75)',
+        background: 'rgba(15, 23, 42, 0.85)',
         border: '1px solid rgba(0, 245, 212, 0.25)',
         display: 'flex',
         alignItems: 'center',
@@ -640,7 +676,7 @@ export default function AccountantWorkspace() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <UsersIcon size={16} color="#00f5d4" />
           <span style={{ fontSize: '12px', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Trải Nghiệm Theo Chân Dung Khách Hàng (Persona View):
+            3 Chế Độ Demo Trực Tiếp (3 Separate Demos):
           </span>
         </div>
 
@@ -653,7 +689,7 @@ export default function AccountantWorkspace() {
               setCurrentPlan('starter');
               setCurrentRole('firm_owner');
               setStaffFilter('all');
-              showToast('Đã chuyển sang góc nhìn Chị Hương!', 'Kế toán tự do (22 hộ) • Giao diện tinh gọn, tự động hóa VietQR, không làm thêm cuối tuần.');
+              showToast('Đã chọn Demo 1: Chị Hương!', 'Kế toán tự do (22 hộ) • Giao diện tinh gọn, tự động hóa VietQR, không làm thêm cuối tuần.');
             }}
             style={{
               padding: '6px 14px',
@@ -669,7 +705,7 @@ export default function AccountantWorkspace() {
               gap: '6px'
             }}
           >
-            <span>Chị Hương (Kế toán tự do • 22 hộ)</span>
+            <span>Demo 1: Chị Hương (Kế toán tự do • 22 hộ)</span>
             <span style={{
               fontSize: '10px',
               padding: '1px 6px',
@@ -688,14 +724,14 @@ export default function AccountantWorkspace() {
               setPersonaMode('tuan');
               setCurrentPlan('pro_studio');
               setCurrentRole('firm_owner');
-              showToast('Đã chuyển sang góc nhìn Anh Tuấn!', 'Chủ đại lý thuế An Bình (90 hộ, 5 nhân sự) • Dashboard tập trung, kiểm soát Junior QC, tiết kiệm 40% phí MISA.');
+              showToast('Đã chọn Demo 2: Anh Tuấn!', 'Chủ đại lý thuế An Bình (90 hộ, 5 nhân sự) • Dashboard tập trung, kiểm soát Junior QC, tiết kiệm 40% phí MISA.');
             }}
             style={{
               padding: '6px 14px',
               borderRadius: '20px',
-              background: personaMode === 'tuan' ? '#00f5d4' : 'rgba(255, 255, 255, 0.05)',
+              background: personaMode === 'tuan' ? '#38bdf8' : 'rgba(255, 255, 255, 0.05)',
               color: personaMode === 'tuan' ? '#05101a' : '#cbd5e1',
-              border: personaMode === 'tuan' ? '1px solid #00f5d4' : '1px solid rgba(255, 255, 255, 0.1)',
+              border: personaMode === 'tuan' ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.1)',
               fontSize: '12px',
               fontWeight: 700,
               cursor: 'pointer',
@@ -704,7 +740,7 @@ export default function AccountantWorkspace() {
               gap: '6px'
             }}
           >
-            <span>Anh Tuấn (Chủ đại lý thuế • 90 hộ)</span>
+            <span>Demo 2: Anh Tuấn (Chủ đại lý thuế • 90 hộ)</span>
             <span style={{
               fontSize: '10px',
               padding: '1px 6px',
@@ -720,15 +756,17 @@ export default function AccountantWorkspace() {
           <button
             type="button"
             onClick={() => {
+              setPersonaMode('lan');
               const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
               setPreviewPortalClient(lanClient);
+              showToast('Đã chọn Demo 3: Cô Lan!', 'Chủ Quán Phở Lan (1.5 tỷ) • Góc nhìn Zalo Mobile, bóc tách tiền con gửi miễn thuế.');
             }}
             style={{
               padding: '6px 14px',
               borderRadius: '20px',
-              background: 'rgba(245, 158, 11, 0.15)',
-              color: '#fbbf24',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: personaMode === 'lan' ? '#fbbf24' : 'rgba(245, 158, 11, 0.15)',
+              color: personaMode === 'lan' ? '#05101a' : '#fbbf24',
+              border: personaMode === 'lan' ? '1px solid #fbbf24' : '1px solid rgba(245, 158, 11, 0.4)',
               fontSize: '12px',
               fontWeight: 700,
               cursor: 'pointer',
@@ -737,10 +775,304 @@ export default function AccountantWorkspace() {
               gap: '6px'
             }}
           >
-            <EyeIcon size={13} color="#fbbf24" />
-            <span>Cô Lan (Chủ Hộ Phở Lan • 1.5 tỷ/năm)</span>
+            <EyeIcon size={13} color={personaMode === 'lan' ? '#05101a' : '#fbbf24'} />
+            <span>Demo 3: Cô Lan (Chủ Hộ Phở Lan • 1.5 tỷ/năm)</span>
           </button>
         </div>
+      </div>
+
+      {/* INTERACTIVE DEMO SCENARIO CONTROLLER & PLAYBOOK */}
+      <div className="demo-scenario-card glass-panel" style={{
+        margin: '0 0 20px',
+        padding: '16px 20px',
+        borderRadius: '12px',
+        background: personaMode === 'huong'
+          ? 'linear-gradient(135deg, rgba(0, 245, 212, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%)'
+          : personaMode === 'tuan'
+          ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%)'
+          : 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.95) 100%)',
+        border: personaMode === 'huong'
+          ? '1px solid rgba(0, 245, 212, 0.35)'
+          : personaMode === 'tuan'
+          ? '1px solid rgba(56, 189, 248, 0.35)'
+          : '1px solid rgba(245, 158, 11, 0.35)',
+        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.3)'
+      }}>
+        {/* Top bar with Direct Demo Link & Copy Button */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          paddingBottom: '12px',
+          marginBottom: '14px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{
+              background: personaMode === 'huong' ? '#00f5d4' : personaMode === 'tuan' ? '#38bdf8' : '#fbbf24',
+              color: '#05101a',
+              padding: '3px 10px',
+              borderRadius: '6px',
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.05em'
+            }}>
+              {personaMode === 'huong' ? 'KỊCH BẢN DEMO 1' : personaMode === 'tuan' ? 'KỊCH BẢN DEMO 2' : 'KỊCH BẢN DEMO 3'}
+            </span>
+            <span style={{ fontSize: '15px', fontWeight: 700, color: '#fff' }}>
+              {personaMode === 'huong' 
+                ? 'Chị Nguyễn Thị Hương - Kế Toán Dịch Vụ Tự Do (38 tuổi, Bình Thạnh, TP.HCM • 22 Hộ)'
+                : personaMode === 'tuan'
+                ? 'Anh Trần Văn Tuấn - Chủ Đại Lý Thuế An Bình (42 tuổi, Cầu Giấy, HN • 90 Hộ, 5 Nhân Sự)'
+                : 'Cô Phạm Thị Lan - Chủ Hộ Kinh Doanh Quán Phở Lan (52 tuổi, Quận 3, TP.HCM • Doanh Thu 1.5 Tỷ)'}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
+              fontSize: '12px',
+              color: '#94a3b8',
+              fontFamily: 'monospace',
+              background: 'rgba(0, 0, 0, 0.3)',
+              padding: '4px 10px',
+              borderRadius: '6px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              /demo/{personaMode}
+            </span>
+            <button
+              type="button"
+              onClick={() => copyDemoLink(personaMode)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#fff',
+                padding: '5px 12px',
+                borderRadius: '6px',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <FileTextIcon size={13} color="currentColor" />
+              <span>{copiedDemoLink === personaMode ? 'Đã sao chép link!' : 'Sao Chép Link Demo'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Persona Details & Interactive Triggers */}
+        {personaMode === 'huong' && (
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '14px' }}>
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #ef4444' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#f87171', textTransform: 'uppercase' }}>Nỗi Đau / Nỗi Sợ Lớn Nhất</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  Quá tải cuối tuần vì ngồi cộng sao kê ngân hàng từng trang; hoang mang sợ nộp muộn tờ khai Q1/2026 khi Thông tư 152 áp dụng bắt buộc.
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #00f5d4' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#00f5d4', textTransform: 'uppercase' }}>Điểm Chốt Đơn (Aha-Moment)</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  18/22 hộ xong sớm, tự động hóa 100% dòng tiền VietQR vào sổ S1a/S2a, cuối tuần thảnh thơi. Giá chỉ 490.000đ/tháng (22.000đ/hộ).
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                Thao tác thử nghiệm nhanh:
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
+                    handleOpenClientLedger(lanClient);
+                  }}
+                  style={{
+                    background: '#00f5d4',
+                    color: '#05101a',
+                    border: 'none',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Mở Sổ Cái Hộ Cô Lan (VietQR Auto-Sync)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowBillingModal(true)}
+                  style={{
+                    background: 'rgba(0, 245, 212, 0.15)',
+                    color: '#00f5d4',
+                    border: '1px solid #00f5d4',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Xem Gói Khởi Nghiệp (490k/tháng)
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {personaMode === 'tuan' && (
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '14px' }}>
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #ef4444' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#f87171', textTransform: 'uppercase' }}>Nỗi Đau / Rủi Ro Lớn Nhất</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  Chi phí phần mềm MISA theo user quá đắt; sợ 5 nhân viên cấp dưới làm sai hoặc xóa sửa số liệu dẫn đến trách nhiệm pháp lý khi Cục Thuế thanh tra.
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #38bdf8' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase' }}>Điểm Chốt Hợp Đồng (Aha-Moment)</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  Tiết kiệm 40% chi phí phần mềm hàng năm (Gói Pro Studio 1.490k/tháng); Giám sát QC theo 3 nhân viên; Di cư MISA 30 phút; Nhật ký Audit Trail bất biến bảo vệ đại lý.
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                Thao tác thử nghiệm nhanh:
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStaffFilter('trang');
+                    showToast('Đã lọc theo Kế toán Trang!', 'Hiển thị 28 hộ kinh doanh do nhân sự Trang phụ trách kiểm soát chất lượng.');
+                  }}
+                  style={{
+                    background: '#38bdf8',
+                    color: '#05101a',
+                    border: 'none',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Lọc Trợ Lý Trang (28 Hộ)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowMigrationModal(true)}
+                  style={{
+                    background: 'rgba(56, 189, 248, 0.15)',
+                    color: '#38bdf8',
+                    border: '1px solid #38bdf8',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Thử Di Cư 10 Hộ MISA (30 Giây)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAuditModal(true)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: '#fff',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Mở Nhật Ký Kiểm Toán (Audit Trail)
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {personaMode === 'lan' && (
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '14px' }}>
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #ef4444' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#f87171', textTransform: 'uppercase' }}>Nỗi Đau / Nỗi Sợ Của Chủ Hộ</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  Không hiểu thuật ngữ kế toán, sợ bị truy thu thuế oan; đặc biệt lo lắng khoản 250 triệu tiền con gái gửi về tài khoản bị tính thuế bán phở 4.5%.
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(0, 0, 0, 0.25)', padding: '12px 14px', borderRadius: '8px', borderLeft: '3px solid #fbbf24' }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase' }}>Đòn Bẩy Giữ Chân (Retention Lever)</div>
+                <div style={{ fontSize: '13px', color: '#e2e8f0', marginTop: '4px' }}>
+                  Cổng Zalo không mật khẩu (OTP điện thoại). 3 con số minh bạch: Bán phở 1.5 tỷ, Thuế 67.5M, và 250M ĐÃ TÁCH MIỄN THUẾ theo Điều 4 TT152. Chủ hộ tin tưởng chị Hương tuyệt đối.
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                Thao tác trải nghiệm:
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
+                    setPreviewPortalClient(lanClient);
+                  }}
+                  style={{
+                    background: '#fbbf24',
+                    color: '#0f172a',
+                    border: 'none',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Mở Cổng Tra Cứu Cô Lan (Zalo Mobile View)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
+                    handleOpenClientLedger(lanClient);
+                  }}
+                  style={{
+                    background: 'rgba(251, 191, 36, 0.15)',
+                    color: '#fbbf24',
+                    border: '1px solid #fbbf24',
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Xem Sổ Cái Kế Toán Đối Soát (RESTful)
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Top Banner: Dynamically tailored to Huong vs Tuan */}
@@ -900,7 +1232,7 @@ export default function AccountantWorkspace() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : personaMode === 'tuan' ? (
         <div className="tuan-focus-banner" style={{
           margin: '0 0 20px',
           padding: '16px 20px',
@@ -948,6 +1280,51 @@ export default function AccountantWorkspace() {
                 {s.label}
               </button>
             ))}
+          </div>
+        </div>
+      ) : (
+        <div className="lan-focus-banner" style={{
+          margin: '0 0 20px',
+          padding: '16px 20px',
+          background: 'rgba(245, 158, 11, 0.05)',
+          border: '1px solid rgba(245, 158, 11, 0.35)',
+          borderRadius: '12px',
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '16px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <EyeIcon size={24} color="#fbbf24" style={{ flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#fbbf24' }}>
+                Cổng Tra Cứu Số Liệu Khách Hàng (Cô Lan - Quán Phở Lan):
+              </div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '3px' }}>
+                Chủ hộ xem qua Zalo không cần mật khẩu. 250M tiền con gửi ĐÃ TÁCH MIỄN THUẾ theo Điều 4 TT152 giúp chủ hộ tuyệt đối tin tưởng chị Hương.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '12px', borderLeft: '1px solid rgba(255, 255, 255, 0.1)', paddingLeft: '16px' }}>
+            <button
+              type="button"
+              onClick={() => {
+                const lanClient = clients.find(c => c.id === 'hkd-lan') || clients[0];
+                setPreviewPortalClient(lanClient);
+              }}
+              style={{
+                background: '#fbbf24',
+                color: '#0f172a',
+                border: 'none',
+                padding: '8px 18px',
+                borderRadius: '8px',
+                fontWeight: 700,
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}
+            >
+              Mở Cổng Tra Cứu Cô Lan (Zalo View)
+            </button>
           </div>
         </div>
       )}
