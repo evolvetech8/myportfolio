@@ -39,6 +39,13 @@ body {
   overflow-x: hidden;
 }
 
+/* === THREE.JS CANVAS LAYER === */
+/* The WebGL canvas sits fixed behind all DOM content */
+main {
+  position: relative;
+  z-index: 1;
+}
+
 a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--archonic-amber); }
 
@@ -154,9 +161,9 @@ a:hover { color: var(--archonic-amber); }
   text-align: center;
   padding: 130px 24px 80px;
   background:
-    radial-gradient(ellipse at 50% 12%, rgba(255, 109, 0, 0.14) 0%, transparent 65%),
-    radial-gradient(ellipse at 85% 65%, rgba(234, 57, 27, 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse at 15% 75%, rgba(255, 161, 0, 0.06) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 12%, rgba(255, 109, 0, 0.06) 0%, transparent 65%),
+    radial-gradient(ellipse at 85% 65%, rgba(234, 57, 27, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 75%, rgba(255, 161, 0, 0.03) 0%, transparent 50%);
 }
 .hero-inner { 
   max-width: 1120px; 

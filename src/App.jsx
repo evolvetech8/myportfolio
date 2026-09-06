@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
+import { SmoothScroll } from './components/SmoothScroll';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AIAgentDrawer from './components/AIAgentDrawer';
@@ -8,13 +9,30 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import PricingPage from './pages/PricingPage';
 import TrialMVP from './pages/TrialMVP';
+import React, { Suspense, lazy } from 'react';
 import './App.css';
 
-export default function App() {
+/* Lazy-load the entire Three.js canvas layer (code-split) */
+const SceneCanvas = lazy(() => import('./components/three/SceneCanvas'));
+
+function AppShell() {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+  /* Disable smooth scroll on /trial (native scroll needed for forms) */
+  const enableSmooth = isLanding;
+
   return (
-    <LanguageProvider>
-      <BrowserRouter>
-        <Navbar />
+    <>
+      <Navbar />
+
+      {/* Three.js 3D background — only on landing page */}
+      {isLanding && (
+        <Suspense fallback={null}>
+          <SceneCanvas />
+        </Suspense>
+      )}
+
+      <SmoothScroll enabled={enableSmooth}>
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -24,8 +42,19 @@ export default function App() {
             <Route path="/trial" element={<TrialMVP />} />
           </Routes>
         </main>
-        <AIAgentDrawer />
         <Footer />
+      </SmoothScroll>
+
+      <AIAgentDrawer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <BrowserRouter>
+        <AppShell />
       </BrowserRouter>
     </LanguageProvider>
   );
