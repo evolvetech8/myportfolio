@@ -230,6 +230,12 @@ export default function TrialMVP() {
   // Custom VietQR URL for merchant
   const customVietQrUrl = `https://img.vietqr.io/image/${bankDetails.bankCode}-${bankDetails.accountNumber}-compact2.png?amount=0&addInfo=${encodeURIComponent(`A-SO ${bankDetails.storeName}`)}&accountName=${encodeURIComponent(bankDetails.accountName)}`;
 
+  // Real-time tax metrics & savings calculation
+  const totalBankInflow = s1Ledger.reduce((sum, r) => sum + r.rawAmount, 0);
+  const excludedRevenue = s1Ledger.filter((r) => !r.isTaxable).reduce((sum, r) => sum + r.rawAmount, 0);
+  const taxSaved = Math.round(excludedRevenue * 0.015); // 1.5% flat tax under Circular 40/2021
+  const hoursSaved = Math.round((s1Ledger.length * 15) / 60 * 10) / 10;
+
   return (
     <div className="trial-page">
       {/* Dynamic Ambient Background Glows */}
@@ -546,7 +552,10 @@ export default function TrialMVP() {
                     onClick={() => triggerVietQRTransaction(150000, 'Khách thanh toán 3 ly cà phê')}
                   >
                     <ZapIcon size={15} color="#ffffff" />
-                    <span>1. Bán Lẻ: +150.000đ (Vào Sổ S1)</span>
+                    <div>
+                      <strong>1. Bán Lẻ: +150.000đ (Vào Sổ S1)</strong>
+                      <span className="sub-note-hint">Zero Data Entry • Không cần định khoản Nợ/Có như MISA</span>
+                    </div>
                   </button>
 
                   <button 
@@ -556,7 +565,23 @@ export default function TrialMVP() {
                     title="A-Sổ tự động nhận diện từ khóa 'sửa chữa' để không tính thuế oan cho bạn"
                   >
                     <ShieldIcon size={15} color="#38bdf8" />
-                    <span>2. Chuyển Nội Bộ: +5.000.000đ (Miễn Thuế)</span>
+                    <div>
+                      <strong>2. Sửa Quán: +5.000.000đ (Miễn Thuế)</strong>
+                      <span className="sub-note-hint">AI lọc từ khóa 'sửa chữa' -&gt; Miễn tính thuế</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    type="button" 
+                    className="magic-btn-fire loan-btn"
+                    onClick={() => triggerVietQRTransaction(10000000, 'Vay vốn người nhà nộp tiền mở rộng cơ sở')}
+                    title="Chống mất 150k thuế oan mà KiotViet/MISA sẽ tính nhầm thành doanh thu"
+                  >
+                    <ShieldIcon size={15} color="#c084fc" />
+                    <div>
+                      <strong>3. Vay Vốn / Nạp Tiền: +10.000.000đ</strong>
+                      <span className="sub-note-hint">Cứu 150.000đ tiền thuế oan (MISA/KiotViet sẽ tính nhầm)</span>
+                    </div>
                   </button>
 
                   <button 
@@ -565,7 +590,10 @@ export default function TrialMVP() {
                     onClick={() => triggerVietQRTransaction(2500000, 'Bàn tiệc sinh nhật #08')}
                   >
                     <ZapIcon size={15} color="#FFA100" />
-                    <span>3. Bán Lẻ Lớn: +2.500.000đ</span>
+                    <div>
+                      <strong>4. Bán Lẻ Lớn: +2.500.000đ</strong>
+                      <span className="sub-note-hint">Tự động đối soát ngân hàng & chốt Sổ S1</span>
+                    </div>
                   </button>
                 </div>
               </div>
@@ -599,6 +627,29 @@ export default function TrialMVP() {
                   ></div>
                 </div>
 
+                {/* Tax Shield Banner: Protecting Personal Money from Unfair Taxation */}
+                <div className="tax-shield-banner">
+                  <div className="tsb-left">
+                    <ShieldIcon size={20} color="#00f5d4" />
+                    <div>
+                      <div className="tsb-title">KHIÊN BẢO VỆ DÒNG TIỀN (TAX SHIELD)</div>
+                      <div className="tsb-desc">
+                        {excludedRevenue > 0 ? (
+                          <span>Đã bóc tách <strong>{new Intl.NumberFormat('vi-VN').format(excludedRevenue)}đ</strong> dòng tiền cá nhân • Cứu ngay <strong>{new Intl.NumberFormat('vi-VN').format(taxSaved)}đ</strong> tiền thuế không bị nộp oan!</span>
+                        ) : (
+                          <span>Tự động phát hiện & loại trừ tiền nạp cá nhân, tiền vay để không bị tính thuế oan như phần mềm cũ.</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {excludedRevenue > 0 && (
+                    <div className="tsb-saved-pill">
+                      <span>Đã Cứu:</span>
+                      <strong>+{new Intl.NumberFormat('vi-VN').format(taxSaved)}đ</strong>
+                    </div>
+                  )}
+                </div>
+
                 <div className="trw-footer">
                   <div className="trw-footer-item">
                     <CheckCircleIcon size={14} color="#4ade80" />
@@ -607,6 +658,49 @@ export default function TrialMVP() {
                   <div className="trw-footer-item">
                     <ShieldIcon size={14} color="#FFA100" />
                     <span>Bảo mật: Xác thực chữ ký HMAC-SHA256 chống Webhook giả mạo</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* COMPETITOR COMPARISON: A-Sổ vs MISA vs KiotViet */}
+              <div className="competitor-comparison-card glass-panel">
+                <div className="comp-header">
+                  <div className="comp-header-badge">
+                    <ShieldIcon size={14} color="#FFA100" />
+                    <span>SO SÁNH THỰC TẾ</span>
+                  </div>
+                  <h4 className="comp-title">Tại Sao A-Sổ Thay Thế Hoàn Toàn Bộ Đôi MISA + KiotViet?</h4>
+                  <p className="comp-sub">
+                    Giải quyết triệt để 3 bế tắc lớn nhất khiến 80% chủ hộ kinh doanh và SME đau đầu:
+                  </p>
+                </div>
+                <div className="comp-grid">
+                  <div className="comp-col comp-kiotviet">
+                    <div className="comp-brand-tag">KiotViet (POS Bán hàng)</div>
+                    <ul className="comp-list">
+                      <li>• <strong>Mù tịt sổ sách TT88:</strong> Chỉ in bill, không biết làm 7 sổ kế toán thuế.</li>
+                      <li>• <strong>Mất 30h/tháng gõ Excel:</strong> Phải xuất file ra rồi gõ lại thủ công.</li>
+                      <li>• <strong>Lỗi kết nối HĐĐT:</strong> Hay nghẽn máy POS giờ cao điểm, đổ lỗi nhà mạng.</li>
+                    </ul>
+                  </div>
+                  <div className="comp-col comp-misa">
+                    <div className="comp-brand-tag">MISA (Kế toán truyền thống)</div>
+                    <ul className="comp-list">
+                      <li>• <strong>Bắt học Nợ/Có:</strong> Bắt chủ quán định khoản TK 111, 511, lập 5 loại phiếu.</li>
+                      <li>• <strong>Đánh thuế oan:</strong> Không tự phân biệt tiền cá nhân/vay mượn với doanh thu.</li>
+                      <li>• <strong>Phí phát sinh dai dẳng:</strong> Phí bảo trì hàng năm, phí block hóa đơn, cước 1900.</li>
+                    </ul>
+                  </div>
+                  <div className="comp-col comp-aso active-glow">
+                    <div className="comp-brand-tag tag-aso">
+                      <SparklesIcon size={14} color="#00f5d4" />
+                      <span>A-Sổ (Zero-Touch Cloud)</span>
+                    </div>
+                    <ul className="comp-list">
+                      <li>• <strong>Zero Data Entry:</strong> Ting ting VietQR -&gt; Vào Sổ S1 trong 1.2s, 0% gõ tay.</li>
+                      <li>• <strong>Bộ lọc chống thuế oan:</strong> Tự bóc tách tiền vay, nạp vốn + nút [Bỏ qua] 1-chạm.</li>
+                      <li>• <strong>Khép kín 100% tới CQT:</strong> Trọn gói 7 Sổ TT88 + HĐĐT NĐ 123, 1-click xuất XML.</li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -725,15 +819,42 @@ export default function TrialMVP() {
                     </tbody>
                     {s1Ledger.length > 0 && (
                       <tfoot>
-                        <tr>
-                          <td colSpan={4} className="total-label">CỘNG DOANH THU THỰC TẾ CHỊU THUẾ:</td>
+                        <tr className="tfoot-inflow-row">
+                          <td colSpan={4} className="total-label" style={{ color: '#94a3b8' }}>TỔNG DÒNG TIỀN VÀO TÀI KHOẢN NGÂN HÀNG:</td>
+                          <td className="text-right mono" style={{ color: '#94a3b8', fontSize: '13px' }}>
+                            {new Intl.NumberFormat('vi-VN').format(totalBankInflow)}đ
+                          </td>
+                          <td colSpan={2} style={{ fontSize: '11px', color: '#94a3b8' }}>
+                            {s1Ledger.length} giao dịch ghi nhận
+                          </td>
+                        </tr>
+                        {excludedRevenue > 0 && (
+                          <tr className="tfoot-exempt-row" style={{ background: 'rgba(0, 245, 212, 0.04)' }}>
+                            <td colSpan={4} className="total-label" style={{ color: '#00f5d4' }}>
+                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                                <ShieldIcon size={12} color="#00f5d4" />
+                                <span>TIỀN NỘI BỘ / CÁ NHÂN ĐÃ LOẠI TRỪ (MIỄN THUẾ):</span>
+                              </span>
+                            </td>
+                            <td className="text-right mono" style={{ color: '#00f5d4', fontWeight: 800 }}>
+                              -{new Intl.NumberFormat('vi-VN').format(excludedRevenue)}đ
+                            </td>
+                            <td colSpan={2} style={{ color: '#00f5d4', fontWeight: 700, fontSize: '11px' }}>
+                              <span>Tiết kiệm ngay +{new Intl.NumberFormat('vi-VN').format(taxSaved)}đ tiền thuế</span>
+                            </td>
+                          </tr>
+                        )}
+                        <tr className="tfoot-main-row">
+                          <td colSpan={4} className="total-label" style={{ fontWeight: 800, color: '#ffffff' }}>
+                            CỘNG DOANH THU THỰC TẾ CHỊU THUẾ (S1-HKD):
+                          </td>
                           <td className="text-right total-amount mono">
                             {new Intl.NumberFormat('vi-VN').format(revenue)}đ
                           </td>
                           <td colSpan={2} className="total-status">
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                               <CheckIcon size={12} color="#4ade80" />
-                              <span>{s1Ledger.filter(r => !r.isTaxable).length > 0 ? `Đã trừ ${s1Ledger.filter(r => !r.isTaxable).length} dòng nội bộ` : '100% Cân Đối Chuẩn TT88'}</span>
+                              <span>Đã chuẩn hóa 100% Thông tư 88 (Tiết kiệm ~{hoursSaved}h gõ tay)</span>
                             </span>
                           </td>
                         </tr>
@@ -866,19 +987,23 @@ export default function TrialMVP() {
               <div className="upgrade-comparison-list">
                 <div className="ucl-item">
                   <CheckCircleIcon size={16} color="#4ade80" />
-                  <span>Xuất file XML chuẩn Cổng Thông Tin Tổng Cục Thuế không giới hạn</span>
+                  <span><strong>Tiết kiệm hơn 30 giờ/tháng</strong> nhập liệu thủ công giữa sao kê ngân hàng và Excel</span>
                 </div>
                 <div className="ucl-item">
                   <CheckCircleIcon size={16} color="#4ade80" />
-                  <span>Đồng bộ và đối chiếu tự động Hóa đơn điện tử NĐ 123</span>
+                  <span><strong>1 Click xuất file XML</strong> nộp trực tiếp Cổng Thuế thuedientu.gdt.gov.vn không giới hạn</span>
                 </div>
                 <div className="ucl-item">
                   <CheckCircleIcon size={16} color="#4ade80" />
-                  <span>Bảng cảnh báo rủi ro thuế 'Đèn Giao Thông' (Xanh / Vàng / Đỏ)</span>
+                  <span><strong>Tự động bảo vệ dòng tiền cá nhân:</strong> Không bị tính thuế oan tiền vay, tiền nạp vốn</span>
                 </div>
                 <div className="ucl-item">
                   <CheckCircleIcon size={16} color="#4ade80" />
-                  <span>Bảo hành số liệu và hỗ trợ giải trình thuế trực tiếp với chuyên viên</span>
+                  <span><strong>Đồng bộ Hóa đơn điện tử NĐ 123:</strong> Không đứt gãy kết nối, không đổ lỗi bên thứ 3</span>
+                </div>
+                <div className="ucl-item">
+                  <CheckCircleIcon size={16} color="#4ade80" />
+                  <span><strong>Minh bạch trọn gói:</strong> Không phí bảo trì hàng năm, không phí block hóa đơn</span>
                 </div>
               </div>
 

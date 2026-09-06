@@ -4458,3 +4458,171 @@ a:hover { color: var(--archonic-amber); }
   border-color: transparent;
   box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
 }
+
+/* =============================================
+   TRIAL MVP: COMPETITOR COMPARISON & TAX SHIELD
+   ============================================= */
+.competitor-comparison-card {
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 12, 18, 0.65);
+  backdrop-filter: blur(20px);
+}
+
+.comp-header {
+  margin-bottom: 18px;
+}
+.comp-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #FFA100;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.comp-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+.comp-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.25fr;
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .comp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comp-col {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.comp-col.active-glow {
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.06) 0%, rgba(139, 92, 246, 0.06) 100%);
+  border: 1px solid rgba(0, 245, 212, 0.35);
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.12);
+}
+
+.comp-brand-tag {
+  font-size: 13px;
+  font-weight: 800;
+  color: #94a3b8;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.comp-brand-tag.tag-aso {
+  color: #00f5d4;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom-color: rgba(0, 245, 212, 0.25);
+}
+
+.comp-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.comp-list li strong {
+  color: #ffffff;
+}
+
+/* Tax Shield Savings Banner */
+.tax-shield-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-top: 14px;
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.08) 0%, rgba(56, 189, 248, 0.04) 100%);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+}
+.tsb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tsb-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #00f5d4;
+  margin-bottom: 2px;
+}
+.tsb-desc {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+.tsb-desc strong {
+  color: #ffffff;
+}
+.tsb-saved-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: rgba(0, 245, 212, 0.15);
+  border: 1px solid rgba(0, 245, 212, 0.4);
+  padding: 6px 14px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.tsb-saved-pill span {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+.tsb-saved-pill strong {
+  font-size: 15px;
+  color: #00f5d4;
+  font-family: monospace;
+}
+
+/* 4th Simulation Button - Loan / Family */
+.magic-btn-fire.loan-btn {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #c084fc;
+  box-shadow: none;
+}
+.magic-btn-fire.loan-btn:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: #a855f7;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.sub-note-hint {
+  font-size: 10px;
+  opacity: 0.8;
+  display: block;
+}
