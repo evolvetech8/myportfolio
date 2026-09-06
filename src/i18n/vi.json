@@ -215,10 +215,22 @@
   },
   "metrics": {
     "title": "Tiêu Chuẩn Kỹ Thuật & Tuân Thủ Của A-Sổ",
-    "stat1": { "value": "100%", "label": "Sổ kế toán chuẩn Thông tư 152" },
-    "stat2": { "value": "< 1.2s", "label": "Tốc độ đối chiếu hóa đơn điện tử" },
-    "stat3": { "value": "100%", "label": "Chuẩn hóa TT 152 & NĐ 70/123" },
-    "stat4": { "value": "E2EE", "label": "Mã hóa đầu-cuối dữ liệu tài chính" }
+    "stat1": {
+      "value": "100%",
+      "label": "Sổ kế toán chuẩn Thông tư 152"
+    },
+    "stat2": {
+      "value": "< 1.2s",
+      "label": "Tốc độ đối chiếu hóa đơn điện tử"
+    },
+    "stat3": {
+      "value": "100%",
+      "label": "Chuẩn hóa TT 152 & NĐ 70/123"
+    },
+    "stat4": {
+      "value": "E2EE",
+      "label": "Mã hóa đầu-cuối dữ liệu tài chính"
+    }
   },
   "about": {
     "title": "Về Archonic",
@@ -240,11 +252,13 @@
     "emailLabel": "Email Kỹ Thuật"
   },
   "aiAgent": {
-    "badge": "Archonic A-Sổ Sales Engineer AI",
-    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật A-Sổ của Archonic. Bạn muốn tìm hiểu cách A-Sổ tự động hóa sổ kế toán theo Thông tư 152, đối soát hóa đơn Nghị định 70/123 hay bảng giá triển khai?",
+    "fabText": "Trợ Lý Thuế A-Sổ AI",
+    "badge": "Trợ Lý Pháp Lý & Thuế A-Sổ",
+    "subtitle": "Tư Vấn Thông Tư 152 & Nghị Định 70 • Trực Tuyến 24/7",
+    "welcome": "Xin chào! Tôi là Trợ lý Pháp lý & Thuế A-Sổ. Bạn muốn tìm hiểu cách A-Sổ tự động hóa sổ kế toán theo Thông tư 152, đối soát hóa đơn Nghị định 70/123 hay chính sách dùng thử 30 ngày?",
     "prompt1": "A-Sổ phân nhóm sổ theo TT 152 ra sao?",
-    "prompt2": "A-Sổ đối chiếu hóa đơn NĐ 123 ra sao?",
-    "prompt3": "Chi phí và cách bắt đầu dùng A-Sổ?",
+    "prompt2": "A-Sổ đối chiếu hóa đơn NĐ 70 & 123 ra sao?",
+    "prompt3": "Bảng giá CPA và dùng thử 30 ngày?",
     "inputPlaceholder": "Đặt câu hỏi về A-Sổ hoặc quy định thuế...",
     "send": "Gửi"
   },

@@ -50,9 +50,9 @@ export default function AIAgentDrawer() {
       en: 'A-Sổ synchronizes directly with Decree 70/2025 and Decree 123 e-invoicing portals. It automatically verifies input and output e-invoice authenticity, matches tax authority codes, and reconciles entries with your ledgers in real time.'
     },
     pricing: {
-      keywords: ['giá', 'bảng giá', 'chi phí', 'tiền', 'gói', 'starter', 'pro', 'advanced', 'price', 'pricing', 'cost'],
-      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) - Tự động sổ kế toán Thông tư 152/2025/TT-BTC, kết nối 1 ngân hàng, tiết kiệm 30% chi phí so với phần mềm truyền thống.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) - Tích hợp Cổng Thuế NĐ70 & NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) - Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 30 ngày MIỄN PHÍ quét VietQR không cần thẻ tín dụng!',
-      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) - Circular 152/2025 ledgers, 1 bank sync, saves 30% vs traditional legacy tools.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) - Decree 70 & 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) - Vision AI receipt scanning & multi-branch management.\nAll plans include a 30-Day Risk-Free Trial without credit card required!'
+      keywords: ['giá', 'bảng giá', 'chi phí', 'tiền', 'gói', 'starter', 'pro', 'advanced', 'enterprise', 'price', 'pricing', 'cost', 'khởi nghiệp'],
+      vi: 'Bảng giá A-Sổ dành cho kế toán dịch vụ & đại lý thuế:\n1. Gói Khởi Nghiệp: 490.000đ/tháng (4.900.000đ/năm - tiết kiệm 980k) cho tối đa 15 hộ kinh doanh.\n2. Gói Pro Studio (Khuyên dùng): 1.490.000đ/tháng (14.900.000đ/năm - tiết kiệm 2,98 triệu) cho đại lý thuế tối đa 50 hộ, 5 tài khoản kế toán, phân quyền RBAC và audit trail.\n3. Gói Enterprise Firm: 2.990.000đ/tháng (29.900.000đ/năm - tiết kiệm 5,98 triệu) cho tối đa 200 hộ (+20k/hộ phụ trội).\nĐặc biệt: Đăng ký dùng thử 30 ngày MIỄN PHÍ trọn vẹn chu kỳ đóng sổ tháng không cần thẻ tín dụng!',
+      en: 'A-Sổ CPA Studio pricing:\n1. Starter: 490,000 VND/mo (4,900,000 VND/yr - save 980k) for up to 15 clients.\n2. Pro Studio (Recommended): 1,490,000 VND/mo (14,900,000 VND/yr - save 2.98M) for up to 50 clients, 5 staff seats, RBAC & audit trail.\n3. Enterprise Firm: 2,990,000 VND/mo (29,900,000 VND/yr - save 5.98M) for up to 200 clients.\nIncludes 30-Day Free Trial covering a full monthly closing cycle!'
     },
     demo: {
       keywords: ['demo', 'dùng thử', 'trial', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
@@ -114,7 +114,7 @@ export default function AIAgentDrawer() {
       >
         <span className="ai-agent-fab-pulse"></span>
         <span className="ai-agent-fab-icon"><SparklesIcon size={15} color="#FF7A00" /></span>
-        <span className="ai-agent-fab-text">Vertex AI Sales Eng</span>
+        <span className="ai-agent-fab-text">{t('aiAgent.fabText')}</span>
       </button>
 
       {/* Slide-out Drawer */}
@@ -125,7 +125,7 @@ export default function AIAgentDrawer() {
               <span className="ai-drawer-status-dot"></span>
               <div>
                 <h3 className="ai-drawer-title">{t('aiAgent.badge')}</h3>
-                <span className="ai-drawer-subtitle">Google Cloud Run & Vertex AI Node</span>
+                <span className="ai-drawer-subtitle">{t('aiAgent.subtitle')}</span>
               </div>
             </div>
             <button className="ai-drawer-close" onClick={() => setIsOpen(false)} aria-label="Close AI Agent">

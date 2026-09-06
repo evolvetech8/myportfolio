@@ -215,10 +215,22 @@
   },
   "metrics": {
     "title": "A-Sổ Engineering & Compliance Truths",
-    "stat1": { "value": "100%", "label": "Circular 152 Compliant Ledgers" },
-    "stat2": { "value": "< 1.2s", "label": "E-Invoice Cross-Reconciliation" },
-    "stat3": { "value": "100%", "label": "Circular 152 & Decree 70/123 Compliant" },
-    "stat4": { "value": "E2EE", "label": "End-to-End Encrypted Financial Ledger" }
+    "stat1": {
+      "value": "100%",
+      "label": "Circular 152 Compliant Ledgers"
+    },
+    "stat2": {
+      "value": "< 1.2s",
+      "label": "E-Invoice Cross-Reconciliation"
+    },
+    "stat3": {
+      "value": "100%",
+      "label": "Circular 152 & Decree 70/123 Compliant"
+    },
+    "stat4": {
+      "value": "E2EE",
+      "label": "End-to-End Encrypted Financial Ledger"
+    }
   },
   "about": {
     "title": "About Archonic",
@@ -240,11 +252,13 @@
     "emailLabel": "Technical Inquiries"
   },
   "aiAgent": {
-    "badge": "Archonic A-Sổ Sales Engineer AI",
-    "welcome": "Hello! I am the Archonic A-Sổ Solutions Architect. Ask me anything about automating Circular 152/2025 ledgers, Decree 70/123 e-invoicing, or deployment pricing for A-Sổ.",
-    "prompt1": "How does A-Sổ categorize ledgers under Circular 152?",
+    "fabText": "A-Sổ Tax Assistant AI",
+    "badge": "A-Sổ Accounting & Tax Assistant AI",
+    "subtitle": "Circular 152 & Decree 70 Compliance • 24/7 Online",
+    "welcome": "Hello! I am your A-Sổ Accounting & Tax Assistant. Ask me anything about automating Circular 152/2025 ledgers, Decree 70/123 cash-register e-invoices, or our 30-day free trial.",
+    "prompt1": "How does A-Sổ categorize books under TT 152?",
     "prompt2": "How does A-Sổ reconcile Decree 70 & 123 e-invoices?",
-    "prompt3": "How do I deploy A-Sổ for my business?",
+    "prompt3": "CPA firm pricing & 30-day trial?",
     "inputPlaceholder": "Ask a question about A-Sổ or tax regulations...",
     "send": "Send"
   },
