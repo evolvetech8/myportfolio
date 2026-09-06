@@ -83,6 +83,24 @@ export default async function handler(req, res) {
         global.__asoTransactions.pop();
       }
 
+      // Real-time broadcast to connected client dashboards via Server-Sent Events (SSE)
+      const cleanAccount = String(accountNumber).replace(/[^a-zA-Z0-9]/g, '');
+      try {
+        const payloadStr = JSON.stringify(newTx);
+        await Promise.allSettled([
+          fetch(`https://ntfy.sh/aso_live_${cleanAccount}`, {
+            method: 'POST',
+            body: payloadStr
+          }),
+          fetch('https://ntfy.sh/aso_live_global', {
+            method: 'POST',
+            body: payloadStr
+          })
+        ]);
+      } catch (broadcastErr) {
+        console.warn('[SSE BROADCAST WARNING]', broadcastErr.message);
+      }
+
       console.log(`[LIVE WEBHOOK] Ingested +${amount}đ for account ${accountNumber} | Ref: ${referenceNo}`);
 
       return res.status(200).json({

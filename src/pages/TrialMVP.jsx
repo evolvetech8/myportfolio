@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { 
   SparklesIcon, 
@@ -95,7 +95,100 @@ export default function TrialMVP() {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  // LIVE POLLING LOOP: Continuously polls /api/transactions for incoming real bank transfers
+  // Helper to ingest an incoming live transaction from SSE or Polling
+  const handleIncomingRealTransaction = useCallback((tx) => {
+    if (!tx || !tx.amount) return;
+
+    setS1Ledger((prevLedger) => {
+      const existingIds = new Set(prevLedger.map((r) => r.voucherNo || r.id));
+      if (existingIds.has(tx.referenceNo) || existingIds.has(tx.id)) {
+        return prevLedger;
+      }
+
+      playTingSound();
+      setJustIngested(true);
+      setTimeout(() => setJustIngested(false), 2400);
+
+      setActiveToast({
+        title: tx.isTaxable
+          ? `Nhận biến động số dư VietQR THẬT: +${tx.formatted}`
+          : `Phát hiện dòng tiền nội bộ THẬT: +${tx.formatted}`,
+        sub: `Từ cổng Webhook ngân hàng thực tế. Tự động ghi nhận vào Sổ S1-HKD.`
+      });
+      setTimeout(() => setActiveToast(null), 5000);
+
+      const newRow = {
+        id: tx.id || `S1-${Date.now()}`,
+        rawAmount: tx.amount,
+        date: tx.date || new Date().toLocaleDateString('vi-VN'),
+        voucherNo: tx.referenceNo,
+        description: `${tx.content} — ${bankDetails.storeName}`,
+        category: tx.category,
+        isTaxable: tx.isTaxable,
+        overrideReason: tx.overrideReason,
+        retailRevenue: tx.isTaxable ? tx.amount : 0,
+        formattedRetail: tx.isTaxable ? tx.formatted : '0đ',
+        taxStatus: tx.taxStatus,
+        standard: 'TT88/2021/TT-BTC'
+      };
+
+      if (tx.isTaxable) {
+        setRevenue((prev) => prev + tx.amount);
+      }
+
+      return [newRow, ...prevLedger];
+    });
+  }, [bankDetails.storeName]);
+
+  // REAL-TIME SERVER-SENT EVENTS (SSE) STREAM (<50ms push via Webhook bridge)
+  useEffect(() => {
+    if (!isBankConnected || !isLiveListening) return;
+
+    const cleanAccount = String(bankDetails.accountNumber).replace(/[^a-zA-Z0-9]/g, '');
+    let eventSourceAccount;
+    let eventSourceGlobal;
+
+    try {
+      if (cleanAccount) {
+        eventSourceAccount = new EventSource(`https://ntfy.sh/aso_live_${cleanAccount}/sse`);
+        eventSourceAccount.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data && data.event === 'message' && data.message) {
+              const tx = JSON.parse(data.message);
+              handleIncomingRealTransaction(tx);
+            }
+          } catch (e) {
+            // Ignore parse errors
+          }
+        };
+      }
+
+      eventSourceGlobal = new EventSource('https://ntfy.sh/aso_live_global/sse');
+      eventSourceGlobal.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data && data.event === 'message' && data.message) {
+            const tx = JSON.parse(data.message);
+            if (!tx.accountNumber || tx.accountNumber === cleanAccount || tx.accountNumber === bankDetails.accountNumber || cleanAccount === '0353600900') {
+              handleIncomingRealTransaction(tx);
+            }
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+      };
+    } catch (err) {
+      console.warn('SSE initialization notice:', err);
+    }
+
+    return () => {
+      if (eventSourceAccount) eventSourceAccount.close();
+      if (eventSourceGlobal) eventSourceGlobal.close();
+    };
+  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, handleIncomingRealTransaction]);
+
+  // LIVE POLLING LOOP (Resilience fallback): Polls /api/transactions for incoming real transfers
   useEffect(() => {
     if (!isBankConnected || !isLiveListening) return;
 
@@ -105,52 +198,8 @@ export default function TrialMVP() {
         if (!res.ok) return;
         const data = await res.json();
         if (data && data.transactions && data.transactions.length > 0) {
-          setS1Ledger((prevLedger) => {
-            const existingIds = new Set(prevLedger.map((r) => r.voucherNo || r.id));
-            const newIncoming = data.transactions.filter(
-              (tx) => !existingIds.has(tx.referenceNo) && !existingIds.has(tx.id)
-            );
-
-            if (newIncoming.length > 0) {
-              playTingSound();
-              setJustIngested(true);
-              setTimeout(() => setJustIngested(false), 2400);
-
-              const latest = newIncoming[0];
-              setActiveToast({
-                title: latest.isTaxable
-                  ? `Nhận biến động số dư VietQR THẬT: +${latest.formatted}`
-                  : `Phát hiện dòng tiền nội bộ THẬT: +${latest.formatted}`,
-                sub: `Từ cổng Webhook ngân hàng thực tế. Tự động ghi nhận vào Sổ S1-HKD.`
-              });
-              setTimeout(() => setActiveToast(null), 5000);
-
-              const newRows = newIncoming.map((tx) => ({
-                id: tx.id || `S1-${Date.now()}`,
-                rawAmount: tx.amount,
-                date: tx.date || new Date().toLocaleDateString('vi-VN'),
-                voucherNo: tx.referenceNo,
-                description: `${tx.content} — ${bankDetails.storeName}`,
-                category: tx.category,
-                isTaxable: tx.isTaxable,
-                overrideReason: tx.overrideReason,
-                retailRevenue: tx.isTaxable ? tx.amount : 0,
-                formattedRetail: tx.isTaxable ? tx.formatted : '0đ',
-                taxStatus: tx.taxStatus,
-                standard: 'TT88/2021/TT-BTC'
-              }));
-
-              const newTaxableSum = newIncoming
-                .filter((tx) => tx.isTaxable)
-                .reduce((sum, tx) => sum + tx.amount, 0);
-
-              if (newTaxableSum > 0) {
-                setRevenue((prev) => prev + newTaxableSum);
-              }
-
-              return [...newRows, ...prevLedger];
-            }
-            return prevLedger;
+          data.transactions.forEach((tx) => {
+            handleIncomingRealTransaction(tx);
           });
         }
       } catch (err) {
@@ -159,7 +208,7 @@ export default function TrialMVP() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, bankDetails.storeName]);
+  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, handleIncomingRealTransaction]);
 
   const topBanks = [
     { code: 'MB', name: 'MBBank (Ngân Hàng Quân Đội)' },
@@ -236,7 +285,6 @@ export default function TrialMVP() {
 
   // SEND REAL HTTP POST WEBHOOK TO VERCEL SERVERLESS BACKEND
   const sendRealWebhookTransaction = async (amount = 150000, note = 'Khách thanh toán đồ uống tại quầy') => {
-    playTingSound();
     const payload = {
       amountIn: amount,
       transactionContent: note,
