@@ -39,7 +39,6 @@ body {
 /* The WebGL canvas sits fixed behind all DOM content */
 main {
   position: relative;
-  z-index: 1;
 }
 
 a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
@@ -5850,7 +5849,7 @@ a:hover { color: var(--archonic-amber); }
 }
 
 /* ========================================================================= */
-/* CLIENT READ-ONLY PORTAL MODAL STYLES                                      */
+/* CLIENT READ-ONLY PORTAL (DEMO 3: CÔ PHẠM THỊ LAN) STYLES                  */
 /* ========================================================================= */
 .client-portal-overlay {
   position: fixed;
@@ -5858,614 +5857,983 @@ a:hover { color: var(--archonic-amber); }
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(3, 7, 18, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 99999;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1050;
-  padding: 24px;
-  backdrop-filter: blur(10px);
+  align-items: flex-start;
+  padding: 24px 16px 60px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
 }
 
 .client-portal-modal {
   width: 100%;
-  max-width: 1020px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 18px;
-  background: #0f1015;
+  max-width: 1160px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background: #0b0f19;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 161, 0, 0.15);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
-.portal-cpa-banner {
+/* Callout Banner */
+.portal-top-banner {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 14px 24px;
-  background: rgba(255, 161, 0, 0.06);
-  border-bottom: 1px solid rgba(255, 161, 0, 0.18);
+  justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.portal-cpa-identity {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
+.portal-top-badge {
+  background: #fbbf24;
+  color: #0f172a;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.portal-cpa-badge {
+.portal-top-title {
+  font-size: 13px;
+  color: #fef3c7;
+  font-weight: 600;
+}
+
+/* CPA Firm Header Bar */
+.portal-cpa-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  background: rgba(255, 161, 0, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.portal-cpa-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.portal-cpa-logo-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-size: 12px;
   font-weight: 800;
   color: #FFA100;
   letter-spacing: 0.5px;
 }
 
-.portal-cpa-divider {
-  color: #64748b;
-}
-
-.portal-sub-tag {
+.portal-cpa-tag {
   color: #94a3b8;
+  font-size: 12px;
 }
 
-.portal-header-actions {
+.portal-actions-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.portal-share-btn {
-  background: rgba(255, 255, 255, 0.06);
+.portal-btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f1f5f9;
+  color: #cbd5e1;
   padding: 5px 12px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.portal-close-btn {
+.portal-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.portal-close-icon-btn {
   background: transparent;
   border: none;
   color: #94a3b8;
   cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
 
-.portal-client-profile {
+.portal-close-icon-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Security Ribbon */
+.portal-sec-ribbon {
+  background: rgba(0, 245, 212, 0.05);
+  border-bottom: 1px solid rgba(0, 245, 212, 0.15);
+  padding: 8px 22px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  color: #94a3b8;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 8px;
 }
 
-.portal-profile-left {
+/* 2-Column Body Layout */
+.portal-layout-grid {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  min-height: 580px;
+  background: #090d16;
+}
+
+/* Left Sidebar */
+.portal-sidebar {
+  background: rgba(13, 18, 30, 0.85);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.portal-sidebar-profile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.portal-avatar-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.portal-avatar-box {
-  width: 48px;
-  height: 48px;
+.portal-avatar-box-lg {
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   background: linear-gradient(135deg, #FFA100 0%, #FF6D00 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   color: #000;
   flex-shrink: 0;
 }
 
-.portal-client-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-
-.portal-client-name {
+.portal-client-heading {
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 800;
   color: #fff;
+  line-height: 1.25;
 }
 
-.portal-regime-chip {
+.portal-client-subheading {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.portal-meta-details {
   font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.6;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+}
+
+.portal-meta-details strong {
+  color: #cbd5e1;
+}
+
+.portal-regime-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
   font-weight: 700;
   color: #00f5d4;
-  background: rgba(0, 245, 212, 0.12);
+  background: rgba(0, 245, 212, 0.1);
   border: 1px solid rgba(0, 245, 212, 0.3);
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
 }
 
-.portal-client-meta {
+/* Accountant Reassurance Box */
+.portal-accountant-card {
+  background: rgba(0, 245, 212, 0.04);
+  border: 1px solid rgba(0, 245, 212, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.accountant-card-title {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #94a3b8;
-  flex-wrap: wrap;
-}
-
-.portal-client-meta strong {
-  color: #f1f5f9;
-}
-
-.portal-profile-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.portal-readonly-pill {
-  display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-
-.portal-open-ledger-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #FFA100;
-  color: #000;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 12px;
   font-weight: 700;
-  cursor: pointer;
+  color: #00f5d4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
 }
 
-.portal-tabs-bar {
-  display: flex;
-  gap: 10px;
-  padding: 0 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.portal-tab {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: #94a3b8;
-  padding: 12px 6px;
+.accountant-card-name {
   font-size: 13px;
   font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: #fff;
+  margin-bottom: 4px;
 }
 
-.portal-tab:hover {
+.accountant-card-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.portal-zalo-cta-btn {
+  width: 100%;
+  background: #00f5d4;
+  color: #05101a;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 245, 212, 0.2);
+}
+
+.portal-zalo-cta-btn:hover {
+  background: #26f8db;
+  transform: translateY(-1px);
+}
+
+/* Sidebar Navigation Menu */
+.portal-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.portal-nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 4px;
+  margin-bottom: 4px;
+}
+
+.portal-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.portal-nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.portal-nav-item.active {
+  background: rgba(255, 161, 0, 0.12);
+  border-color: rgba(255, 161, 0, 0.4);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.portal-nav-item.active .portal-nav-icon {
+  color: #FFA100;
+}
+
+.portal-nav-icon {
+  flex-shrink: 0;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.portal-nav-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.portal-nav-title {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.portal-nav-sub {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.25;
+}
+
+.portal-nav-item.active .portal-nav-sub {
+  color: #fbbf24;
+}
+
+/* Sidebar Footer */
+.portal-sidebar-footer {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* Right Main Panel */
+.portal-main-panel {
+  padding: 26px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: rgba(11, 15, 25, 0.5);
+}
+
+/* View 1: 3 Con Số Minh Bạch */
+.portal-reassurance-box {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.reassurance-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reassurance-title {
+  font-size: 14px;
+  font-weight: 700;
   color: #fff;
 }
 
-.portal-tab.active {
-  color: #FFA100;
-  border-bottom-color: #FFA100;
-}
-
-.portal-tab-content {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.reassurance-sub {
+  font-size: 12px;
+  color: #cbd5e1;
+  margin-top: 2px;
 }
 
 .portal-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
 .portal-kpi-card {
-  padding: 16px;
-  border-radius: 10px;
+  padding: 18px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s;
 }
 
-.portal-kpi-label {
+.portal-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.kpi-label {
   font-size: 11px;
+  font-weight: 600;
   color: #94a3b8;
   margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.portal-kpi-val {
-  font-size: 20px;
+.kpi-value {
+  font-size: 22px;
   font-weight: 800;
   color: #fff;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
+  font-family: inherit;
 }
 
-.kpi-green { color: #4ade80; }
-.kpi-amber { color: #FFA100; }
-.kpi-cyan { color: #00f5d4; }
+.highlight-cyan { color: #00f5d4; }
+.highlight-amber { color: #FFA100; }
+.highlight-green { color: #4ade80; }
+.highlight-blue { color: #38bdf8; }
 
-.portal-kpi-sub {
-  font-size: 10px;
+.kpi-subtext {
+  font-size: 11px;
   color: #64748b;
+  line-height: 1.4;
 }
 
-.portal-nd70-bar {
-  padding: 16px 20px;
-  border-radius: 10px;
-  background: rgba(0, 245, 212, 0.04);
+/* Nghị định 70 Milestone Box */
+.portal-nd70-box {
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(0, 245, 212, 0.03);
   border: 1px solid rgba(0, 245, 212, 0.2);
 }
 
-.portal-nd70-info {
-  margin-bottom: 10px;
-}
-
-.nd70-status-title {
+.nd70-header {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: #fff;
-  margin-bottom: 4px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
-.nd70-status-title strong {
+.nd70-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #00f5d4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.nd70-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nd70-ratio-text {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.nd70-ratio-text strong {
+  font-size: 20px;
+  font-weight: 800;
   color: #00f5d4;
 }
 
-.nd70-note {
-  margin: 0;
+.nd70-threshold-cap {
   font-size: 12px;
   color: #94a3b8;
 }
 
-.nd70-progress-outer {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+.nd70-progress-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 
-.nd70-progress-inner {
+.nd70-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8 0%, #00f5d4 100%);
-  border-radius: 3px;
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.portal-recent-box {
+.nd70-progress-fill.exceeded {
+  background: linear-gradient(90deg, #FFA100 0%, #ef4444 100%);
+}
+
+.nd70-progress-fill.safe {
+  background: linear-gradient(90deg, #38bdf8 0%, #00f5d4 100%);
+}
+
+.nd70-desc {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.text-red { color: #f87171; }
+.text-amber { color: #fbbf24; }
+.text-green { color: #4ade80; }
+
+/* Tax Quarters Table */
+.portal-tax-table-card {
   padding: 18px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.portal-recent-header {
+.portal-tax-table-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.portal-tax-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.portal-tax-table th {
+  text-align: left;
+  padding: 8px 10px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portal-tax-table td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+}
+
+.portal-tax-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* View 2: Khoản Tiền Con Gửi Miễn Thuế (Deep Dive) */
+.portal-remittance-deep-card {
+  background: rgba(74, 222, 128, 0.04);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.remittance-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.remittance-main-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.remittance-main-desc {
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.55;
+  margin: 0 0 18px;
+}
+
+.remittance-evidence-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed rgba(74, 222, 128, 0.35);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.evidence-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+}
+
+.evidence-row:last-child {
+  border-bottom: none;
+}
+
+.evidence-label {
+  color: #94a3b8;
+}
+
+.evidence-val {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.evidence-val.green {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+/* View 3: Sổ Kế Toán Thông Tư 152 */
+.portal-books-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.portal-book-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.portal-book-item:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.book-left-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.book-badge-code {
+  background: rgba(255, 161, 0, 0.15);
+  border: 1px solid rgba(255, 161, 0, 0.4);
+  color: #FFA100;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.book-title-txt {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.book-status-txt {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.book-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.verified-seal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #00f5d4;
+  font-weight: 600;
+}
+
+.btn-download-excel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-download-excel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* View 4: Hóa Đơn & Dòng Tiền VietQR */
+.portal-feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.portal-feed-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.feed-time {
+  font-size: 11px;
+  color: #64748b;
+  font-family: monospace;
+}
+
+.feed-desc {
+  font-size: 13px;
+  color: #cbd5e1;
+  flex: 1;
+}
+
+.feed-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.feed-badge.matched {
+  background: rgba(0, 245, 212, 0.1);
+  color: #00f5d4;
+  border: 1px solid rgba(0, 245, 212, 0.25);
+}
+
+.feed-badge.excluded {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+/* Portal Footer */
+.portal-footer-strip {
+  padding: 14px 24px;
+  background: rgba(13, 18, 30, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #94a3b8;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Floating Scroll-to-Top Button */
+.portal-scroll-top-btn {
+  position: sticky;
+  bottom: 20px;
+  align-self: flex-end;
+  margin-right: 20px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 161, 0, 0.4);
+  color: #FFA100;
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.portal-scroll-top-btn:hover {
+  background: #FFA100;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Inquiry Submodal */
+.portal-inquiry-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 20px;
+}
+
+.portal-inquiry-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #111522;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.inquiry-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
 }
 
-.portal-recent-header h3 {
+.inquiry-header h4 {
   margin: 0;
-  font-size: 14px;
-  color: #fff;
-}
-
-.portal-audit-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: #4ade80;
-}
-
-.portal-table-wrap {
-  overflow-x: auto;
-}
-
-.portal-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-.portal-table th {
-  text-align: left;
-  padding: 8px 10px;
-  color: #94a3b8;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 11px;
-}
-
-.portal-table td {
-  padding: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.portal-book-pill {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.pill-taxable {
-  background: rgba(255, 161, 0, 0.1);
-  color: #FFA100;
-}
-
-.pill-excluded {
-  background: rgba(74, 222, 128, 0.1);
-  color: #4ade80;
-}
-
-.portal-rule-tag {
-  font-size: 10px;
-  color: #94a3b8;
-}
-
-.portal-contact-cta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.portal-contact-cta h4 {
-  margin: 0 0 2px;
-  font-size: 14px;
-  color: #fff;
-}
-
-.portal-contact-cta p {
-  margin: 0;
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-/* Books Grid in Portal */
-.portal-books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.portal-book-card {
-  padding: 18px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-}
-
-.book-card-header {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.book-card-header h4 {
-  margin: 0 0 2px;
-  font-size: 14px;
-  color: #fff;
-}
-
-.book-card-header span {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-.book-desc {
-  font-size: 12px;
-  color: #cbd5e1;
-  line-height: 1.4;
-  margin: 0 0 14px;
-  flex: 1;
-}
-
-.book-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.book-ready-tag {
-  font-size: 11px;
-  color: #4ade80;
-  font-weight: 600;
-}
-
-.book-download-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-/* Invoices View in Portal */
-.portal-invoice-status-banner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 12px;
-  background: rgba(0, 245, 212, 0.04);
-  border: 1px solid rgba(0, 245, 212, 0.25);
-}
-
-.portal-invoice-status-banner h4 {
-  margin: 0 0 4px;
   font-size: 15px;
   color: #fff;
+  font-weight: 700;
 }
 
-.portal-invoice-status-banner p {
-  margin: 0;
-  font-size: 13px;
-  color: #94a3b8;
-  line-height: 1.4;
-}
-
-.portal-invoice-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.portal-inv-item {
-  padding: 16px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  text-align: center;
-}
-
-.portal-inv-item .inv-num {
-  display: block;
-  font-size: 22px;
-  font-weight: 800;
-  color: #4ade80;
-  margin-bottom: 4px;
-}
-
-.portal-inv-item .inv-label {
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-/* Contact Submodal */
-.portal-submodal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1100;
-  padding: 20px;
-}
-
-.portal-submodal {
-  width: 100%;
-  max-width: 480px;
-  background: #141620;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 22px;
-}
-
-.submodal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.submodal-header h3 {
-  margin: 0;
-  font-size: 16px;
-  color: #fff;
-}
-
-.submodal-header button {
+.inquiry-header button {
   background: transparent;
   border: none;
-  color: #888;
+  color: #94a3b8;
   cursor: pointer;
 }
 
-.submodal-form label {
-  display: block;
+.inquiry-intro {
   font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 6px;
+  color: #cbd5e1;
+  margin: 0 0 12px;
+  line-height: 1.45;
 }
 
-.submodal-form textarea {
+.inquiry-textarea {
   width: 100%;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
-  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
+  color: #fff;
+  padding: 12px;
   font-size: 13px;
-  outline: none;
+  font-family: inherit;
   resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  outline: none;
 }
 
-.submodal-file-attach {
-  margin-top: 12px;
+.inquiry-textarea:focus {
+  border-color: #00f5d4;
 }
 
-.file-attach-label {
-  display: block;
-  font-size: 11px;
-  color: #94a3b8;
-  margin-bottom: 4px;
-}
-
-.submodal-actions {
+.inquiry-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 18px;
 }
 
-.submodal-success {
+.inquiry-actions .btn-cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.inquiry-actions .btn-submit {
+  background: #00f5d4;
+  color: #05101a;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inquiry-success-msg {
   text-align: center;
   padding: 20px 0;
 }
 
-.submodal-success h4 {
-  margin: 10px 0 4px;
-  font-size: 16px;
-  color: #4ade80;
+.inquiry-success-msg p {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.5;
 }
 
-.submodal-success p {
-  margin: 0;
-  font-size: 13px;
-  color: #94a3b8;
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .portal-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .portal-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .portal-sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .portal-nav-item {
+    min-width: 180px;
+  }
+  .portal-main-panel {
+    padding: 20px 16px;
+  }
 }
+
 
