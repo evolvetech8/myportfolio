@@ -32,53 +32,53 @@
     "status": "Đang Tự Động Ghi Sổ & Đối Chiếu",
     "feedHeader": "Hoạt Động Giao Dịch & Ghi Sổ Tự Động",
     "feedLiveBadge": "Thời gian thực",
-    "complianceScore": "100% Đạt Chuẩn TT88 & NĐ123",
+    "complianceScore": "100% Đạt Chuẩn TT 152/2025 & NĐ123",
     "auditReady": "Sẵn Sàng Xuất Báo Cáo & Thanh Tra Thuế",
-    "exportBtn": "Xuất 7 Sổ Ra Excel / XML",
-    "ledgerProgressTitle": "Tiến Độ 7 Loại Sổ Kế Toán Bắt Buộc",
-    "ledger1": "Sổ Doanh Thu (S1-HKD)",
+    "exportBtn": "Xuất Sổ Kế Toán Ra Excel / XML",
+    "ledgerProgressTitle": "Tiến Độ Hệ Thống Sổ Kế Toán Bắt Buộc",
+    "ledger1": "Sổ Doanh Thu (S1a-HKD)",
     "ledger1Status": "Đã chốt doanh thu",
-    "ledger2": "Sổ Hàng Hóa & CP (S2, S3-HKD)",
+    "ledger2": "Sổ Hàng Hóa & CP (S2b, S2c)",
     "ledger2Status": "Khớp 100% hóa đơn NĐ123",
-    "ledger3": "Sổ Tiền Mặt & Tiền Gửi (S4, S5)",
+    "ledger3": "Sổ Chi Tiết Tiền (S2e-HKD)",
     "ledger3Status": "Cân đối dòng tiền VietQR & POS",
     "securityReassurance": "Dữ liệu kế toán được bảo mật mã hóa đa tầng & Tự động sao lưu đám mây",
     "item1": {
       "title": "Bán lẻ tại quầy (Máy POS #04)",
-      "desc": "Tự động kết chuyển vào Sổ Doanh thu (S1-HKD)",
+      "desc": "Tự động kết chuyển vào Sổ Doanh thu (S1a-HKD)",
       "amount": "+1.450.000đ",
-      "tag": "Đã vào sổ S1",
+      "tag": "Đã vào sổ S1a",
       "time": "Vừa xong"
     },
     "item2": {
       "title": "Hóa đơn điện tử đầu vào (#008491)",
-      "desc": "Khớp mã Tổng cục Thuế (NĐ 123) → Ghi Sổ Hàng hóa (S2)",
+      "desc": "Khớp mã Tổng cục Thuế (NĐ 123) -> Ghi Sổ Hàng hóa (S2d)",
       "amount": "Hợp lệ NĐ 123",
       "tag": "Khớp mã 100%",
       "time": "4s trước"
     },
     "item3": {
       "title": "Khách thanh toán quét mã VietQR",
-      "desc": "Tự động cân đối Sổ Tiền gửi ngân hàng (S5-HKD)",
+      "desc": "Tự động cân đối Sổ Tiền (S2e-HKD)",
       "amount": "+8.200.000đ",
       "tag": "Đã khớp ngân hàng",
       "time": "9s trước"
     },
     "item4": {
       "title": "Đối soát sổ quỹ & tiền mặt cuối ngày",
-      "desc": "Tự động cân bằng Sổ Tiền mặt (S4-HKD) & Chi phí (S3)",
+      "desc": "Tự động cân bằng Sổ Chi tiết tiền (S2e) & Doanh thu",
       "amount": "Cân đối 100%",
-      "tag": "Chuẩn TT88",
+      "tag": "Chuẩn TT 152",
       "time": "15s trước"
     }
   },
   "products": {
     "title": "Hệ Thống Tính Năng Cốt Lõi Của A-Sổ",
     "module1": {
-      "name": "Tự Động Hóa 7 Sổ Kế Toán",
-      "tagline": "Chuẩn Mực Thông tư 88/2021/TT-BTC",
-      "desc": "Tự động lập và cập nhật đầy đủ 7 sổ kế toán bắt buộc: Sổ doanh thu (S1-HKD), Hàng hóa (S2-HKD), Chi phí (S3-HKD), Tiền mặt (S4-HKD), Tiền gửi (S5-HKD), Thuế (S6-HKD), và Lương (S7-HKD). Sẵn sàng thanh tra mọi lúc.",
-      "tag": "7/7 SỔ KẾ TOÁN TT88"
+      "name": "Tự Động Hóa Sổ Sách Kế Toán",
+      "tagline": "Chuẩn Mực Thông tư 152/2025/TT-BTC",
+      "desc": "Tự động lập và cập nhật hệ thống sổ kế toán theo Thông tư 152/2025/TT-BTC: Sổ doanh thu (S1a-HKD / S2b-HKD), Hàng hóa (S2d-HKD), Doanh thu - Chi phí (S2c-HKD), Tiền (S2e-HKD). Sẵn sàng thanh tra mọi lúc.",
+      "tag": "CHUẨN SỔ TT 152/2025"
     },
     "module2": {
       "name": "Đối Chiếu Hóa Đơn Điện Tử",
@@ -112,11 +112,11 @@
       "priceMonthly": "189.000",
       "billedAnnualText": "1.788.000đ / năm (Tiết kiệm 20%)",
       "billedMonthlyText": "Thanh toán từng tháng linh hoạt • Hủy bất kỳ lúc nào",
-      "desc": "Tiết kiệm 30% so với các phần mềm kế toán truyền thống. Tự động hóa 7 sổ TT88 không cần nhập tay.",
+      "desc": "Tiết kiệm 30% so với các phần mềm kế toán truyền thống. Tự động hóa sổ kế toán Thông tư 152/2025 không cần nhập tay.",
       "cta": "Bắt Đầu Dùng Thử 14 Ngày",
       "features": [
         "Kết nối 1 tài khoản ngân hàng (Hút giao dịch VietQR tự động)",
-        "Tự động lập đầy đủ 7 Sổ Kế Toán Thông tư 88/2021/TT-BTC",
+        "Tự động lập đầy đủ Sổ Kế Toán Thông tư 152/2025/TT-BTC",
         "Xuất file XML & Excel chuẩn cơ quan thuế chỉ với 1 click",
         "Báo cáo doanh thu & dòng tiền cơ bản",
         "Hỗ trợ kỹ thuật qua Email & Zalo giờ hành chính"
@@ -248,7 +248,7 @@
     "send": "Gửi"
   },
   "footer": {
-    "tagline": "A-Sổ — Hạ tầng quản trị sổ thuế & tuân thủ doanh thu tự động.",
-    "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT88 & NĐ123."
+    "tagline": "A-Sổ - Hạ tầng quản trị sổ thuế & tuân thủ doanh thu tự động.",
+    "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT 152/2025 & NĐ123."
   }
 }

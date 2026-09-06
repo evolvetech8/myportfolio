@@ -206,8 +206,8 @@ export default function About() {
             <h3 className="principle-title">{isEn ? 'Absolute Regulatory Rigor' : 'Pháp Lý Chuẩn Mực Tuyệt Đối'}</h3>
             <p className="principle-desc">
               {isEn
-                ? 'We strictly comply with Ministry of Finance guidelines (Circular 88 & Decree 123). Every ledger generated is 100% valid for tax audits and inspections.'
-                : 'Chúng tôi bám sát nghiêm ngặt các văn bản pháp quy của Bộ Tài Chính (TT88 & NĐ 123). Mọi biểu mẫu kết xuất đều đạt chuẩn 100% sẵn sàng cho kỳ thanh tra thuế.'}
+                ? 'We strictly comply with Ministry of Finance guidelines (Circular 152/2025 & Decree 123). Every ledger generated is 100% valid for tax audits and inspections.'
+                : 'Chúng tôi bám sát nghiêm ngặt các văn bản pháp quy mới nhất của Bộ Tài Chính (Thông tư 152/2025/TT-BTC & Nghị định 123). Mọi biểu mẫu kết xuất đều đạt chuẩn 100% sẵn sàng cho kỳ thanh tra thuế.'}
             </p>
           </div>
           <div className="principle-card glass-panel">

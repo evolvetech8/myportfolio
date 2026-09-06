@@ -9,7 +9,7 @@ export default function ProductPillars() {
       <h2 className="section-title">{t('products.title')}</h2>
       
       <div className="products-grid">
-        {/* Module 1: 7 Sổ Kế Toán TT88 */}
+        {/* Module 1: Sổ Kế Toán Thông Tư 152 */}
         <div className="product-card glass-panel">
           <div className="product-card-top">
             <div className="product-icon" style={{ color: '#FF7A00' }}>
@@ -30,17 +30,17 @@ export default function ProductPillars() {
           <div className="product-micro-ui">
             <div className="micro-header">
               <span className="micro-dot-green"></span>
-              <span>7 Sổ Kế Toán TT88 (S1-S7) Tự Động</span>
+              <span>Sổ Kế Toán Thông Tư 152 (S1a, S2b, S2c)</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">Sổ Doanh Thu (S1)</span>
+              <span className="micro-data-key">Sổ Doanh Thu (S1a)</span>
               <span className="micro-data-val">Tự động kết chuyển</span>
               <span className="micro-status-tag">HOÀN TẤT</span>
             </div>
             <div className="micro-data-row">
-              <span className="micro-data-key">Sổ Hàng Hóa & CP (S2, S3)</span>
+              <span className="micro-data-key">Sổ Hàng Hóa & CP (S2b, S2c)</span>
               <span className="micro-data-val">Khớp 100% hóa đơn</span>
-              <span className="micro-status-tag">TT88 HỢP LỆ</span>
+              <span className="micro-status-tag">TT152 HỢP LỆ</span>
             </div>
           </div>
         </div>

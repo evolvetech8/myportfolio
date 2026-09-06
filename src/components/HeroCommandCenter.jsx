@@ -54,9 +54,9 @@ export default function HeroCommandCenter() {
     {
       id: 'item4',
       title: 'Đối soát sổ quỹ & tiền mặt cuối ngày',
-      desc: 'Tự động cân bằng Sổ Tiền mặt (S4-HKD) & Chi phí (S3)',
+      desc: 'Tự động cân bằng Sổ Chi tiết tiền (S2e) & Doanh thu',
       amount: 'Cân đối 100%',
-      tag: 'Chuẩn TT88',
+      tag: 'Chuẩn TT 152',
       time: '15s trước',
       icon: <LandmarkIcon size={18} color="#a78bfa" />,
       iconBg: 'rgba(167, 139, 250, 0.14)',
@@ -155,7 +155,7 @@ export default function HeroCommandCenter() {
           onClick={() => setActiveTab('ledgers')}
         >
           <BookOpenIcon size={14} color="#38bdf8" />
-          <span>7 Sổ Kế Toán TT88</span>
+          <span>Sổ Kế Toán TT 152</span>
         </button>
 
         {/* Live Simulation Action Button */}
@@ -325,7 +325,7 @@ export default function HeroCommandCenter() {
         </div>
       )}
 
-      {/* TAB 3: 7 Sổ Kế Toán TT88 Explorer */}
+      {/* TAB 3: Sổ Kế Toán TT 152/2025 Explorer */}
       {activeTab === 'ledgers' && (
         <div className="hcc-ledgers-tab-body">
           <div className="ledgers-pill-selector">

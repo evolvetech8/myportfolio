@@ -141,7 +141,7 @@ export default function TaxSavingsCalculator() {
             <div className="calc-metrics-mini-row">
               <div className="mini-metric">
                 <span className="mini-val">100%</span>
-                <span className="mini-lbl">{isEn ? 'Circular 88 7 Ledgers' : 'Chuẩn hóa 7 Sổ TT88'}</span>
+                <span className="mini-lbl">{isEn ? 'Circular 152 Ledgers' : 'Chuẩn hóa Sổ TT 152'}</span>
               </div>
               <div className="mini-metric">
                 <span className="mini-val">&lt; 1.2s</span>
