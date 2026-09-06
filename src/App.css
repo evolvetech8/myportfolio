@@ -4626,3 +4626,131 @@ a:hover { color: var(--archonic-amber); }
   opacity: 0.8;
   display: block;
 }
+
+/* =============================================
+   LIVE OPEN BANKING & WEBHOOK INGESTION HUB
+   ============================================= */
+.live-stream-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #4ade80;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.live-stream-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px #4ade80;
+  animation: pulseBeacon 1.5s infinite;
+}
+
+.live-hub-box {
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 245, 212, 0.35);
+  background: linear-gradient(135deg, rgba(0, 245, 212, 0.07) 0%, rgba(139, 92, 246, 0.04) 100%);
+  margin-top: 20px;
+}
+
+.live-hub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.live-hub-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #00f5d4;
+  letter-spacing: 0.5px;
+}
+
+.live-webhook-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+.live-webhook-label {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.live-webhook-input-row {
+  display: flex;
+  gap: 8px;
+}
+.live-webhook-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+}
+.live-copy-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.live-copy-btn:hover {
+  background: #00f5d4;
+  color: #000000;
+  border-color: #00f5d4;
+}
+
+.live-sepay-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #00f5d4 0%, #06b6d4 100%);
+  color: #000000;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 245, 212, 0.3);
+}
+.live-sepay-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 245, 212, 0.5);
+}
+
+.sepay-connect-modal {
+  width: 100%;
+  max-width: 520px;
+  padding: 28px;
+  border-radius: 20px;
+  background: #09090f;
+  border: 1px solid rgba(0, 245, 212, 0.3);
+  position: relative;
+}
