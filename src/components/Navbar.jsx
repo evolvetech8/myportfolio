@@ -28,6 +28,15 @@ export default function Navbar() {
         <div className="navbar-links">
           <Link to="/">{t('nav.home')}</Link>
           <Link to="/about">{t('nav.about')}</Link>
+          <Link to="/cpa" className="nav-cpa-btn" style={{ 
+            color: '#00f5d4', 
+            fontWeight: 700, 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '4px' 
+          }}>
+            <span>{t('nav.cpa')}</span>
+          </Link>
           <Link to="/pricing">{t('nav.pricing')}</Link>
           <Link to="/contact">{t('nav.contact')}</Link>
           <button className="lang-toggle" onClick={toggleLang} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

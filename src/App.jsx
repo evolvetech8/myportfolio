@@ -9,6 +9,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import PricingPage from './pages/PricingPage';
 import TrialMVP from './pages/TrialMVP';
+import AccountantWorkspace from './pages/AccountantWorkspace';
 import React, { Suspense, lazy } from 'react';
 import './App.css';
 
@@ -18,7 +19,7 @@ const SceneCanvas = lazy(() => import('./components/three/SceneCanvas'));
 function AppShell() {
   const location = useLocation();
   const isLanding = location.pathname === '/';
-  /* Disable smooth scroll on /trial (native scroll needed for forms) */
+  /* Disable smooth scroll on /trial and /cpa (native scroll needed for data tables and forms) */
   const enableSmooth = isLanding;
 
   return (
@@ -40,6 +41,8 @@ function AppShell() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/trial" element={<TrialMVP />} />
+            <Route path="/cpa" element={<AccountantWorkspace />} />
+            <Route path="/accountant" element={<AccountantWorkspace />} />
           </Routes>
         </main>
         <Footer />

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { 
   SparklesIcon, 
@@ -16,16 +17,23 @@ import {
   SlashCircleIcon,
   RefreshCwIcon,
   ArrowRightIcon,
-  CheckIcon
+  CheckIcon,
+  BuildingIcon
 } from '../components/Icons';
 import VietQRCheckoutModal from '../components/VietQRCheckoutModal';
 
 export default function TrialMVP() {
+  const [searchParams] = useSearchParams();
+  const clientParam = searchParams.get('client');
+  const clientNameParam = searchParams.get('name');
+  const clientRegimeParam = searchParams.get('regime');
+
   const { lang } = useLanguage();
   const isEn = lang === 'en';
 
   // Phase 1: Authentication State with SMS OTP Burn Rate Protection & Zalo ZNS
-  const [authStep, setAuthStep] = useState('phone'); // 'phone' | 'otp' | 'ready'
+  // If navigated from CPA multi-client workspace, bypass OTP directly to client ledger
+  const [authStep, setAuthStep] = useState(clientParam ? 'ready' : 'phone'); // 'phone' | 'otp' | 'ready'
   const [phone, setPhone] = useState('0988123456');
   const [otpChannel, setOtpChannel] = useState('zalo'); // 'zalo' (ZNS) | 'sms'
   const [otp, setOtp] = useState(['1', '2', '3', '4', '5', '6']);
@@ -34,14 +42,14 @@ export default function TrialMVP() {
   const [honeypot, setHoneypot] = useState('');
 
   // Phase 1: Bank Connection State
-  const [isBankConnected, setIsBankConnected] = useState(false);
+  const [isBankConnected, setIsBankConnected] = useState(!!clientParam);
   const [showBankModal, setShowBankModal] = useState(false);
   const [bankDetails, setBankDetails] = useState({
     bankCode: 'MB',
     bankName: 'MBBank (Ngân Hàng Quân Đội)',
     accountNumber: '0353600900',
     accountName: 'NGUYEN VAN AN',
-    storeName: 'Tiệm Cà Phê & Bánh Mộc'
+    storeName: clientNameParam ? decodeURIComponent(clientNameParam) : 'Tiệm Cà Phê & Bánh Mộc'
   });
 
   // Phase 2 & 3: Live Ingestion & S1-HKD Ledger State with Manual Override
@@ -63,7 +71,7 @@ export default function TrialMVP() {
   const [copiedWebhook, setCopiedWebhook] = useState(false);
   const [liveSyncLoading, setLiveSyncLoading] = useState(false);
   const [streamSecret, setStreamSecret] = useState('sec_aso_trial_2026');
-  const [taxRegime, setTaxRegime] = useState('group1'); // 'group1' (S1a) | 'group2' (S2a) | 'group3' (Bộ 4 Sổ: S2b, S2c, S2d, S2e)
+  const [taxRegime, setTaxRegime] = useState(clientRegimeParam || 'group2'); // 'group1' (S1a) | 'group2' (S2a) | 'group3' (Bộ 4 Sổ: S2b, S2c, S2d, S2e)
 
   // Rotate / regenerate secret token for webhook & session security
   const rotateSecretKey = () => {
@@ -543,6 +551,29 @@ export default function TrialMVP() {
           <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 152/2025 & NĐ 70/2025</span>
         </div>
         <div className="trial-top-actions">
+          {clientParam && (
+            <Link 
+              to="/cpa" 
+              className="trial-back-cpa-btn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                background: 'rgba(0, 245, 212, 0.1)',
+                border: '1px solid rgba(0, 245, 212, 0.35)',
+                color: '#00f5d4',
+                fontSize: '12px',
+                fontWeight: 700,
+                textDecoration: 'none',
+                marginRight: '8px'
+              }}
+            >
+              <BuildingIcon size={13} color="#00f5d4" />
+              <span>Về Không Gian Kế Toán (CPA)</span>
+            </Link>
+          )}
           <button 
             type="button" 
             className="trial-upgrade-top-btn"
