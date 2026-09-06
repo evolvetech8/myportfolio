@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, useParams, Link } from 'react-router-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { 
   SparklesIcon, 
@@ -24,7 +24,8 @@ import VietQRCheckoutModal from '../components/VietQRCheckoutModal';
 
 export default function TrialMVP() {
   const [searchParams] = useSearchParams();
-  const clientParam = searchParams.get('client');
+  const { clientId } = useParams();
+  const effectiveClientId = clientId || searchParams.get('client');
   const clientNameParam = searchParams.get('name');
   const clientRegimeParam = searchParams.get('regime');
 
@@ -33,7 +34,7 @@ export default function TrialMVP() {
 
   // Phase 1: Authentication State with SMS OTP Burn Rate Protection & Zalo ZNS
   // If navigated from CPA multi-client workspace, bypass OTP directly to client ledger
-  const [authStep, setAuthStep] = useState(clientParam ? 'ready' : 'phone'); // 'phone' | 'otp' | 'ready'
+  const [authStep, setAuthStep] = useState(effectiveClientId ? 'ready' : 'phone'); // 'phone' | 'otp' | 'ready'
   const [phone, setPhone] = useState('0988123456');
   const [otpChannel, setOtpChannel] = useState('zalo'); // 'zalo' (ZNS) | 'sms'
   const [otp, setOtp] = useState(['1', '2', '3', '4', '5', '6']);
@@ -551,7 +552,7 @@ export default function TrialMVP() {
           <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 152/2025 & NĐ 70/2025</span>
         </div>
         <div className="trial-top-actions">
-          {clientParam && (
+          {effectiveClientId && (
             <Link 
               to="/cpa" 
               className="trial-back-cpa-btn"

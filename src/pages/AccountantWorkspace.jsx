@@ -24,6 +24,10 @@ import {
   QrCodeIcon
 } from '../components/Icons';
 import ClientReadOnlyPortal from '../components/ClientReadOnlyPortal';
+import DataMigrationModal from '../components/DataMigrationModal';
+import AuditTrailModal from '../components/AuditTrailModal';
+import CpaAuthModal from '../components/CpaAuthModal';
+import CpaBillingModal from '../components/CpaBillingModal';
 
 export default function AccountantWorkspace() {
   const navigate = useNavigate();
@@ -45,6 +49,24 @@ export default function AccountantWorkspace() {
   const [showNewClientModal, setShowNewClientModal] = useState(false);
   const [showCsvImportModal, setShowCsvImportModal] = useState(false);
   const [selectedImportClient, setSelectedImportClient] = useState(null);
+  const [showMigrationModal, setShowMigrationModal] = useState(false);
+  const [showAuditModal, setShowAuditModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showBillingModal, setShowBillingModal] = useState(false);
+
+  // RBAC & Plan State
+  const [currentRole, setCurrentRole] = useState('firm_owner'); // 'firm_owner' | 'senior_accountant' | 'junior_accountant'
+  const [currentPlan, setCurrentPlan] = useState('pro_studio');
+
+  // Partial-Failure Bulk Runner State
+  const [bulkExecutionModal, setBulkExecutionModal] = useState({
+    isOpen: false,
+    title: '',
+    type: 'lock',
+    isRunning: false,
+    progress: 0,
+    results: []
+  });
 
   // Toast State
   const [activeToast, setActiveToast] = useState(null);
@@ -318,43 +340,145 @@ export default function AccountantWorkspace() {
     }
   };
 
-  // Bulk Action 1: Export XML / Excel
-  const handleBulkExport = () => {
-    const count = selectedClientIds.size;
-    showToast(
-      `Đang đóng gói hồ sơ XML / Excel cho ${count} hộ kinh doanh`,
-      'Hệ thống đang xuất file S1a, S2a và Bộ 4 Sổ theo đúng quy chuẩn TT 152/2025/TT-BTC.'
-    );
-    setTimeout(() => {
+  // Atomic Partial-Failure Bulk Operations Runner (Resolves Blocker 8)
+  const runBulkOperation = (type, title) => {
+    const selectedList = clients.filter((c) => selectedClientIds.has(c.id));
+    if (selectedList.length === 0) return;
+
+    // Enforce RBAC permission for period lock:
+    if (type === 'lock' && currentRole === 'junior_accountant') {
       showToast(
-        `Hoàn tất xuất file cho ${count} hộ kinh doanh!`,
-        'File nén ZIP chứa sổ sách kế toán và bảng kê hóa đơn đã sẵn sàng tải về máy.'
+        'Từ chối truy cập: Quyền hạn không đủ',
+        'Tác vụ khóa sổ kỳ kế toán yêu cầu quyền Kế toán trưởng (Firm Owner) hoặc Kế toán chính (Senior).'
       );
-    }, 1800);
+      return;
+    }
+
+    setBulkExecutionModal({
+      isOpen: true,
+      title,
+      type,
+      isRunning: true,
+      progress: 25,
+      results: []
+    });
+
+    setTimeout(() => {
+      let failureCount = 0;
+      const results = selectedList.map((c, idx) => {
+        // In demo, simulate 1 item failure if more than 2 items selected and client has review status or is last item
+        if (failureCount === 0 && selectedList.length > 2 && (c.status === 'review' || idx === selectedList.length - 1)) {
+          failureCount++;
+          return {
+            id: c.id,
+            name: c.name,
+            mst: c.mst,
+            status: 'failed',
+            error: type === 'lock' 
+              ? 'Tồn tại giao dịch loại trừ lớn chưa đính kèm chứng từ (RULE-EX-01). Cần xác nhận trước khi khóa sổ.' 
+              : type === 'sync' 
+                ? 'Chứng thư số CQT của hộ kinh doanh chưa được liên kết hoặc hết hạn.' 
+                : 'Thiếu thông tin người đại diện theo pháp luật trong hồ sơ đăng ký.'
+          };
+        }
+        return {
+          id: c.id,
+          name: c.name,
+          mst: c.mst,
+          status: 'success',
+          msg: type === 'lock' 
+            ? 'Đã khóa sổ Quý 1/2026 thành công' 
+            : type === 'sync' 
+              ? 'Khớp 100% hóa đơn máy tính tiền CQT' 
+              : 'Đã đóng gói Mẫu S1a/S2a Excel chuẩn Bộ Tài Chính'
+        };
+      });
+
+      if (type === 'lock') {
+        const successIds = new Set(results.filter((r) => r.status === 'success').map((r) => r.id));
+        setClients((prev) => prev.map((c) => successIds.has(c.id) ? { ...c, status: 'current', statusNote: 'Đã khóa sổ Quý 1/2026' } : c));
+      }
+
+      setBulkExecutionModal({
+        isOpen: true,
+        title,
+        type,
+        isRunning: false,
+        progress: 100,
+        results
+      });
+    }, 850);
+  };
+
+  const handleRetryFailedBulk = () => {
+    setBulkExecutionModal((prev) => ({
+      ...prev,
+      isRunning: true,
+      progress: 50
+    }));
+
+    setTimeout(() => {
+      setBulkExecutionModal((prev) => ({
+        ...prev,
+        isRunning: false,
+        progress: 100,
+        results: prev.results.map((r) => ({
+          ...r,
+          status: 'success',
+          msg: 'Đã xử lý & đối soát thành công trong lần thử lại',
+          error: undefined
+        }))
+      }));
+      showToast('Đã thử lại thành công!', 'Tất cả các hộ kinh doanh bị lỗi đã được xử lý hoàn tất.');
+    }, 750);
+  };
+
+  // Bulk Action 1: Export XML / Excel (Prioritizes official MOF TT152 Excel, labels XML as CQT beta)
+  const handleBulkExport = () => {
+    runBulkOperation('export', `Xuất Bộ Sổ Thông Tư 152 Cho ${selectedClientIds.size} Hộ Kinh Doanh`);
   };
 
   // Bulk Action 2: Lock Accounting Period
   const handleBulkLockPeriod = () => {
-    const count = selectedClientIds.size;
-    showToast(
-      `Đã khóa sổ kỳ kế toán Tháng 02/2026 cho ${count} khách hàng`,
-      'Dữ liệu doanh thu và chi phí đã được chốt số dư an toàn, chống sửa đổi số liệu.'
-    );
-    setSelectedClientIds(new Set());
+    runBulkOperation('lock', `Khóa Sổ Kế Toán Quý 1/2026 Cho ${selectedClientIds.size} Hộ Kinh Doanh`);
   };
 
   // Bulk Action 3: Sync Decree 70/123 Invoices
   const handleBulkSyncInvoices = () => {
-    const count = selectedClientIds.size;
-    showToast(
-      `Đang đối soát HĐĐT Cổng Thuế cho ${count} hộ kinh doanh`,
-      'Kiểm tra tính hợp lệ của hóa đơn đầu vào, hóa đơn MTT và khóa các đơn vị rủi ro cao.'
-    );
+    runBulkOperation('sync', `Đồng Bộ Hóa Đơn Cổng Thuế Cho ${selectedClientIds.size} Hộ Kinh Doanh`);
   };
 
-  // Drilldown to Client Ledger
+  // Drilldown to Client Ledger (RESTful URL - Resolves Blocker 4)
   const handleOpenClientLedger = (client) => {
-    navigate(`/trial?client=${client.id}&regime=${client.taxRegime}&name=${encodeURIComponent(client.name)}`);
+    navigate(`/cpa/clients/${client.id}/ledger?regime=${client.taxRegime}&name=${encodeURIComponent(client.name)}`);
+  };
+
+  // MISA / Excel Data Migration Handler (Resolves Blocker 6)
+  const handleMigrationSuccess = (newRecords) => {
+    const formatted = newRecords.map((r, i) => ({
+      id: `migrated-${Date.now()}-${i}`,
+      name: r.name,
+      mst: r.mst,
+      owner: 'Chủ hộ (Di cư từ MISA)',
+      industry: r.industry === 'fnb' ? 'F&B (Ăn uống, Giải khát)' : r.industry === 'retail' ? 'Bán lẻ hàng hóa' : 'Dịch vụ',
+      address: 'Hà Nội',
+      taxRegime: r.regime,
+      taxRate: r.regime === 'group1' ? 'Miễn thuế (< 500M)' : r.regime === 'group2' ? '1.5% - 4.5%' : 'Kê khai chi phí',
+      revenue: r.rev,
+      totalBankInflow: Math.round(r.rev * 1.1),
+      excludedFlow: Math.round(r.rev * 0.1),
+      estimatedTax: Math.round(r.rev * 0.015),
+      status: 'current',
+      statusNote: 'Di cư thành công từ MISA - Sổ sách hợp lệ',
+      connection: 'MISA Import File',
+      nd70Warning: r.rev >= 1000000000,
+      lastSync: 'Vừa xong'
+    }));
+    setClients((prev) => [...formatted, ...prev]);
+    showToast(
+      `Đã nạp thành công ${newRecords.length} hộ kinh doanh từ MISA vào danh mục!`,
+      'Dữ liệu mã số thuế, doanh thu và chế độ sổ sách TT152 đã được ánh xạ tự động.'
+    );
   };
 
   // Create New Client Submit
@@ -484,7 +608,66 @@ export default function AccountantWorkspace() {
           </div>
         </div>
 
-        <div className="cpa-header-actions">
+        <div className="cpa-header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+          <button 
+            type="button" 
+            className="cpa-btn-action"
+            onClick={() => setShowMigrationModal(true)}
+            style={{
+              background: 'rgba(0, 245, 212, 0.12)',
+              border: '1px solid rgba(0, 245, 212, 0.35)',
+              color: '#00f5d4',
+              fontWeight: 700
+            }}
+          >
+            <UploadCloudIcon size={14} color="currentColor" />
+            <span>Di Cư MISA / Excel</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="cpa-btn-action"
+            onClick={() => setShowAuditModal(true)}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1'
+            }}
+          >
+            <ShieldIcon size={14} color="currentColor" />
+            <span>Nhật Ký Kiểm Toán</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="cpa-btn-action"
+            onClick={() => setShowBillingModal(true)}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1'
+            }}
+          >
+            <SparklesIcon size={14} color="#00f5d4" />
+            <span>Gói Cước: Pro Studio</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="cpa-btn-action"
+            onClick={() => setShowAuthModal(true)}
+            style={{
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1'
+            }}
+          >
+            <LockIcon size={14} color="#38bdf8" />
+            <span>
+              Quyền: {currentRole === 'firm_owner' ? 'Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Kế Toán Chính (Senior)' : 'Trợ Lý (Junior)'}
+            </span>
+          </button>
+
           <button 
             type="button" 
             className="cpa-btn-action cpa-btn-csv"
@@ -496,6 +679,7 @@ export default function AccountantWorkspace() {
             <UploadCloudIcon size={14} color="currentColor" />
             <span>Nhập File Sao Kê CSV</span>
           </button>
+
           <button 
             type="button" 
             className="cpa-btn-action cpa-btn-add"
@@ -504,6 +688,44 @@ export default function AccountantWorkspace() {
             <PlusIcon size={14} color="currentColor" />
             <span>+ Tiếp Nhận HKD Mới</span>
           </button>
+        </div>
+      </div>
+
+      {/* Scope Disclaimer & Strategic Positioning Banner (Resolves Blockers 10-12) */}
+      <div className="cpa-scope-banner glass-panel" style={{
+        margin: '0 0 20px',
+        padding: '12px 20px',
+        background: 'rgba(0, 245, 212, 0.03)',
+        border: '1px solid rgba(0, 245, 212, 0.2)',
+        borderRadius: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '16px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <ShieldIcon size={20} color="#00f5d4" style={{ flexShrink: 0 }} />
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: '#fff' }}>
+              Định Vị Chuyên Biệt: Hộ Kê Khai Đơn Giản (Nhóm 1 &amp; Nhóm 2 - TT 152/2025) và Cổng Đối Soát HĐĐT Máy Tính Tiền (NĐ 70/2025)
+            </div>
+            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+              Tập trung giải quyết 85% - 90% thị trường tính thuế theo tỷ lệ % doanh thu (Mẫu S1a &amp; S2a-HKD). Đối với Hộ Nhóm 3 (Chi phí &amp; Kho), A-Sổ hỗ trợ ghi nhận doanh thu VietQR và kết nối xuất dữ liệu sang đối tác ERP/kế toán.
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+          <span style={{
+            fontSize: '11px',
+            fontWeight: 700,
+            background: 'rgba(0, 245, 212, 0.12)',
+            color: '#00f5d4',
+            padding: '4px 10px',
+            borderRadius: '6px',
+            border: '1px solid rgba(0, 245, 212, 0.3)'
+          }}>
+            Chuẩn TT152 / NĐ70
+          </span>
         </div>
       </div>
 
@@ -1184,6 +1406,351 @@ export default function AccountantWorkspace() {
           }}
         />
       )}
+
+      {/* MODAL 4: ATOMIC PARTIAL-FAILURE BULK EXECUTION RUNNER (Resolves Blocker 8) */}
+      {bulkExecutionModal.isOpen && (
+        <div className="cpa-modal-overlay" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'rgba(5, 10, 20, 0.85)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px'
+        }}>
+          <div className="cpa-modal-card" style={{
+            background: '#0e1626',
+            border: '1px solid rgba(0, 245, 212, 0.3)',
+            borderRadius: '16px',
+            width: '100%',
+            maxWidth: '720px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.6)',
+            color: '#f0f4f8',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            {/* Header */}
+            <div style={{
+              padding: '20px 24px',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '17px', color: '#fff', fontWeight: 700 }}>
+                  {bulkExecutionModal.title}
+                </h3>
+                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#94a3b8' }}>
+                  Hệ thống xử lý nguyên tử (Atomic Per-Client Execution) với kiểm tra trạng thái độc lập từng hồ sơ.
+                </p>
+              </div>
+              {!bulkExecutionModal.isRunning && (
+                <button
+                  type="button"
+                  onClick={() => setBulkExecutionModal(prev => ({ ...prev, isOpen: false }))}
+                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                >
+                  <CloseIcon size={18} />
+                </button>
+              )}
+            </div>
+
+            {/* Body */}
+            <div style={{ padding: '24px' }}>
+              {/* Progress Bar */}
+              <div style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
+                  <span style={{ color: '#cbd5e1' }}>
+                    {bulkExecutionModal.isRunning ? 'Đang thực thi tác vụ trên từng hộ kinh doanh...' : 'Tiến trình hoàn tất 100%'}
+                  </span>
+                  <span style={{ color: '#00f5d4', fontWeight: 700 }}>
+                    {bulkExecutionModal.progress}%
+                  </span>
+                </div>
+                <div style={{
+                  width: '100%',
+                  height: '8px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  borderRadius: '4px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    width: `${bulkExecutionModal.progress}%`,
+                    height: '100%',
+                    background: '#00f5d4',
+                    transition: 'width 0.4s ease'
+                  }} />
+                </div>
+              </div>
+
+              {/* Status Summary */}
+              {!bulkExecutionModal.isRunning && bulkExecutionModal.results.length > 0 && (
+                <div style={{
+                  display: 'flex',
+                  gap: '12px',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{
+                    flex: 1,
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: 'rgba(0, 245, 212, 0.1)',
+                    border: '1px solid rgba(0, 245, 212, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '12px'
+                  }}>
+                    <CheckCircleIcon size={16} color="#00f5d4" />
+                    <span>
+                      Thành công: <strong>{bulkExecutionModal.results.filter(r => r.status === 'success').length}</strong> hộ
+                    </span>
+                  </div>
+                  {bulkExecutionModal.results.some(r => r.status === 'failed') && (
+                    <div style={{
+                      flex: 1,
+                      padding: '10px 14px',
+                      borderRadius: '8px',
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.25)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '12px',
+                      color: '#f87171'
+                    }}>
+                      <AlertTriangleIcon size={16} color="#f87171" />
+                      <span>
+                        Thất bại: <strong>{bulkExecutionModal.results.filter(r => r.status === 'failed').length}</strong> hộ (Có thể thử lại)
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Itemized Results List */}
+              <div style={{
+                maxHeight: '260px',
+                overflowY: 'auto',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px'
+              }}>
+                {bulkExecutionModal.results.map((r, i) => (
+                  <div key={r.id || i} style={{
+                    padding: '10px 14px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    fontSize: '12px'
+                  }}>
+                    <div>
+                      <div style={{ fontWeight: 600, color: '#fff' }}>{r.name}</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8' }}>MST: {r.mst}</div>
+                    </div>
+
+                    <div>
+                      {r.status === 'success' ? (
+                        <span style={{
+                          color: '#00f5d4',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          background: 'rgba(0, 245, 212, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '4px'
+                        }}>
+                          <CheckIcon size={12} />
+                          <span>{r.msg}</span>
+                        </span>
+                      ) : (
+                        <span style={{
+                          color: '#f87171',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          background: 'rgba(239, 68, 68, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '4px'
+                        }}>
+                          <AlertTriangleIcon size={12} />
+                          <span>{r.error}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Export Specific Options (Resolves Blocker 7) */}
+              {bulkExecutionModal.type === 'export' && !bulkExecutionModal.isRunning && (
+                <div style={{
+                  marginTop: '16px',
+                  padding: '12px 16px',
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  borderRadius: '8px'
+                }}>
+                  <div style={{ fontSize: '12px', fontWeight: 600, color: '#fff', marginBottom: '8px' }}>
+                    Chọn định dạng xuất dữ liệu:
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => alert('Đang tải gói ZIP chứa toàn bộ Bộ Sổ Kế Toán Excel chuẩn Mẫu Bộ Tài Chính (Thông tư 152/2025/TT-BTC)...')}
+                      style={{
+                        flex: 1,
+                        padding: '10px',
+                        background: '#00f5d4',
+                        color: '#05101a',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <DownloadCloudIcon size={14} />
+                      <span>Tải Excel Mẫu Chuẩn BTC (Khuyên Dùng)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => alert('Tệp XML Kê Khai Thuế theo chuẩn dự thảo Cục Thuế 2026 đã được xuất. Sẵn sàng nộp khi CQT mở cổng tiếp nhận chính thức.')}
+                      style={{
+                        flex: 1,
+                        padding: '10px',
+                        background: 'rgba(255, 255, 255, 0.06)',
+                        color: '#cbd5e1',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <FileTextIcon size={14} />
+                      <span>Xuất Tệp XML (Dự Thảo CQT)</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div style={{
+              padding: '16px 24px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              background: 'rgba(5, 10, 20, 0.5)'
+            }}>
+              <div>
+                {bulkExecutionModal.results.some(r => r.status === 'failed') && (
+                  <button
+                    type="button"
+                    disabled={bulkExecutionModal.isRunning}
+                    onClick={handleRetryFailedBulk}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      color: '#f87171',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <RefreshCwIcon size={14} />
+                    <span>Thử Lại Các Hộ Thất Bại (Chỉ xử lý mục lỗi)</span>
+                  </button>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setBulkExecutionModal(prev => ({ ...prev, isOpen: false }));
+                  setSelectedClientIds(new Set());
+                }}
+                style={{
+                  background: '#00f5d4',
+                  color: '#05101a',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 20px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                Hoàn Tất &amp; Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 5: DATA MIGRATION FROM MISA & EXCEL */}
+      <DataMigrationModal
+        isOpen={showMigrationModal}
+        onClose={() => setShowMigrationModal(false)}
+        onImportSuccess={handleMigrationSuccess}
+      />
+
+      {/* MODAL 6: IMMUTABLE AUDIT TRAIL MODAL */}
+      <AuditTrailModal
+        isOpen={showAuditModal}
+        onClose={() => setShowAuditModal(false)}
+      />
+
+      {/* MODAL 7: CPA AUTH & RBAC MODAL */}
+      <CpaAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        currentRole={currentRole}
+        onRoleChange={(r) => {
+          setCurrentRole(r);
+          showToast(
+            'Đã chuyển đổi vai trò RBAC!',
+            `Chế độ hiển thị: ${r === 'firm_owner' ? 'Chủ Đại Lý (Toàn Quyền)' : r === 'senior_accountant' ? 'Kế Toán Viên Chính (Senior)' : 'Trợ Lý Kế Toán (Junior)'}`
+          );
+        }}
+        onLoginSuccess={(u) => {
+          showToast('Đăng nhập thành công!', `Đang quản trị: ${u.firmName}`);
+        }}
+      />
+
+      {/* MODAL 8: CPA BILLING & PRICING TIERS MODAL */}
+      <CpaBillingModal
+        isOpen={showBillingModal}
+        onClose={() => setShowBillingModal(false)}
+        currentPlan={currentPlan}
+        onUpgradeSuccess={(p) => {
+          setCurrentPlan(p);
+          showToast('Nâng cấp bản quyền thành công!', `Gói cước của đại lý thuế đã kích hoạt: ${p.toUpperCase()}`);
+        }}
+      />
 
     </div>
   );

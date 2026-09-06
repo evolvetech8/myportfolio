@@ -43,6 +43,8 @@ function AppShell() {
             <Route path="/trial" element={<TrialMVP />} />
             <Route path="/cpa" element={<AccountantWorkspace />} />
             <Route path="/accountant" element={<AccountantWorkspace />} />
+            <Route path="/cpa/clients/:clientId/ledger" element={<TrialMVP />} />
+            <Route path="/portal" element={<AccountantWorkspace initialPortalOpen={true} />} />
           </Routes>
         </main>
         <Footer />
