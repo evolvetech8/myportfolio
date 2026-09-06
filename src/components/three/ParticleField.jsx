@@ -2,20 +2,27 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
+/**
+ * ParticleField — Cosmic Mint & Violet Stardust (Vesper Aesthetic)
+ * 7,000 gentle celestial particles floating in deep space with harmonic drift and parallax.
+ */
 const ParticleField = ({ scrollProgress = 0 }) => {
   const pointsRef = useRef();
   const materialRef = useRef();
   const { pointer } = useThree();
 
-  const particleCount = 8000;
+  const particleCount = 7000;
 
   const [positions, colors, sizes] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
     const col = new Float32Array(particleCount * 3);
     const size = new Float32Array(particleCount);
     
-    const colorAmber = new THREE.Color('#FFA100');
-    const colorGold = new THREE.Color('#FFD54F');
+    const colorMint = new THREE.Color('#00f5d4');
+    const colorCyan = new THREE.Color('#38bdf8');
+    const colorViolet = new THREE.Color('#8b5cf6');
+    const colorIndigo = new THREE.Color('#6366f1');
+    const colorWhite = new THREE.Color('#f1f5f9');
     const tempColor = new THREE.Color();
 
     for (let i = 0; i < particleCount; i++) {
@@ -23,7 +30,7 @@ const ParticleField = ({ scrollProgress = 0 }) => {
       const v = Math.random();
       const theta = u * 2.0 * Math.PI;
       const phi = Math.acos(2.0 * v - 1.0);
-      const r = Math.cbrt(Math.random()) * 18;
+      const r = 4.0 + Math.cbrt(Math.random()) * 20; // Expansive field around the orb
       
       const x = r * Math.sin(phi) * Math.cos(theta);
       const y = r * Math.sin(phi) * Math.sin(theta);
@@ -33,12 +40,20 @@ const ParticleField = ({ scrollProgress = 0 }) => {
       pos[i * 3 + 1] = y;
       pos[i * 3 + 2] = z;
 
-      tempColor.lerpColors(colorAmber, colorGold, Math.random());
+      const seed = Math.random();
+      if (seed < 0.35) {
+        tempColor.lerpColors(colorMint, colorCyan, Math.random());
+      } else if (seed < 0.75) {
+        tempColor.lerpColors(colorViolet, colorIndigo, Math.random());
+      } else {
+        tempColor.copy(colorWhite);
+      }
+
       col[i * 3] = tempColor.r;
       col[i * 3 + 1] = tempColor.g;
       col[i * 3 + 2] = tempColor.b;
 
-      size[i] = 0.015 + Math.random() * 0.025;
+      size[i] = 0.01 + Math.random() * 0.025;
     }
     
     return [pos, col, size];
@@ -49,27 +64,20 @@ const ParticleField = ({ scrollProgress = 0 }) => {
 
     const time = state.clock.getElapsedTime();
     
-    const positionsAttr = pointsRef.current.geometry.attributes.position;
-    for (let i = 0; i < particleCount; i++) {
-      const idx = i * 3;
-      positionsAttr.array[idx] += Math.sin(time * 0.1 + i) * 0.002;
-      positionsAttr.array[idx + 1] += Math.cos(time * 0.1 + i) * 0.002;
-    }
-    positionsAttr.needsUpdate = true;
+    // Smooth slow cosmic drift
+    pointsRef.current.rotation.y = time * 0.018 + scrollProgress * 0.3;
+    pointsRef.current.rotation.x = Math.sin(time * 0.012) * 0.05;
 
-    const currentOpacity = THREE.MathUtils.lerp(0.3, 0.8, scrollProgress);
+    // Fluid mouse parallax
+    const targetX = pointer.x * 0.4;
+    const targetY = pointer.y * 0.4 - scrollProgress * 2.0;
+
+    pointsRef.current.position.x = THREE.MathUtils.lerp(pointsRef.current.position.x, targetX, 0.04);
+    pointsRef.current.position.y = THREE.MathUtils.lerp(pointsRef.current.position.y, targetY, 0.04);
+
+    // Dynamic breathing opacity
+    const currentOpacity = 0.5 + Math.sin(time * 0.8) * 0.12;
     materialRef.current.opacity = currentOpacity;
-    
-    const rotationSpeed = 0.05 + scrollProgress * 0.2;
-    pointsRef.current.rotation.y = time * rotationSpeed;
-    
-    pointsRef.current.position.y = scrollProgress * -5;
-
-    const targetX = (pointer.x * state.viewport.width * 0.03);
-    const targetY = (pointer.y * state.viewport.height * 0.03);
-    
-    pointsRef.current.position.x = THREE.MathUtils.lerp(pointsRef.current.position.x, targetX, 0.1);
-    pointsRef.current.position.y = THREE.MathUtils.lerp(pointsRef.current.position.y, scrollProgress * -5 + targetY, 0.1);
   });
 
   return (

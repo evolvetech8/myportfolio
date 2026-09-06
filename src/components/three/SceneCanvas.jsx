@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import ParticleField from './ParticleField';
-import ArchonicCore from './ArchonicCore';
+import VesperOrb from './VesperOrb';
 
 const checkWebGLSupport = () => {
   if (typeof window === 'undefined') return false;
@@ -54,9 +54,9 @@ const SceneContent = () => {
 
   return (
     <>
-      <ambientLight intensity={0.15} />
+      <ambientLight intensity={0.2} />
       <ParticleField scrollProgress={progress} />
-      <ArchonicCore scrollProgress={progress} />
+      <VesperOrb scrollProgress={progress} />
     </>
   );
 };
@@ -69,14 +69,32 @@ const SceneCanvasComponent = () => {
   }, []);
 
   if (!hasWebGL) {
-    return <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: '#08080a', zIndex: 0 }} />;
+    return (
+      <div 
+        style={{ 
+          position: 'fixed', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%', 
+          backgroundColor: '#040407', 
+          zIndex: 0 
+        }} 
+      />
+    );
   }
 
   return (
     <Canvas
-      camera={{ position: [0, 0, 8], fov: 50 }}
+      camera={{ position: [0, 0, 7.5], fov: 48 }}
       dpr={[1, 1.5]}
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+      gl={{ 
+        antialias: true, 
+        alpha: true, 
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: false
+      }}
       style={{
         position: 'fixed',
         top: 0,
