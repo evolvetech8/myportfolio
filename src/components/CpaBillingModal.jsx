@@ -7,12 +7,16 @@ import {
   ShieldIcon, 
   CheckIcon,
   ArrowRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  PhoneIcon,
+  FileTextIcon
 } from './Icons';
 
 export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starter', onUpgradeSuccess }) {
   const [selectedPlan, setSelectedPlan] = useState('pro_studio');
-  const [billingCycle, setBillingCycle] = useState('annual'); // 'monthly' | 'annual' (20% discount)
+  const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
+  const [paymentMethod, setPaymentMethod] = useState('vietqr'); // 'vietqr' | 'bank_transfer'
+  const [addConciergeSetup, setAddConciergeSetup] = useState(false);
   const [showQrStep, setShowQrStep] = useState(false);
   const [needVatInvoice, setNeedVatInvoice] = useState(true);
   const [isPaid, setIsPaid] = useState(false);
@@ -29,54 +33,81 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
   const plans = [
     {
       id: 'starter',
-      name: 'Gói Khởi Nghiệp (Starter)',
-      limit: 'Tối đa 15 Hộ Kinh Doanh',
+      name: 'Khởi Nghiệp',
+      subtitle: 'Kế toán dịch vụ tự do (dạng Chị Hương)',
+      limit: 'Tối đa 15 hộ kinh doanh',
       monthlyPrice: 490000,
-      annualPrice: 390000, // per month billed annually
+      annualPrice: 4900000,
+      annualSavingsVnd: '980k',
+      annualSavingsCallout: 'Hoặc 4.900.000đ/năm - tiết kiệm 980k',
+      badgeBg: 'rgba(244, 63, 94, 0.12)',
+      badgeColor: '#fb7185',
+      badgeBorder: 'rgba(244, 63, 94, 0.3)',
       features: [
-        'Đầy đủ biểu mẫu TT152 (S1a, S2a)',
-        'Cảnh báo ngưỡng 1 tỷ Nghị định 70',
-        'Nạp sao kê CSV 5 ngân hàng lớn',
-        '1 Tài khoản Kế toán chính',
-        'Hỗ trợ kỹ thuật giờ hành chính'
-      ]
+        'Sổ S1a-HKD và S2a-HKD tự động lập',
+        'Đối soát VietQR thời gian thực (MB, VCB, TCB)',
+        'Nhập sao kê CSV cho các ngân hàng khác',
+        'Cổng khách hàng OTP qua Zalo ZNS',
+        'Lịch cảnh báo hạn kê khai quý',
+        '1 tài khoản kế toán'
+      ],
+      ctaText: 'Dùng thử 30 ngày miễn phí',
+      trialDuration: '30 ngày'
     },
     {
       id: 'pro_studio',
-      name: 'Gói Chuyên Nghiệp (Pro Studio)',
-      badge: 'Khuyên Dùng Cho Đại Lý Thuế',
-      limit: 'Tối đa 50 Hộ Kinh Doanh',
+      name: 'Pro Studio',
+      badge: 'Phổ biến nhất',
+      subtitle: 'Đại lý thuế 3-8 người (dạng Anh Tuấn)',
+      limit: 'Tối đa 50 hộ kinh doanh',
       monthlyPrice: 1490000,
-      annualPrice: 1190000,
+      annualPrice: 14900000,
+      annualSavingsVnd: '2,98 triệu',
+      annualSavingsCallout: 'Hoặc 14.900.000đ/năm - tiết kiệm 2,98 triệu',
+      badgeBg: 'rgba(56, 189, 248, 0.12)',
+      badgeColor: '#38bdf8',
+      badgeBorder: 'rgba(56, 189, 248, 0.3)',
       features: [
-        'Mọi tính năng gói Starter',
-        'Thao tác hàng loạt (Bulk Lock, Bulk Export)',
-        'Cổng xem báo cáo cho chủ hộ (Portal OTP)',
-        'Công cụ di cư dữ liệu MISA & Excel 1-click',
-        '3 Tài khoản phân quyền RBAC (Chủ & Kế toán)',
-        'Xuất hóa đơn VAT điện tử doanh nghiệp'
-      ]
+        'Mọi tính năng gói Khởi Nghiệp',
+        'Bộ 4 sổ TT152 Nhóm 3 (S2b, S2c, S2d, S2e)',
+        'Tối đa 5 tài khoản kế toán viên',
+        'Phân quyền vai trò (chủ, senior, junior)',
+        'Nhật ký kiểm toán đầy đủ (audit log)',
+        'Thao tác hàng loạt (khoá sổ, xuất báo cáo)',
+        'Nhập dữ liệu di cư từ MISA và Excel'
+      ],
+      ctaText: 'Dùng thử 14 ngày miễn phí',
+      trialDuration: '14 ngày'
     },
     {
       id: 'enterprise',
-      name: 'Gói Công Ty (Enterprise Firm)',
-      limit: 'Không giới hạn Hộ Kinh Doanh',
+      name: 'Enterprise Firm',
+      subtitle: 'Công ty dịch vụ kế toán quy mô lớn',
+      limit: 'Tối đa 200 hộ kinh doanh',
       monthlyPrice: 2990000,
-      annualPrice: 2390000,
+      annualPrice: 29900000,
+      annualSavingsVnd: '5,98 triệu',
+      annualSavingsCallout: 'Hoặc 29.900.000đ/năm - tiết kiệm 5,98 triệu',
+      badgeBg: 'rgba(245, 158, 11, 0.12)',
+      badgeColor: '#fbbf24',
+      badgeBorder: 'rgba(245, 158, 11, 0.3)',
       features: [
         'Mọi tính năng gói Pro Studio',
-        'Không giới hạn số lượng hộ kinh doanh',
-        'Không giới hạn số nhân sự kế toán viên',
-        'Nhật ký kiểm toán bảo mật bất biến nâng cao',
-        'Đầu mối kỹ thuật hỗ trợ riêng biệt 24/7',
-        'Ký cam kết bảo mật NDA dữ liệu theo NĐ 13'
-      ]
+        'Không giới hạn tài khoản kế toán viên',
+        'Hỗ trợ ưu tiên qua Zalo trong giờ hành chính',
+        'Onboarding trực tiếp cho đội ngũ',
+        'Phụ phí 20k/hộ khi vượt ngưỡng 200',
+        'Cam kết uptime 99% giờ hành chính Việt Nam'
+      ],
+      ctaText: 'Liên hệ tư vấn',
+      trialDuration: 'Tư vấn theo quy mô'
     }
   ];
 
   const currentSelectedPlan = plans.find(p => p.id === selectedPlan) || plans[1];
-  const monthlyRate = billingCycle === 'annual' ? currentSelectedPlan.annualPrice : currentSelectedPlan.monthlyPrice;
-  const totalAmount = billingCycle === 'annual' ? monthlyRate * 12 : monthlyRate;
+  const basePrice = billingCycle === 'annual' ? currentSelectedPlan.annualPrice : currentSelectedPlan.monthlyPrice;
+  const conciergeFee = addConciergeSetup ? 500000 : 0;
+  const totalAmount = basePrice + conciergeFee;
 
   const fmtCurrency = (val) => new Intl.NumberFormat('vi-VN').format(val) + 'đ';
 
@@ -112,8 +143,8 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
         border: '1px solid rgba(0, 245, 212, 0.3)',
         borderRadius: '16px',
         width: '100%',
-        maxWidth: '950px',
-        maxHeight: '92vh',
+        maxWidth: '1020px',
+        maxHeight: '94vh',
         overflowY: 'auto',
         boxShadow: '0 24px 48px rgba(0,0,0,0.6)',
         color: '#f0f4f8',
@@ -126,17 +157,19 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
           borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <BuildingIcon size={20} color="#00f5d4" />
               <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#fff' }}>
-                Đăng Ký Bản Quyền CPA Studio (A-Sổ Kế Toán)
+                Bảng Giá Bản Quyền A-Sổ (CPA Studio)
               </h2>
             </div>
             <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#94a3b8' }}>
-              Trang bị cho đội ngũ kế toán công cụ quản trị 20 - 100 hộ kinh doanh chuẩn Thông tư 152 & Nghị định 70.
+              Tự động hóa sổ sách cho hộ kinh doanh chuẩn Thông tư 152 &amp; Nghị định 70. Tiết kiệm 40% chi phí so với MISA.
             </p>
           </div>
           <button 
@@ -156,7 +189,7 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
 
         {!showQrStep ? (
           <div style={{ padding: '24px' }}>
-            {/* Billing cycle switch */}
+            {/* Billing Cycle Switcher */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
               <div style={{
                 background: 'rgba(255, 255, 255, 0.04)',
@@ -169,7 +202,7 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                   type="button"
                   onClick={() => setBillingCycle('monthly')}
                   style={{
-                    padding: '6px 18px',
+                    padding: '6px 20px',
                     borderRadius: '24px',
                     background: billingCycle === 'monthly' ? '#00f5d4' : 'transparent',
                     color: billingCycle === 'monthly' ? '#05101a' : '#cbd5e1',
@@ -185,7 +218,7 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                   type="button"
                   onClick={() => setBillingCycle('annual')}
                   style={{
-                    padding: '6px 18px',
+                    padding: '6px 20px',
                     borderRadius: '24px',
                     background: billingCycle === 'annual' ? '#00f5d4' : 'transparent',
                     color: billingCycle === 'annual' ? '#05101a' : '#cbd5e1',
@@ -198,124 +231,214 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                     gap: '6px'
                   }}
                 >
-                  <span>Thanh Toán Năm</span>
+                  <span>Thanh Toán Năm (10 Tháng)</span>
                   <span style={{
                     fontSize: '10px',
                     background: billingCycle === 'annual' ? '#05101a' : 'rgba(0, 245, 212, 0.2)',
                     color: billingCycle === 'annual' ? '#00f5d4' : '#00f5d4',
-                    padding: '1px 6px',
-                    borderRadius: '10px'
+                    padding: '1px 8px',
+                    borderRadius: '10px',
+                    fontWeight: 800
                   }}>
-                    Tiết kiệm 20%
+                    Tặng 2 Tháng
                   </span>
                 </button>
               </div>
             </div>
 
-            {/* Plan Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+            {/* 3 Pricing Cards Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '16px', marginBottom: '20px' }}>
               {plans.map(p => {
                 const isCurrent = p.id === selectedPlan;
-                const price = billingCycle === 'annual' ? p.annualPrice : p.monthlyPrice;
+                const displayPrice = billingCycle === 'annual' ? p.annualPrice : p.monthlyPrice;
+                const periodLabel = billingCycle === 'annual' ? '/năm' : '/tháng';
+
                 return (
                   <div
                     key={p.id}
                     onClick={() => setSelectedPlan(p.id)}
                     style={{
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                       background: isCurrent ? 'rgba(0, 245, 212, 0.05)' : 'rgba(255, 255, 255, 0.02)',
                       border: isCurrent ? '2px solid #00f5d4' : '1px solid rgba(255, 255, 255, 0.08)',
-                      padding: '20px',
+                      padding: '22px',
                       cursor: 'pointer',
                       display: 'flex',
                       flexDirection: 'column',
-                      position: 'relative'
+                      position: 'relative',
+                      boxShadow: isCurrent ? '0 12px 30px rgba(0, 245, 212, 0.1)' : 'none',
+                      transition: 'all 0.2s ease'
                     }}
                   >
+                    {/* Top Popular Ribbon */}
                     {p.badge && (
                       <div style={{
                         position: 'absolute',
-                        top: '-10px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: '#00f5d4',
-                        color: '#05101a',
-                        fontSize: '10px',
-                        fontWeight: 800,
+                        top: '16px',
+                        right: '16px',
+                        background: 'rgba(56, 189, 248, 0.15)',
+                        border: '1px solid rgba(56, 189, 248, 0.35)',
+                        color: '#38bdf8',
+                        fontSize: '11px',
+                        fontWeight: 700,
                         padding: '2px 10px',
-                        borderRadius: '10px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em'
+                        borderRadius: '12px'
                       }}>
                         {p.badge}
                       </div>
                     )}
 
-                    <h3 style={{ margin: '0 0 6px', fontSize: '15px', color: '#fff', fontWeight: 700 }}>
+                    <h3 style={{ margin: '0 0 4px', fontSize: '18px', color: '#fff', fontWeight: 800 }}>
                       {p.name}
                     </h3>
-                    <div style={{ fontSize: '12px', color: '#00f5d4', fontWeight: 600, marginBottom: '16px' }}>
-                      {p.limit}
-                    </div>
+                    <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#94a3b8' }}>
+                      {p.subtitle}
+                    </p>
 
-                    <div style={{ marginBottom: '16px' }}>
-                      <span style={{ fontSize: '24px', fontWeight: 800, color: '#fff' }}>
-                        {fmtCurrency(price)}
+                    <div style={{ marginBottom: '12px' }}>
+                      <span style={{ fontSize: '28px', fontWeight: 800, color: '#fff' }}>
+                        {fmtCurrency(displayPrice)}
                       </span>
-                      <span style={{ fontSize: '12px', color: '#94a3b8' }}> / tháng</span>
+                      <span style={{ fontSize: '13px', color: '#94a3b8' }}> {periodLabel}</span>
                     </div>
 
+                    {/* Annual Savings Callout Badge */}
+                    <div style={{
+                      background: p.badgeBg,
+                      border: '1px solid ' + p.badgeBorder,
+                      color: p.badgeColor,
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      marginBottom: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}>
+                      <span style={{ fontWeight: 800 }}>•</span>
+                      <span>{p.annualSavingsCallout}</span>
+                    </div>
+
+                    {/* Capacity Indicator */}
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: '#00f5d4',
+                      padding: '8px 0',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+                      borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+                      marginBottom: '16px'
+                    }}>
+                      <span>{p.limit}</span>
+                    </div>
+
+                    {/* Feature Bullet Points */}
                     <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', flex: 1 }}>
                       {p.features.map((feat, idx) => (
-                        <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12px', color: '#cbd5e1', marginBottom: '8px' }}>
+                        <li key={idx} style={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '8px',
+                          fontSize: '12px',
+                          color: '#cbd5e1',
+                          marginBottom: '9px',
+                          lineHeight: '1.4'
+                        }}>
                           <CheckIcon size={14} color="#00f5d4" style={{ flexShrink: 0, marginTop: '2px' }} />
                           <span>{feat}</span>
                         </li>
                       ))}
                     </ul>
 
+                    {/* Action Button */}
                     <button
                       type="button"
+                      onClick={() => {
+                        setSelectedPlan(p.id);
+                        if (p.id === 'enterprise') {
+                          alert('Quý công ty vui lòng liên hệ hotline 0903-xxx-xxx hoặc gửi email tới contact@evolvetech.biz.vn để nhận hợp đồng riêng cho quy mô trên 200 HKD.');
+                        } else {
+                          setShowQrStep(true);
+                        }
+                      }}
                       style={{
                         width: '100%',
-                        padding: '10px',
+                        padding: '11px',
                         borderRadius: '8px',
                         background: isCurrent ? '#00f5d4' : 'rgba(255, 255, 255, 0.06)',
                         color: isCurrent ? '#05101a' : '#cbd5e1',
-                        border: 'none',
+                        border: isCurrent ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
                         fontSize: '13px',
                         fontWeight: 700,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
                       }}
                     >
-                      {isCurrent ? 'Đang Chọn Gói Này' : 'Chọn Gói'}
+                      {p.ctaText}
                     </button>
                   </div>
                 );
               })}
             </div>
 
-            {/* VAT Invoice Checkbox & Inputs */}
+            {/* Design Partner Program Box */}
+            <div style={{
+              background: 'rgba(56, 189, 248, 0.05)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              marginBottom: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <SparklesIcon size={16} color="#38bdf8" />
+                <strong style={{ fontSize: '13px', color: '#fff' }}>Chương trình Đối Tác Sáng Lập (Design Partner Program)</strong>
+              </div>
+              <p style={{ margin: 0, fontSize: '12px', color: '#cbd5e1', lineHeight: '1.6' }}>
+                10 kế toán đầu tiên đăng ký nhận Pro Studio miễn phí 6 tháng, đổi lại phản hồi hàng tuần và quyền trích dẫn khi A-Sổ ra mắt chính thức. Sau kỳ ưu đãi hưởng giảm 40% năm đầu.
+              </p>
+            </div>
+
+            {/* Concierge Setup Add-on & VAT Section */}
             <div style={{
               background: 'rgba(255, 255, 255, 0.02)',
               border: '1px solid rgba(255, 255, 255, 0.06)',
-              borderRadius: '10px',
-              padding: '16px',
+              borderRadius: '12px',
+              padding: '16px 20px',
               marginBottom: '20px'
             }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: '#fff' }}>
+              {/* Concierge Setup Checkbox */}
+              <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '13px', color: '#fff', marginBottom: '14px' }}>
+                <input
+                  type="checkbox"
+                  checked={addConciergeSetup}
+                  onChange={(e) => setAddConciergeSetup(e.target.checked)}
+                />
+                <div>
+                  <span style={{ fontWeight: 700 }}>Gói Khởi Tạo Chuyên Nghiệp (Concierge Setup): +500.000đ</span>
+                  <span style={{ display: 'block', fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+                    Chuyên viên kỹ thuật A-Sổ trực tiếp hỗ trợ bóc tách và di cư 10 khách hàng đầu tiên từ MISA / Excel vào hệ thống.
+                  </span>
+                </div>
+              </label>
+
+              {/* VAT Invoice Checkbox */}
+              <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '13px', color: '#fff' }}>
                 <input
                   type="checkbox"
                   checked={needVatInvoice}
                   onChange={(e) => setNeedVatInvoice(e.target.checked)}
                 />
-                <span>Yêu cầu xuất Hóa đơn điện tử VAT (GTGT) cho Công ty Dịch vụ Kế toán</span>
+                <span>Yêu cầu xuất Hóa đơn điện tử VAT (GTGT 8%) cho Công ty Dịch vụ Kế toán</span>
               </label>
 
               {needVatInvoice && (
-                <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12px' }}>
+                <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', fontSize: '12px' }}>
                   <div>
-                    <span style={{ color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Tên đơn vị mua hàng:</span>
+                    <span style={{ color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Tên công ty / đơn vị:</span>
                     <input
                       type="text"
                       value={vatDetails.companyName}
@@ -332,82 +455,189 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                       style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#152238', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}
                     />
                   </div>
+                  <div>
+                    <span style={{ color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Email nhận HĐĐT:</span>
+                    <input
+                      type="email"
+                      value={vatDetails.invoiceEmail}
+                      onChange={(e) => setVatDetails({ ...vatDetails, invoiceEmail: e.target.value })}
+                      style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#152238', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}
+                    />
+                  </div>
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* Policy Notes & Guarantees */}
+            <div style={{
+              fontSize: '11px',
+              color: '#94a3b8',
+              lineHeight: '1.6',
+              marginBottom: '20px',
+              borderLeft: '2px solid rgba(0, 245, 212, 0.4)',
+              paddingLeft: '12px'
+            }}>
+              <div>• Giá đã bao gồm 8% VAT. Xuất hoá đơn điện tử VAT cho công ty dịch vụ kế toán mỗi kỳ thanh toán.</div>
+              <div>• Không bao gồm dịch vụ HĐĐT-MTT theo NĐ 70/2025 (đăng ký riêng qua đối tác meInvoice, EasyInvoice hoặc VNPT).</div>
+              <div>• <strong>Ân hạn 7 ngày:</strong> Không tạm khóa dịch vụ ngay lập tức khi chậm nộp tiền để đảm bảo tiến độ báo cáo thuế cho khách hàng.</div>
+              <div>• <strong>Chính sách hoàn tiền:</strong> Hoàn 100% trong 7 ngày đầu tiên nếu không hài lòng. Không hoàn tiền cho tháng dở dang.</div>
+            </div>
+
+            {/* Total Bar & Next Step CTA */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '16px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              paddingTop: '16px'
+            }}>
               <div>
-                <div style={{ fontSize: '12px', color: '#94a3b8' }}>Tổng cộng thanh toán ({billingCycle === 'annual' ? '12 tháng' : '1 tháng'}):</div>
-                <div style={{ fontSize: '22px', fontWeight: 800, color: '#00f5d4' }}>{fmtCurrency(totalAmount)}</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                  Tổng cộng ({billingCycle === 'annual' ? '12 tháng (tặng 2 tháng)' : '1 tháng'}
+                  {addConciergeSetup ? ' + Khởi tạo 500k' : ''}):
+                </div>
+                <div style={{ fontSize: '24px', fontWeight: 800, color: '#00f5d4' }}>
+                  {fmtCurrency(totalAmount)}
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowQrStep(true)}
-                style={{
-                  background: '#00f5d4',
-                  color: '#05101a',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '12px 28px',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <span>Tiếp Tục Thanh Toán VietQR</span>
-                <ArrowRightIcon size={16} />
-              </button>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => setShowQrStep(true)}
+                  style={{
+                    background: '#00f5d4',
+                    color: '#05101a',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '12px 28px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>Tiếp Tục Thanh Toán VietQR</span>
+                  <ArrowRightIcon size={16} />
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          /* Step 2: VietQR Payment Step */
+          /* Step 2: Payment Execution (VietQR or Bank Transfer) */
           <div style={{ padding: '24px', textAlign: 'center' }}>
             <h3 style={{ margin: '0 0 6px', fontSize: '18px', color: '#fff' }}>
-              Quét Mã VietQR Napas247 Kích Hoạt Bản Quyền Tự Động
+              Thanh Toán Gói {currentSelectedPlan.name} ({billingCycle === 'annual' ? '12 Tháng' : '1 Tháng'})
             </h3>
             <p style={{ margin: '0 0 20px', fontSize: '13px', color: '#94a3b8' }}>
-              Hệ thống tự động kích hoạt gói {currentSelectedPlan.name} ngay khi nhận được tín hiệu chuyển khoản.
+              Hệ thống tự động kích hoạt tài khoản hoặc hỗ trợ đối soát thủ công theo quý kèm ủy nhiệm chi.
             </p>
 
-            {/* Simulated VietQR Card */}
-            <div style={{
-              display: 'inline-block',
-              background: '#fff',
-              padding: '20px',
-              borderRadius: '16px',
-              color: '#05101a',
-              marginBottom: '20px',
-              boxShadow: '0 8px 32px rgba(0, 245, 212, 0.25)'
-            }}>
-              <div style={{ fontWeight: 800, fontSize: '16px', color: '#003366', marginBottom: '8px' }}>
-                VIETQR - NAPAS 247
-              </div>
-              <div style={{
-                width: '180px',
-                height: '180px',
-                margin: '0 auto 12px',
-                border: '2px dashed #003366',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: '#f8fafc',
-                borderRadius: '8px'
-              }}>
-                <QrCodeIcon size={120} color="#003366" />
-                <span style={{ fontSize: '10px', color: '#64748b', fontWeight: 600 }}>Quét bằng App Ngân Hàng</span>
-              </div>
-              <div style={{ fontSize: '13px', fontWeight: 700 }}>{fmtCurrency(totalAmount)}</div>
-              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>
-                Nội dung: <strong style={{ color: '#003366' }}>CPA ANBINH {currentSelectedPlan.id.toUpperCase()}</strong>
-              </div>
+            {/* Payment Method Selector */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('vietqr')}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '8px',
+                  background: paymentMethod === 'vietqr' ? 'rgba(0, 245, 212, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                  border: paymentMethod === 'vietqr' ? '1px solid #00f5d4' : '1px solid rgba(255, 255, 255, 0.1)',
+                  color: paymentMethod === 'vietqr' ? '#00f5d4' : '#cbd5e1',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                Quét Mã VietQR Napas247 (Tự Động)
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('bank_transfer')}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '8px',
+                  background: paymentMethod === 'bank_transfer' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                  border: paymentMethod === 'bank_transfer' ? '1px solid #38bdf8' : '1px solid rgba(255, 255, 255, 0.1)',
+                  color: paymentMethod === 'bank_transfer' ? '#38bdf8' : '#cbd5e1',
+                  fontWeight: 700,
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                Chuyển Khoản Ngân Hàng / Hóa Đơn Quý
+              </button>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+            {paymentMethod === 'vietqr' ? (
+              /* Simulated VietQR Card */
+              <div style={{
+                display: 'inline-block',
+                background: '#fff',
+                padding: '20px',
+                borderRadius: '16px',
+                color: '#05101a',
+                marginBottom: '20px',
+                boxShadow: '0 8px 32px rgba(0, 245, 212, 0.25)',
+                maxWidth: '320px'
+              }}>
+                <div style={{ fontWeight: 800, fontSize: '16px', color: '#003366', marginBottom: '8px' }}>
+                  VIETQR - NAPAS 247
+                </div>
+                <div style={{
+                  width: '180px',
+                  height: '180px',
+                  margin: '0 auto 12px',
+                  border: '2px dashed #003366',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#f8fafc',
+                  borderRadius: '8px'
+                }}>
+                  <QrCodeIcon size={120} color="#003366" />
+                  <span style={{ fontSize: '10px', color: '#64748b', fontWeight: 600 }}>Quét bằng App Ngân Hàng</span>
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: 800, color: '#003366' }}>{fmtCurrency(totalAmount)}</div>
+                <div style={{ fontSize: '11px', color: '#64748b', marginTop: '6px' }}>
+                  Nội dung: <strong style={{ color: '#003366' }}>ASO {currentSelectedPlan.id.toUpperCase()} 0108998877</strong>
+                </div>
+              </div>
+            ) : (
+              /* Bank Transfer Manual Reconciliation Card */
+              <div style={{
+                display: 'inline-block',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '24px',
+                borderRadius: '16px',
+                color: '#cbd5e1',
+                marginBottom: '20px',
+                textAlign: 'left',
+                maxWidth: '480px'
+              }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#38bdf8', marginBottom: '12px' }}>
+                  Thông Tin Tài Khoản Thanh Toán Doanh Nghiệp:
+                </div>
+                <div style={{ fontSize: '12px', lineHeight: '1.8' }}>
+                  <div>• Ngân hàng: <strong>Vietcombank (VCB) - Chi nhánh TP.HCM</strong></div>
+                  <div>• Số tài khoản: <strong style={{ color: '#00f5d4' }}>0071001234567</strong></div>
+                  <div>• Đơn vị thụ hưởng: <strong>CÔNG TY TNHH EVOLVETECH VIỆT NAM</strong></div>
+                  <div>• Số tiền: <strong style={{ color: '#fff', fontSize: '14px' }}>{fmtCurrency(totalAmount)}</strong></div>
+                  <div>• Nội dung chuyển khoản: <strong style={{ color: '#fbbf24' }}>ASO {currentSelectedPlan.id.toUpperCase()} MST {vatDetails.taxCode}</strong></div>
+                </div>
+                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '12px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '8px' }}>
+                  Hóa đơn điện tử VAT sẽ được gửi tự động qua email <strong>{vatDetails.invoiceEmail}</strong> sau khi kế toán A-Sổ đối soát ủy nhiệm chi trong 2 giờ làm việc.
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <button
                 type="button"
                 onClick={() => setShowQrStep(false)}
@@ -441,7 +671,7 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                 }}
               >
                 <CheckCircleIcon size={16} />
-                <span>{isPaid ? 'Đang Kích Hoạt Tài Khoản...' : 'Xác Nhận Đã Chuyển Tiền (Mô Phỏng Webhook)'}</span>
+                <span>{isPaid ? 'Đang Kích Hoạt Bản Quyền...' : 'Xác Nhận Đã Chuyển Tiền (Mô Phỏng Webhook)'}</span>
               </button>
             </div>
           </div>

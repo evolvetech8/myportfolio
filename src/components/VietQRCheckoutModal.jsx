@@ -26,11 +26,13 @@ export default function VietQRCheckoutModal({
 
   if (!isOpen) return null;
 
-  // Pricing calculations
+  // Pricing calculations (Aligned with CPA Studio: 490k / 1.49M / 2.99M)
   const priceMap = {
-    starter: { annual: 1788000, monthly: 189000, code: 'START' },
-    pro: { annual: 2988000, monthly: 319000, code: 'PRO' },
-    advanced: { annual: 4788000, monthly: 499000, code: 'ADV' }
+    starter: { annual: 4900000, monthly: 490000, code: 'START', name: 'Khởi Nghiệp' },
+    pro: { annual: 14900000, monthly: 1490000, code: 'PRO', name: 'Pro Studio' },
+    pro_studio: { annual: 14900000, monthly: 1490000, code: 'PRO', name: 'Pro Studio' },
+    enterprise: { annual: 29900000, monthly: 2990000, code: 'ENT', name: 'Enterprise Firm' },
+    advanced: { annual: 29900000, monthly: 2990000, code: 'ENT', name: 'Enterprise Firm' }
   };
 
   const currentPlanMeta = priceMap[selectedPlan] || priceMap.pro;
