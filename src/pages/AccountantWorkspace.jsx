@@ -1124,39 +1124,55 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
 
       {/* Top Banner: Dynamically tailored to Huong vs Tuan */}
       <div className="cpa-header-bar glass-panel">
-        <div className="cpa-header-left">
-          <div className="cpa-firm-icon">
-            <BuildingIcon size={24} color={personaMode === 'huong' ? '#00f5d4' : '#FFA100'} />
-          </div>
-          <div>
-            <div className="cpa-title-row">
-              <h1 className="cpa-firm-title">
-                {personaMode === 'huong' 
-                  ? 'Góc Làm Việc Kế Toán Tự Do • Chị Nguyễn Thị Hương' 
-                  : 'Văn Phòng Dịch Vụ Kế Toán & Đại Lý Thuế An Bình • Anh Trần Văn Tuấn'}
-              </h1>
-              <span className="cpa-pro-chip" style={{
-                background: personaMode === 'huong' ? 'rgba(0, 245, 212, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                color: personaMode === 'huong' ? '#00f5d4' : '#38bdf8'
-              }}>
-                {personaMode === 'huong' ? 'GÓI KHỞI NGHIỆP • 490.000Đ/THÁNG' : 'GÓI PRO STUDIO • 1.490.000Đ/THÁNG'}
-              </span>
+        <div className="cpa-header-top">
+          <div className="cpa-header-left">
+            <div className="cpa-firm-icon">
+              <BuildingIcon size={24} color={personaMode === 'huong' ? '#00f5d4' : '#FFA100'} />
             </div>
-            <p className="cpa-firm-sub">
-              {personaMode === 'huong' ? (
-                <span>
-                  Quản lý <strong>22 Hộ Kinh Doanh</strong> (Bình Thạnh, TP.HCM) • Tự động hóa thu chi VietQR • <strong>Không bao giờ làm bù cuối tuần</strong>.
+            <div>
+              <div className="cpa-title-row">
+                <h1 className="cpa-firm-title">
+                  {personaMode === 'huong' 
+                    ? 'Góc Làm Việc Kế Toán Tự Do • Chị Nguyễn Thị Hương' 
+                    : 'Văn Phòng Dịch Vụ Kế Toán & Đại Lý Thuế An Bình • Anh Trần Văn Tuấn'}
+                </h1>
+                <span className="cpa-pro-chip" style={{
+                  background: personaMode === 'huong' ? 'rgba(0, 245, 212, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                  color: personaMode === 'huong' ? '#00f5d4' : '#38bdf8'
+                }}>
+                  {personaMode === 'huong' ? 'GÓI KHỞI NGHIỆP • 490.000Đ/THÁNG' : 'GÓI PRO STUDIO • 1.490.000Đ/THÁNG'}
                 </span>
-              ) : (
-                <span>
-                  Bảng điều khiển tập trung <strong>90 Hộ Kinh Doanh</strong> (Cầu Giấy, Hà Nội) • Giám sát 3 Kế toán viên trẻ (Đức, Trang, Linh) • <strong>Tiết kiệm 40% chi phí MISA</strong>.
-                </span>
-              )}
-            </p>
+              </div>
+              <p className="cpa-firm-sub">
+                {personaMode === 'huong' ? (
+                  <span>
+                    Quản lý <strong>22 Hộ Kinh Doanh</strong> (Bình Thạnh, TP.HCM) • Tự động hóa thu chi VietQR • <strong>Không bao giờ làm bù cuối tuần</strong>.
+                  </span>
+                ) : (
+                  <span>
+                    Bảng điều khiển tập trung <strong>90 Hộ Kinh Doanh</strong> (Cầu Giấy, Hà Nội) • Giám sát 3 Kế toán viên trẻ (Đức, Trang, Linh) • <strong>Tiết kiệm 40% chi phí MISA</strong>.
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          <div className="cpa-header-primary-action">
+            <button 
+              type="button" 
+              className="cpa-btn-action cpa-btn-add"
+              onClick={() => setShowNewClientModal(true)}
+              style={{
+                boxShadow: '0 4px 14px rgba(255, 161, 0, 0.3)'
+              }}
+            >
+              <PlusIcon size={14} color="currentColor" />
+              <span>+ Tiếp Nhận HKD Mới</span>
+            </button>
           </div>
         </div>
 
-        <div className="cpa-header-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+        <div className="cpa-header-actions">
           <button 
             type="button" 
             className="cpa-btn-action"
@@ -1170,6 +1186,18 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
           >
             <UploadCloudIcon size={14} color="currentColor" />
             <span>{personaMode === 'huong' ? 'Nhập Nhanh MISA / Excel' : 'Di Cư MISA / Excel (30 Phút)'}</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="cpa-btn-action cpa-btn-csv"
+            onClick={() => {
+              setSelectedImportClient(clients[0]);
+              setShowCsvImportModal(true);
+            }}
+          >
+            <UploadCloudIcon size={14} color="currentColor" />
+            <span>Nhập File Sao Kê CSV</span>
           </button>
 
           {personaMode === 'tuan' && (
@@ -1239,27 +1267,6 @@ export default function AccountantWorkspace({ initialPersona, initialPortalOpen 
                 ? (currentRole === 'firm_owner' ? 'Quyền: Chủ Đại Lý (Owner)' : currentRole === 'senior_accountant' ? 'Quyền: Kế Toán Chính (Senior)' : 'Quyền: Trợ Lý (Junior)') 
                 : 'Đăng Nhập / Phân Quyền'}
             </span>
-          </button>
-
-          <button 
-            type="button" 
-            className="cpa-btn-action cpa-btn-csv"
-            onClick={() => {
-              setSelectedImportClient(clients[0]);
-              setShowCsvImportModal(true);
-            }}
-          >
-            <UploadCloudIcon size={14} color="currentColor" />
-            <span>Nhập File Sao Kê CSV</span>
-          </button>
-
-          <button 
-            type="button" 
-            className="cpa-btn-action cpa-btn-add"
-            onClick={() => setShowNewClientModal(true)}
-          >
-            <PlusIcon size={14} color="currentColor" />
-            <span>+ Tiếp Nhận HKD Mới</span>
           </button>
         </div>
       </div>
