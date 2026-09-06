@@ -42,7 +42,7 @@ export default function About() {
         <div className="about-metric-card glass-panel">
           <div className="about-metric-num">100%</div>
           <div className="about-metric-label">{isEn ? 'Regulatory Compliance' : 'Chuẩn Hóa Pháp Lý'}</div>
-          <div className="about-metric-sub">{isEn ? 'Circular 88 (7/7) & Decree 123' : 'Thông tư 88 (7/7 Sổ) & NĐ 123'}</div>
+          <div className="about-metric-sub">{isEn ? 'Circular 152/2025 & Decree 70/123' : 'Thông tư 152/2025 & NĐ 70/123'}</div>
         </div>
         <div className="about-metric-card glass-panel">
           <div className="about-metric-num">&lt; 1.2s</div>
@@ -84,7 +84,7 @@ export default function About() {
           <div className="bento-feature-checklist">
             <div className="checklist-item">
               <CheckCircleIcon size={16} color="#4ade80" />
-              <span>{isEn ? 'Automated generation of all 7 Circular 88 mandatory books' : 'Tự động lập và đối soát 7/7 loại sổ kế toán Thông tư 88'}</span>
+              <span>{isEn ? 'Automated generation of Circular 152/2025 statutory accounting books' : 'Tự động lập và đối soát sổ kế toán theo Thông tư 152/2025/TT-BTC'}</span>
             </div>
             <div className="checklist-item">
               <CheckCircleIcon size={16} color="#4ade80" />

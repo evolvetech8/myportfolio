@@ -9,15 +9,15 @@ export default function HeroCommandCenter() {
   const [extraFeed, setExtraFeed] = useState([]);
   const [todayRevenue, setTodayRevenue] = useState(9650000);
   const [justSimulated, setJustSimulated] = useState(false);
-  const [selectedLedger, setSelectedLedger] = useState('S1');
+  const [selectedLedger, setSelectedLedger] = useState('S1a');
 
   const initialFeed = [
     {
       id: 'item1',
       title: 'Bán lẻ tại quầy (Máy POS #04)',
-      desc: 'Tự động kết chuyển vào Sổ Doanh thu (S1-HKD)',
+      desc: 'Tự động kết chuyển vào Sổ Doanh thu (S1a-HKD)',
       amount: '+1.450.000đ',
-      tag: 'Đã vào sổ S1',
+      tag: 'Đã vào sổ S1a',
       time: 'Vừa xong',
       icon: <ShoppingCartIcon size={18} color="#FF8A00" />,
       iconBg: 'rgba(255, 109, 0, 0.14)',
@@ -28,8 +28,8 @@ export default function HeroCommandCenter() {
     {
       id: 'item2',
       title: 'Hóa đơn điện tử đầu vào (#008491)',
-      desc: 'Khớp mã Tổng cục Thuế (NĐ 123) → Ghi Sổ Hàng hóa (S2)',
-      amount: 'Hợp lệ NĐ 123',
+      desc: 'Khớp mã Tổng cục Thuế (NĐ 70 & 123) -> Ghi Sổ Hàng hóa (S2d)',
+      amount: 'Hợp lệ NĐ 70 & 123',
       tag: 'Khớp mã 100%',
       time: '4s trước',
       icon: <FileTextIcon size={18} color="#4ade80" />,
@@ -41,7 +41,7 @@ export default function HeroCommandCenter() {
     {
       id: 'item3',
       title: 'Khách thanh toán quét mã VietQR',
-      desc: 'Tự động cân đối Sổ Tiền gửi ngân hàng (S5-HKD)',
+      desc: 'Tự động cân đối Sổ Tiền gửi ngân hàng (S2e-HKD)',
       amount: '+8.200.000đ',
       tag: 'Đã khớp ngân hàng',
       time: '9s trước',
@@ -103,13 +103,13 @@ export default function HeroCommandCenter() {
   };
 
   const ledgerDetails = {
-    S1: { name: 'Sổ Doanh Thu (S1-HKD)', desc: 'Tự động tổng hợp 100% doanh thu POS & VietQR', status: 'Khớp 100%', code: 'Mẫu TT 88/2021/TT-BTC' },
-    S2: { name: 'Sổ Vật Liệu & Hàng Hóa (S2-HKD)', desc: 'Tự động nhập kho từ hóa đơn điện tử NĐ 123', status: 'Không chênh lệch', code: 'Nhập - Xuất - Tồn chuẩn' },
-    S3: { name: 'Sổ Chi Phí SXKD (S3-HKD)', desc: 'Bóc tách chi phí hợp lý, khấu trừ thuế chính xác', status: 'Đã hạch toán', code: 'Chứng từ hợp lệ' },
-    S4: { name: 'Sổ Quỹ Tiền Mặt (S4-HKD)', desc: 'Theo dõi tiền mặt thu - chi tại quầy theo ca', status: 'Cân bằng quỹ', code: 'Khớp thực tế' },
-    S5: { name: 'Sổ Tiền Gửi Ngân Hàng (S5-HKD)', desc: 'Tự đối soát biến động số dư VietQR 24/7', status: 'Khớp sao kê', code: 'Tự động hóa' },
-    S6: { name: 'Sổ Thuế & Các Khoản Nộp NSNN (S6-HKD)', desc: 'Tính thuế GTGT & TNCN tự động theo quý', status: 'Sẵn sàng nộp', code: 'Đúng hạn 100%' },
-    S7: { name: 'Sổ Tiền Lương & BHXH (S7-HKD)', desc: 'Quản lý bảng lương nhân sự quầy & chi nhánh', status: 'Đã kết xuất', code: 'Chuẩn biểu mẫu' }
+    S1a: { name: 'Sổ Doanh Thu Bán Hàng (S1a-HKD)', desc: 'Tổng hợp doanh thu cho HKD dưới ngưỡng chịu thuế (Nhóm 1)', status: 'Khớp 100%', code: 'Mẫu TT 152/2025/TT-BTC', label: 'Doanh Thu S1a' },
+    S2a: { name: 'Sổ Doanh Thu Kê Khai % (S2a-HKD)', desc: 'Phân loại doanh thu theo nhóm ngành nghề & thuế suất (Nhóm 2)', status: 'Khớp 100%', code: 'Mẫu TT 152/2025/TT-BTC', label: 'Doanh Thu S2a' },
+    S2b: { name: 'Sổ Chi Tiết Doanh Thu (S2b-HKD)', desc: 'Sổ doanh thu theo phương pháp thuế trên thu nhập (Nhóm 3)', status: 'Khớp 100%', code: 'Mẫu TT 152/2025/TT-BTC', label: 'Doanh Thu S2b' },
+    S2c: { name: 'Sổ Doanh Thu & Chi Phí (S2c-HKD)', desc: 'Bóc tách chi phí hợp lý, khấu trừ thuế chính xác theo TT 152', status: 'Đã hạch toán', code: 'Chuẩn TT 152/2025', label: 'Chi Phí S2c' },
+    S2d: { name: 'Sổ Vật Liệu & Hàng Hóa (S2d-HKD)', desc: 'Tự động nhập kho từ HĐĐT máy tính tiền NĐ 70 & NĐ 123', status: 'Không chênh lệch', code: 'Nhập - Xuất - Tồn', label: 'Hàng Hóa S2d' },
+    S2e: { name: 'Sổ Tiền Mặt & Tiền Gửi (S2e-HKD)', desc: 'Tự đối soát biến động số dư VietQR ngân hàng 24/7', status: 'Khớp sao kê', code: 'Tự động hóa', label: 'Tiền Gửi S2e' },
+    S3a: { name: 'Sổ Nghĩa Vụ Thuế (S3a-HKD)', desc: 'Theo dõi nghĩa vụ thuế GTGT, TNCN & thuế khác (Điều 7 TT152)', status: 'Sẵn sàng nộp', code: 'Đúng hạn 100%', label: 'Thuế S3a' }
   };
 
   return (
@@ -337,7 +337,7 @@ export default function HeroCommandCenter() {
                 onClick={() => setSelectedLedger(k)}
               >
                 <strong>{k}</strong>
-                <span>{k === 'S1' ? 'Doanh Thu' : k === 'S2' ? 'Hàng Hóa' : k === 'S3' ? 'Chi Phí' : k === 'S4' ? 'Tiền Mặt' : k === 'S5' ? 'Tiền Gửi' : k === 'S6' ? 'Thuế' : 'Lương'}</span>
+                <span>{ledgerDetails[k]?.label || k}</span>
               </button>
             ))}
           </div>

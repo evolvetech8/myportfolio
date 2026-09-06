@@ -8,13 +8,13 @@
   },
   "hero": {
     "pre": "NỀN TẢNG SỔ THUẾ & TUÂN THỦ DOANH THU",
-    "title": "A-Sổ — Quản Trị Sổ Thuế & Doanh Thu Chuẩn Thông Tư 88",
-    "subtitle": "Nền tảng tự động hóa toàn diện 7 loại sổ kế toán bắt buộc, đối chiếu hóa đơn điện tử Nghị định 123 và quản trị dòng tiền cho hộ kinh doanh & SME Việt Nam.",
+    "title": "A-Sổ — Quản Trị Sổ Thuế & Doanh Thu Chuẩn Thông Tư 152",
+    "subtitle": "Nền tảng tự động hóa toàn diện sổ kế toán Thông tư 152/2025/TT-BTC, đối soát hóa đơn điện tử Nghị định 70 & 123 và quản trị dòng tiền cho hộ kinh doanh & SME Việt Nam.",
     "cta": "Trải Nghiệm A-Sổ Ngay",
     "cta2": "Khám Phá Tính Năng"
   },
   "trust": {
-    "badge1": "Chuẩn hoá Thông tư 88/2021/TT-BTC (7/7 Loại Sổ)",
+    "badge1": "Chuẩn hoá Thông tư 152/2025/TT-BTC",
     "badge2": "Hóa đơn điện tử Nghị định 123/2020/NĐ-CP",
     "infraTitle": "Tiêu Chuẩn Bảo Mật & Hạ Tầng Điện Toán Đám Mây",
     "infra1": "Mã hóa cấp ngân hàng AES-256 & E2EE",
@@ -214,9 +214,9 @@
   },
   "metrics": {
     "title": "Tiêu Chuẩn Kỹ Thuật & Tuân Thủ Của A-Sổ",
-    "stat1": { "value": "7/7", "label": "Sổ kế toán bắt buộc Thông tư 88" },
+    "stat1": { "value": "100%", "label": "Sổ kế toán chuẩn Thông tư 152" },
     "stat2": { "value": "< 1.2s", "label": "Tốc độ đối chiếu hóa đơn điện tử" },
-    "stat3": { "value": "100%", "label": "Chuẩn hóa TT 88 & NĐ 123" },
+    "stat3": { "value": "100%", "label": "Chuẩn hóa TT 152 & NĐ 70/123" },
     "stat4": { "value": "E2EE", "label": "Mã hóa đầu-cuối dữ liệu tài chính" }
   },
   "about": {
@@ -240,8 +240,8 @@
   },
   "aiAgent": {
     "badge": "Archonic A-Sổ Sales Engineer AI",
-    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật A-Sổ của Archonic. Bạn muốn tìm hiểu cách A-Sổ tự động hóa 7 loại sổ theo Thông tư 88, đối chiếu hóa đơn Nghị định 123 hay bảng giá triển khai?",
-    "prompt1": "A-Sổ hỗ trợ 7 loại sổ nào theo TT 88?",
+    "welcome": "Xin chào! Tôi là Trợ lý Kỹ thuật A-Sổ của Archonic. Bạn muốn tìm hiểu cách A-Sổ tự động hóa sổ kế toán theo Thông tư 152, đối soát hóa đơn Nghị định 70/123 hay bảng giá triển khai?",
+    "prompt1": "A-Sổ phân nhóm sổ theo TT 152 ra sao?",
     "prompt2": "A-Sổ đối chiếu hóa đơn NĐ 123 ra sao?",
     "prompt3": "Chi phí và cách bắt đầu dùng A-Sổ?",
     "inputPlaceholder": "Đặt câu hỏi về A-Sổ hoặc quy định thuế...",
@@ -249,6 +249,6 @@
   },
   "footer": {
     "tagline": "A-Sổ - Hạ tầng quản trị sổ thuế & tuân thủ doanh thu tự động.",
-    "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT 152/2025 & NĐ123."
+    "rights": "© 2026 Archonic. All rights reserved. Tiêu chuẩn tuân thủ TT 152/2025 & NĐ 70/123."
   }
 }

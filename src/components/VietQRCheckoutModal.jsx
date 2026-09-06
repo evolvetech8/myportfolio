@@ -297,7 +297,10 @@ export default function VietQRCheckoutModal({
               </div>
               <div className="order-row">
                 <span>Trạng thái:</span>
-                <span className="order-status-badge">● ĐÃ KÍCH HOẠT THÀNH CÔNG</span>
+                <span className="order-status-badge">
+                  <span className="order-status-dot"></span>
+                  <span>ĐÃ KÍCH HOẠT THÀNH CÔNG</span>
+                </span>
               </div>
             </div>
 

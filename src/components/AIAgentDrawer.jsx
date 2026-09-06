@@ -34,10 +34,10 @@ export default function AIAgentDrawer() {
   }, [messages, isTyping]);
 
   const knowledgeBase = {
-    tt88: {
-      keywords: ['88', 'thông tư', 'circular', 'hộ kinh doanh', 'household', 'thuế', 'tax', 'sổ'],
-      vi: 'Thông tư 88/2021/TT-BTC quy định 7 loại sổ kế toán bắt buộc: Sổ doanh thu (S1-HKD), Hàng hóa (S2-HKD), Chi phí (S3-HKD), Tiền mặt (S4-HKD), Tiền gửi (S5-HKD), Thuế (S6-HKD) và Tiền lương (S7-HKD). Nền tảng A-Sổ tự động hóa 100% việc lập, ghi chép và kết xuất 7 loại sổ này theo đúng biểu mẫu pháp lý.',
-      en: 'Circular 88/2021/TT-BTC requires 7 mandatory accounting books: Revenue (S1), Inventory (S2), Expenses (S3), Cash (S4), Bank (S5), Tax (S6), and Payroll (S7). The A-Sổ platform automates 100% of these 7 books to certified regulatory standards.'
+    tt152: {
+      keywords: ['152', '88', 'thông tư', 'circular', 'hộ kinh doanh', 'household', 'thuế', 'tax', 'sổ'],
+      vi: 'Thông tư 152/2025/TT-BTC (thay thế TT 88 từ 01/01/2026) phân nhóm kế toán theo phương pháp tính thuế: Nhóm 1 (< 500M) dùng S1a-HKD; Nhóm 2 (thuế % doanh thu) dùng S2a-HKD; Nhóm 3 (thuế theo thu nhập) mở bộ 4 sổ chi tiết S2b, S2c, S2d, S2e; kết hợp Nghị định 70/2025/NĐ-CP bắt buộc HĐĐT từ máy tính tiền. Nền tảng A-Sổ tự động hóa 100% việc phân loại và lập các sổ này.',
+      en: 'Circular 152/2025/TT-BTC (replacing Circular 88 from Jan 1, 2026) mandates accounting books based on tax calculation method: Group 1 uses S1a-HKD; Group 2 uses S2a-HKD; Group 3 requires the 4-book bundle (S2b, S2c, S2d, S2e); alongside Decree 70/2025/ND-CP on cash register e-invoices. A-Sổ automates 100% of these statutory requirements.'
     },
     aso: {
       keywords: ['a-sổ', 'aso', 'tính năng', 'feature', 'giải pháp', 'archonic'],
@@ -45,14 +45,14 @@ export default function AIAgentDrawer() {
       en: 'A-Sổ is Archonic\'s next-generation tax ledger and revenue compliance platform. It seamlessly connects POS machines, business bank accounts, and e-invoice portals into an audit-ready tax ledger, saving 95% of manual accounting time.'
     },
     nd123: {
-      keywords: ['123', 'nghị định', 'hóa đơn', 'invoice', 'đối chiếu', 'e-invoice'],
-      vi: 'A-Sổ đồng bộ trực tiếp với hệ thống hóa đơn điện tử theo Nghị định 123/2020/NĐ-CP. Hệ thống tự động kiểm tra tính hợp lệ của hóa đơn đầu vào/đầu ra, đối chiếu mã cơ quan thuế và khớp với sổ kế toán ngay lập tức.',
-      en: 'A-Sổ synchronizes directly with Decree 123 e-invoicing portals. It automatically verifies input and output e-invoice authenticity, matches tax authority codes, and reconciles entries with your ledgers in real time.'
+      keywords: ['123', '70', 'nghị định', 'hóa đơn', 'invoice', 'đối chiếu', 'e-invoice'],
+      vi: 'A-Sổ đồng bộ trực tiếp với hệ thống hóa đơn điện tử theo Nghị định 70/2025/NĐ-CP và Nghị định 123/2020/NĐ-CP. Hệ thống tự động kiểm tra tính hợp lệ của hóa đơn đầu vào/đầu ra, đối chiếu mã cơ quan thuế và khớp với sổ kế toán ngay lập tức.',
+      en: 'A-Sổ synchronizes directly with Decree 70/2025 and Decree 123 e-invoicing portals. It automatically verifies input and output e-invoice authenticity, matches tax authority codes, and reconciles entries with your ledgers in real time.'
     },
     pricing: {
       keywords: ['giá', 'bảng giá', 'chi phí', 'tiền', 'gói', 'starter', 'pro', 'advanced', 'price', 'pricing', 'cost'],
-      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) - Tự động sổ kế toán Thông tư 152/2025/TT-BTC, kết nối 1 ngân hàng, tiết kiệm 30% chi phí so với phần mềm truyền thống.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) - Tích hợp Cổng Thuế NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) - Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 14 ngày MIỄN PHÍ quét VietQR không cần thẻ tín dụng!',
-      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) - Circular 152/2025 ledgers, 1 bank sync, saves 30% vs traditional legacy tools.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) - Decree 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) - Vision AI receipt scanning & multi-branch management.\nAll plans include a 14-Day Risk-Free Trial without credit card required!'
+      vi: 'Bảng giá A-Sổ gồm 3 gói tối ưu: \n1. Gói Khởi Điểm (Starter): 149.000đ/tháng (1.788.000đ/năm) - Tự động sổ kế toán Thông tư 152/2025/TT-BTC, kết nối 1 ngân hàng, tiết kiệm 30% chi phí so với phần mềm truyền thống.\n2. Gói Tự Động (Pro - Khuyên dùng): 249.000đ/tháng (2.988.000đ/năm) - Tích hợp Cổng Thuế NĐ70 & NĐ123, bảng cảnh báo Đèn Giao Thông, đa ngân hàng.\n3. Gói Toàn Diện (Advanced): 399.000đ/tháng (4.788.000đ/năm) - Vision AI quét bóc tách hóa đơn giấy, quản lý chuỗi đa chi nhánh.\nĐặc biệt: Dùng thử 14 ngày MIỄN PHÍ quét VietQR không cần thẻ tín dụng!',
+      en: 'A-Sổ transparent pricing tiers: \n1. Starter: 149,000 VND/mo (1,788,000 VND/yr) - Circular 152/2025 ledgers, 1 bank sync, saves 30% vs traditional legacy tools.\n2. Pro (Recommended): 249,000 VND/mo (2,988,000 VND/yr) - Decree 70 & 123 Tax Portal sync, Traffic Light hazard alerts, multi-bank.\n3. Advanced: 399,000 VND/mo (4,788,000 VND/yr) - Vision AI receipt scanning & multi-branch management.\nAll plans include a 14-Day Risk-Free Trial without credit card required!'
     },
     demo: {
       keywords: ['demo', 'dùng thử', 'trial', 'liên hệ', 'contact', 'triển khai', 'deploy', 'bắt đầu'],
@@ -64,8 +64,8 @@ export default function AIAgentDrawer() {
   const answerQuestion = (query) => {
     const q = query.toLowerCase();
     let reply = lang === 'vi' 
-      ? 'Cảm ơn bạn đã quan tâm. Nền tảng A-Sổ của Archonic chuyên tự động hóa toàn diện 7 loại sổ kế toán Thông tư 88 và đối chiếu hóa đơn điện tử Nghị định 123. Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn triển khai chi tiết.'
-      : 'Thank you for your interest. Archonic\'s A-Sổ platform automates the 7 mandatory Circular 88 ledgers and Decree 123 e-invoice reconciliation. Please leave your details on our Contact page to connect with an A-Sổ solutions specialist.';
+      ? 'Cảm ơn bạn đã quan tâm. Nền tảng A-Sổ của Archonic chuyên tự động hóa toàn diện hệ thống sổ kế toán Thông tư 152/2025/TT-BTC và đối chiếu hóa đơn điện tử Nghị định 70 & 123. Bạn có thể để lại thông tin tại trang Liên Hệ để chuyên gia kỹ thuật tư vấn triển khai chi tiết.'
+      : 'Thank you for your interest. Archonic\'s A-Sổ platform automates Circular 152/2025 statutory accounting books and Decree 70/123 e-invoice reconciliation. Please leave your details on our Contact page to connect with an A-Sổ solutions specialist.';
 
     for (const item of Object.values(knowledgeBase)) {
       if (item.keywords.some(k => q.includes(k))) {

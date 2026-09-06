@@ -8,21 +8,21 @@
   },
   "hero": {
     "pre": "AUTOMATED TAX LEDGER & REVENUE COMPLIANCE",
-    "title": "A-Sổ — Automated Circular 88 Tax Ledger & Revenue Platform",
-    "subtitle": "Comprehensive automation for the 7 mandatory accounting ledgers, Decree 123 e-invoice reconciliation, and real-time cashflow management for Vietnamese SMEs and household businesses.",
+    "title": "A-Sổ — Automated Circular 152 Tax Ledger & Revenue Platform",
+    "subtitle": "Comprehensive automation for Circular 152/2025/TT-BTC accounting ledgers, Decree 70 & 123 e-invoice reconciliation, and real-time cashflow management for Vietnamese SMEs and household businesses.",
     "cta": "Get Started with A-Sổ",
     "cta2": "Explore Features"
   },
   "trust": {
-    "badge1": "Circular 88/2021/TT-BTC Standardized (7/7 Ledgers)",
-    "badge2": "Decree 123/2020/ND-CP E-Invoicing Engine",
+    "badge1": "Circular 152/2025/TT-BTC Standardized",
+    "badge2": "Decree 70 & 123 E-Invoicing Engine",
     "infraTitle": "Enterprise Security & Cloud Infrastructure Standards",
     "infra1": "Bank-Grade Financial Encryption AES-256 & E2EE",
     "infra1Sub": "Zero-trust data security for all fiscal records",
     "infra2": "Google Cloud Run Infrastructure SLA 99.9%",
     "infra2Sub": "Self-healing auto-scaling cloud with 24/7 uptime",
     "infra3": "Tax Authority Portal Sync",
-    "infra3Sub": "Real-time Decree 123 verification against tax servers",
+    "infra3Sub": "Real-time Decree 70/123 verification against tax servers",
     "infra4": "Multi-Zone Automated Cloud Backups",
     "infra4Sub": "Zero data loss guarantee with rapid disaster recovery"
   },
@@ -32,11 +32,11 @@
     "status": "Auto-Ingesting & Ledger Syncing",
     "feedHeader": "Live Transactions & Automated Ledger Feed",
     "feedLiveBadge": "Real-time",
-    "complianceScore": "100% Circular 88 & Decree 123 Compliant",
+    "complianceScore": "100% Circular 152 & Decree 70/123 Compliant",
     "auditReady": "Instant Audit-Ready & Tax Report Status",
-    "exportBtn": "Export 7 Ledgers (Excel / XML)",
-    "ledgerProgressTitle": "7 Mandatory Accounting Ledgers Status",
-    "ledger1": "Revenue Ledger (S1-HKD)",
+    "exportBtn": "Export Ledgers (Excel / XML)",
+    "ledgerProgressTitle": "Circular 152 Accounting Ledgers Status",
+    "ledger1": "Revenue Ledger (S1a-HKD)",
     "ledger1Status": "Revenue locked & reconciled",
     "ledger2": "Goods & Expense Ledgers (S2, S3-HKD)",
     "ledger2Status": "100% Decree 123 matched",
@@ -68,17 +68,17 @@
       "title": "End-of-Day Cashflow Reconciliation",
       "desc": "Balanced Cash Ledger (S4) & Expense Ledger (S3)",
       "amount": "100% Balanced",
-      "tag": "Circular 88 Ready",
+      "tag": "Circular 152 Ready",
       "time": "15s ago"
     }
   },
   "products": {
     "title": "A-Sổ Core Architecture",
     "module1": {
-      "name": "7 Mandatory Accounting Ledgers",
-      "tagline": "Circular 88/2021/TT-BTC Standardized",
-      "desc": "Automates all 7 mandatory books: Revenue (S1-HKD), Inventory (S2-HKD), Expenses (S3-HKD), Cash on Hand (S4-HKD), Bank Deposits (S5-HKD), Tax Liabilities (S6-HKD), and Payroll (S7-HKD). Audit-ready 24/7.",
-      "tag": "7/7 CIRCULAR 88 LEDGERS"
+      "name": "Circular 152 Statutory Ledgers",
+      "tagline": "Circular 152/2025/TT-BTC Standardized",
+      "desc": "Automates statutory books mapped to tax calculation regimes: S1a-HKD (under threshold), S2a-HKD (% of revenue), and the 4-book bundle S2b, S2c, S2d, S2e (tax on taxable income). Audit-ready 24/7.",
+      "tag": "CIRCULAR 152 COMPLIANT"
     },
     "module2": {
       "name": "Automated E-Invoice Reconciliation",
@@ -214,9 +214,9 @@
   },
   "metrics": {
     "title": "A-Sổ Engineering & Compliance Truths",
-    "stat1": { "value": "7/7", "label": "Mandatory Circular 88 Ledgers" },
+    "stat1": { "value": "100%", "label": "Circular 152 Compliant Ledgers" },
     "stat2": { "value": "< 1.2s", "label": "E-Invoice Cross-Reconciliation" },
-    "stat3": { "value": "100%", "label": "Circular 88 & Decree 123 Compliant" },
+    "stat3": { "value": "100%", "label": "Circular 152 & Decree 70/123 Compliant" },
     "stat4": { "value": "E2EE", "label": "End-to-End Encrypted Financial Ledger" }
   },
   "about": {
@@ -240,15 +240,15 @@
   },
   "aiAgent": {
     "badge": "Archonic A-Sổ Sales Engineer AI",
-    "welcome": "Hello! I am the Archonic A-Sổ Solutions Architect. Ask me anything about automating the 7 Circular 88 ledgers, Decree 123 e-invoicing, or deployment pricing for A-Sổ.",
-    "prompt1": "What 7 ledgers does A-Sổ automate for TT 88?",
-    "prompt2": "How does A-Sổ reconcile Decree 123 e-invoices?",
+    "welcome": "Hello! I am the Archonic A-Sổ Solutions Architect. Ask me anything about automating Circular 152/2025 ledgers, Decree 70/123 e-invoicing, or deployment pricing for A-Sổ.",
+    "prompt1": "How does A-Sổ categorize ledgers under Circular 152?",
+    "prompt2": "How does A-Sổ reconcile Decree 70 & 123 e-invoices?",
     "prompt3": "How do I deploy A-Sổ for my business?",
     "inputPlaceholder": "Ask a question about A-Sổ or tax regulations...",
     "send": "Send"
   },
   "footer": {
     "tagline": "A-Sổ — Automated tax ledger & revenue compliance infrastructure.",
-    "rights": "© 2026 Archonic. All rights reserved. Compliant with Circular 88 & Decree 123."
+    "rights": "© 2026 Archonic. All rights reserved. Compliant with Circular 152 & Decree 70/123."
   }
 }

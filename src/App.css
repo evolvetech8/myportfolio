@@ -3902,7 +3902,8 @@ a:hover { color: var(--archonic-amber); }
   margin-bottom: 6px;
 }
 
-.ledger-badge-tt88 {
+.ledger-badge-tt88,
+.ledger-badge-tt152 {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -4794,4 +4795,66 @@ a:hover { color: var(--archonic-amber); }
   border-color: #00f5d4;
   color: #00f5d4;
   font-weight: 700;
+}
+
+/* ND70/2025/ND-CP Compliance Callout */
+.nd70-compliance-callout {
+  background: rgba(0, 245, 212, 0.04);
+  border: 1px solid rgba(0, 245, 212, 0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+.nd70-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #00f5d4;
+  margin-bottom: 4px;
+}
+.nd70-desc {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Audit rule tags and high-value confirmation badge */
+.audit-rule-tag {
+  display: inline-block;
+  font-size: 10px;
+  color: #00f5d4;
+  background: rgba(0, 245, 212, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  border: 1px solid rgba(0, 245, 212, 0.15);
+}
+.warning-confirmation-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+.secret-rotate-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.secret-rotate-btn:hover {
+  border-color: #00f5d4;
+  color: #00f5d4;
 }

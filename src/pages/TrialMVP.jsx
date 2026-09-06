@@ -63,7 +63,18 @@ export default function TrialMVP() {
   const [copiedWebhook, setCopiedWebhook] = useState(false);
   const [liveSyncLoading, setLiveSyncLoading] = useState(false);
   const [streamSecret, setStreamSecret] = useState('sec_aso_trial_2026');
-  const [revenueTier, setRevenueTier] = useState('under500m'); // 'under500m' (S1a) | '500m_3b' (S2b) | 'over3b' (S2c)
+  const [taxRegime, setTaxRegime] = useState('group1'); // 'group1' (S1a) | 'group2' (S2a) | 'group3' (Bộ 4 Sổ: S2b, S2c, S2d, S2e)
+
+  // Rotate / regenerate secret token for webhook & session security
+  const rotateSecretKey = () => {
+    const newKey = 'sec_aso_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now().toString(36);
+    setStreamSecret(newKey);
+    setActiveToast({
+      title: 'Đã tạo Secret Token mới!',
+      sub: 'Mã token mới đã được áp dụng. Vui lòng cập nhật Bearer token mới vào cổng kết nối ngân hàng.'
+    });
+    setTimeout(() => setActiveToast(null), 4500);
+  };
 
   // Audio Chime (Vietnamese Cash Register Ting-Ting Sound via Web Audio API)
   const playTingSound = () => {
@@ -97,7 +108,7 @@ export default function TrialMVP() {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  // Helper to ingest an incoming live transaction from SSE or Polling
+  // Helper to ingest an incoming live transaction from Webhook or Polling
   const handleIncomingRealTransaction = useCallback((tx) => {
     if (!tx || !tx.amount) return;
 
@@ -111,11 +122,15 @@ export default function TrialMVP() {
       setJustIngested(true);
       setTimeout(() => setJustIngested(false), 2400);
 
+      const assignedBook = tx.isTaxable
+        ? (taxRegime === 'group1' ? 'Mẫu S1a-HKD' : taxRegime === 'group2' ? 'Mẫu S2a-HKD' : 'Bộ 4 Sổ (S2b, S2c, S2d, S2e)')
+        : 'Dòng tiền loại trừ';
+
       setActiveToast({
         title: tx.isTaxable
-          ? `Nhận biến động số dư VietQR THẬT: +${tx.formatted}`
-          : `Phát hiện dòng tiền nội bộ THẬT: +${tx.formatted}`,
-        sub: `Từ cổng Webhook ngân hàng thực tế. Tự động ghi nhận vào Sổ S1-HKD.`
+          ? `Nhận biến động số dư VietQR: +${tx.formatted}`
+          : `Phát hiện dòng tiền vốn/nội bộ: +${tx.formatted}`,
+        sub: `Đã đối soát vào ${assignedBook} (Chuẩn TT 152/2025).`
       });
       setTimeout(() => setActiveToast(null), 5000);
 
@@ -128,10 +143,14 @@ export default function TrialMVP() {
         category: tx.category,
         isTaxable: tx.isTaxable,
         overrideReason: tx.overrideReason,
+        auditRule: tx.auditRule || (tx.isTaxable ? 'RULE-REV-01: Bán hàng lẻ / Dịch vụ chịu thuế' : 'RULE-EX-01: Dòng tiền nội bộ / Vay vốn (Miễn thuế Điều 4 TT152)'),
+        requiresConfirmation: tx.requiresConfirmation || (tx.amount >= 10000000 && !tx.isTaxable),
         retailRevenue: tx.isTaxable ? tx.amount : 0,
         formattedRetail: tx.isTaxable ? tx.formatted : '0đ',
         taxStatus: tx.taxStatus,
-        standard: 'TT152/2025/TT-BTC'
+        standard: 'TT152/2025/TT-BTC',
+        assignedBook: assignedBook,
+        nd70Compliance: tx.amount >= 1000000000 ? 'Bắt buộc HĐĐT-MTT (Nghị định 70/2025)' : 'Khớp HĐĐT NĐ 123'
       };
 
       if (tx.isTaxable) {
@@ -140,64 +159,20 @@ export default function TrialMVP() {
 
       return [newRow, ...prevLedger];
     });
-  }, [bankDetails.storeName]);
+  }, [bankDetails.storeName, taxRegime]);
 
-  // SECURE SERVER-SENT EVENTS (SSE) STREAM: Private topic derived from merchant secret token
-  useEffect(() => {
-    if (!isBankConnected || !isLiveListening) return;
-
-    const cleanAccount = String(bankDetails.accountNumber).replace(/[^a-zA-Z0-9]/g, '');
-    const secureStreamToken = streamSecret ? streamSecret.slice(0, 16) : 'trial_stream_2026';
-    let eventSourceSecure;
-    let eventSourceAccount;
-
-    try {
-      // Primary: Connect to unguessable private topic (protects merchant financial privacy)
-      eventSourceSecure = new EventSource(`https://ntfy.sh/aso_sec_${secureStreamToken}/sse`);
-      eventSourceSecure.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data && data.event === 'message' && data.message) {
-            const tx = JSON.parse(data.message);
-            handleIncomingRealTransaction(tx);
-          }
-        } catch (e) {
-          // Ignore parse errors
-        }
-      };
-
-      // Fallback: Account-specific topic
-      if (cleanAccount) {
-        eventSourceAccount = new EventSource(`https://ntfy.sh/aso_live_${cleanAccount}/sse`);
-        eventSourceAccount.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            if (data && data.event === 'message' && data.message) {
-              const tx = JSON.parse(data.message);
-              handleIncomingRealTransaction(tx);
-            }
-          } catch (e) {
-            // Ignore parse errors
-          }
-        };
-      }
-    } catch (err) {
-      console.warn('SSE initialization notice:', err);
-    }
-
-    return () => {
-      if (eventSourceSecure) eventSourceSecure.close();
-      if (eventSourceAccount) eventSourceAccount.close();
-    };
-  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, streamSecret, handleIncomingRealTransaction]);
-
-  // LIVE POLLING LOOP (Resilience fallback): Polls /api/transactions for incoming real transfers
+  // PRIVATE & SECURE IN-HOUSE REAL-TIME POLLING LOOP
+  // Compliant with Decree 13/2023/ND-CP: Strictly inside application domain, authenticated via Bearer token
   useEffect(() => {
     if (!isBankConnected || !isLiveListening) return;
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/transactions?accountNumber=${bankDetails.accountNumber}`);
+        const res = await fetch(`/api/transactions?accountNumber=${bankDetails.accountNumber}`, {
+          headers: {
+            'Authorization': `Bearer ${streamSecret}`
+          }
+        });
         if (!res.ok) return;
         const data = await res.json();
         if (data && data.transactions && data.transactions.length > 0) {
@@ -208,10 +183,10 @@ export default function TrialMVP() {
       } catch (err) {
         // Network resilience
       }
-    }, 3000);
+    }, 2000);
 
     return () => clearInterval(interval);
-  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, handleIncomingRealTransaction]);
+  }, [isBankConnected, isLiveListening, bankDetails.accountNumber, streamSecret, handleIncomingRealTransaction]);
 
   const topBanks = [
     { code: 'MB', name: 'MBBank (Ngân Hàng Quân Đội)' },
@@ -247,6 +222,16 @@ export default function TrialMVP() {
       gateway: 'Napas 247 VietQR'
     };
 
+    const assignedBook = isTaxable
+      ? (taxRegime === 'group1' ? 'Mẫu S1a-HKD' : taxRegime === 'group2' ? 'Mẫu S2a-HKD' : 'Bộ 4 Sổ (S2b, S2c, S2d, S2e)')
+      : 'Dòng tiền loại trừ';
+
+    const auditRule = isInternalKeyword 
+      ? 'RULE-EX-01: Phát hiện từ khóa dòng tiền vốn/nội bộ (Không tính thuế theo Điều 4 TT152)' 
+      : (amount >= 20000000 
+          ? 'RULE-REV-02: Giao dịch giá trị lớn (Cần xác nhận chứng từ kèm theo)' 
+          : 'RULE-REV-01: Giao dịch bán hàng lẻ/dịch vụ chịu thuế');
+
     const newLedgerRow = {
       id: `S1-${Date.now().toString().slice(-6)}`,
       rawAmount: amount,
@@ -256,10 +241,14 @@ export default function TrialMVP() {
       category: isTaxable ? 'Bán lẻ' : 'Dòng tiền nội bộ (Bỏ qua)',
       isTaxable: isTaxable,
       overrideReason: isInternalKeyword ? 'Phát hiện từ khóa dòng tiền nội bộ (Không tính thuế)' : null,
+      auditRule: auditRule,
+      requiresConfirmation: amount >= 10000000 && !isTaxable,
       retailRevenue: isTaxable ? amount : 0,
       formattedRetail: isTaxable ? `${formattedAmount}đ` : '0đ',
       taxStatus: isTaxable ? 'Khớp 100% CQT' : 'Miễn thuế',
-      standard: 'TT152/2025/TT-BTC'
+      standard: 'TT152/2025/TT-BTC',
+      assignedBook: assignedBook,
+      nd70Compliance: amount >= 1000000000 ? 'Bắt buộc HĐĐT-MTT (Nghị định 70/2025)' : 'Khớp HĐĐT NĐ 123'
     };
 
     // Update transactions & ledger
@@ -286,7 +275,7 @@ export default function TrialMVP() {
     setTimeout(() => setActiveToast(null), 4500);
   };
 
-  // SEND REAL HTTP POST WEBHOOK TO VERCEL SERVERLESS BACKEND WITH AUTH TOKEN
+  // SEND REAL HTTP POST WEBHOOK TO VERCEL SERVERLESS BACKEND WITH HEADER BEARER AUTH
   const sendRealWebhookTransaction = async (amount = 150000, note = 'Khách thanh toán đồ uống tại quầy') => {
     const payload = {
       amountIn: amount,
@@ -296,11 +285,11 @@ export default function TrialMVP() {
       gateway: bankDetails.bankName,
       referenceCode: `VQR-${Date.now().toString().slice(-6)}`,
       transactionDate: new Date().toISOString(),
-      streamToken: streamSecret.slice(0, 16)
+      taxGroup: taxRegime
     };
 
     try {
-      const res = await fetch(`/api/webhook?secret=${streamSecret}`, {
+      const res = await fetch('/api/webhook', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -309,7 +298,12 @@ export default function TrialMVP() {
         body: JSON.stringify(payload)
       });
 
-      if (!res.ok) {
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.transaction) {
+          handleIncomingRealTransaction(data.transaction);
+        }
+      } else {
         triggerVietQRTransaction(amount, note);
       }
     } catch (err) {
@@ -353,6 +347,16 @@ export default function TrialMVP() {
             const isInternal = /(noi bo|chuyen khoan noi bo|rut tien|nop tien|vay|tra no|hoan tien|sua chua|von chu so huu|nap tien|chuyen tien cho)/.test(lower);
             const isTax = amt < 20000000 && !isInternal;
 
+            const assignedBook = isTax
+              ? (taxRegime === 'group1' ? 'Mẫu S1a-HKD' : taxRegime === 'group2' ? 'Mẫu S2a-HKD' : 'Bộ 4 Sổ (S2b, S2c, S2d, S2e)')
+              : 'Dòng tiền loại trừ';
+
+            const auditRule = isInternal
+              ? 'RULE-EX-01: Phát hiện từ khóa dòng tiền vốn/nội bộ (Không tính thuế theo Điều 4 TT152)'
+              : (amt >= 20000000
+                  ? 'RULE-REV-02: Giao dịch giá trị lớn (Cần xác nhận chứng từ kèm theo)'
+                  : 'RULE-REV-01: Giao dịch bán hàng lẻ/dịch vụ chịu thuế');
+
             newRows.push({
               id: `S1-${txId}`,
               rawAmount: amt,
@@ -362,10 +366,14 @@ export default function TrialMVP() {
               category: isTax ? 'Bán lẻ' : 'Dòng tiền nội bộ (Bỏ qua)',
               isTaxable: isTax,
               overrideReason: isInternal ? 'Phát hiện từ khóa dòng tiền nội bộ (Không tính thuế)' : null,
+              auditRule: auditRule,
+              requiresConfirmation: amt >= 10000000 && !isTax,
               retailRevenue: isTax ? amt : 0,
               formattedRetail: isTax ? `${new Intl.NumberFormat('vi-VN').format(amt)}đ` : '0đ',
               taxStatus: isTax ? 'Khớp 100% CQT' : 'Miễn thuế',
-              standard: 'TT152/2025/TT-BTC'
+              standard: 'TT152/2025/TT-BTC',
+              assignedBook: assignedBook,
+              nd70Compliance: amt >= 1000000000 ? 'Bắt buộc HĐĐT-MTT (Nghị định 70/2025)' : 'Khớp HĐĐT NĐ 123'
             });
 
             if (isTax) {
@@ -381,7 +389,7 @@ export default function TrialMVP() {
           playTingSound();
           setActiveToast({
             title: `Đồng bộ thành công ${addedCount} giao dịch từ SePay!`,
-            sub: `Dữ liệu thật từ tài khoản ${bankDetails.bankCode} đã nạp vào Sổ S1a-HKD (TT 152/2025).`
+            sub: `Dữ liệu thật từ tài khoản ${bankDetails.bankCode} đã nạp vào sổ kế toán chuẩn TT 152/2025.`
           });
           setTimeout(() => setActiveToast(null), 5000);
         } else {
@@ -402,7 +410,7 @@ export default function TrialMVP() {
     }
   };
 
-  // INLINE MANUAL OVERRIDE (Vulnerability #1 Fix)
+  // INLINE MANUAL OVERRIDE (Tax Classification Override)
   const handleToggleRowTaxable = (rowId) => {
     setS1Ledger((prev) => {
       let diff = 0;
@@ -410,13 +418,22 @@ export default function TrialMVP() {
         if (row.id === rowId) {
           const nextTaxable = !row.isTaxable;
           diff = nextTaxable ? row.rawAmount : -row.rawAmount;
+          const nextBook = nextTaxable
+            ? (taxRegime === 'group1' ? 'Mẫu S1a-HKD' : taxRegime === 'group2' ? 'Mẫu S2a-HKD' : 'Bộ 4 Sổ (S2b, S2c, S2d, S2e)')
+            : 'Dòng tiền loại trừ';
+
           return {
             ...row,
             isTaxable: nextTaxable,
             category: nextTaxable ? 'Bán lẻ' : 'Dòng tiền nội bộ (Bỏ qua)',
             formattedRetail: nextTaxable ? `${new Intl.NumberFormat('vi-VN').format(row.rawAmount)}đ` : '0đ',
             taxStatus: nextTaxable ? 'Khớp 100% CQT' : 'Miễn thuế',
-            overrideReason: nextTaxable ? null : 'Chủ hộ kinh doanh bỏ qua (Không phải doanh thu chịu thuế)'
+            overrideReason: nextTaxable ? null : 'Chủ hộ kinh doanh bỏ qua (Không phải doanh thu chịu thuế)',
+            assignedBook: nextBook,
+            auditRule: nextTaxable 
+              ? 'RULE-REV-01: Đã chuyển thành doanh thu chịu thuế theo chỉ định của hộ kinh doanh' 
+              : 'RULE-EX-02: Bóc tách thủ công khỏi doanh thu chịu thuế (Không tính thuế Điều 4 TT152)',
+            requiresConfirmation: false
           };
         }
         return row;
@@ -427,8 +444,8 @@ export default function TrialMVP() {
     });
 
     setActiveToast({
-      title: 'Đã cập nhật trạng thái phân loại sổ S1',
-      sub: 'Số tiền thuế đã được tính toán lại chính xác theo lựa chọn của bạn.'
+      title: 'Đã cập nhật trạng thái phân loại sổ kế toán',
+      sub: 'Số tiền và nghĩa vụ thuế đã được tính toán lại chính xác theo quy chuẩn Thông tư 152.'
     });
     setTimeout(() => setActiveToast(null), 3500);
   };
@@ -523,7 +540,7 @@ export default function TrialMVP() {
           <SparklesIcon size={16} color="#FFA100" />
           <span className="trial-status-chip">14 NGÀY DÙNG THỬ MIỄN PHÍ</span>
           <span className="trial-divider">•</span>
-          <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 88 & NĐ 123</span>
+          <span className="trial-meta-text">Không cần thẻ tín dụng • Chuẩn Thông tư 152/2025 & NĐ 70/2025</span>
         </div>
         <div className="trial-top-actions">
           <button 
@@ -703,7 +720,7 @@ export default function TrialMVP() {
             <span className="welcome-step-chip">BƯỚC 1 / 2: KHỞI TẠO DÒNG TIỀN</span>
             <h2 className="welcome-title">Chào Mừng Bạn Đến Với A-Sổ</h2>
             <p className="welcome-desc">
-              Để phần mềm bắt đầu tự động hóa 7 loại sổ kế toán Thông tư 88 và đối chiếu doanh thu thời gian thực, 
+              Để phần mềm bắt đầu tự động hóa hệ thống sổ kế toán Thông tư 152/2025/TT-BTC và đối soát HĐĐT theo Nghị định 70/2025/NĐ-CP, 
               hãy kết nối tài khoản ngân hàng nhận tiền quét mã VietQR tại quầy của bạn.
             </p>
             <div className="welcome-benefits-row">
@@ -817,33 +834,61 @@ export default function TrialMVP() {
                   Hệ thống kết nối trực tiếp với cổng Webhook Open Banking. Bạn có thể <strong>quét mã VietQR bằng app ngân hàng thật</strong> để kiểm thử thực tế, hoặc đấu nối cổng SePay/Casso tự động:
                 </p>
 
-                {/* Authenticated Webhook URL Card with Copy Button */}
+                {/* Authenticated Webhook Card with Header Bearer Token */}
                 <div className="live-webhook-card">
                   <div className="live-webhook-label">
-                    <span>URL Webhook Được Bảo Vệ Bằng Secret Token:</span>
-                    <span style={{ color: '#00f5d4' }}>Bảo Mật Chống Giả Mạo</span>
+                    <span>Cổng Webhook Ngân Hàng (HTTP POST):</span>
+                    <span style={{ color: '#00f5d4' }}>Header Auth Bắt Buộc</span>
                   </div>
-                  <div className="live-webhook-input-row">
+                  <div className="live-webhook-input-row" style={{ marginBottom: '8px' }}>
                     <input 
                       type="text" 
                       readOnly 
-                      value={`https://www.evolvetech.biz.vn/api/webhook?secret=${streamSecret}`} 
+                      value="https://www.evolvetech.biz.vn/api/webhook" 
                       className="live-webhook-input"
                     />
                     <button 
                       type="button" 
                       onClick={() => {
-                        navigator.clipboard.writeText(`https://www.evolvetech.biz.vn/api/webhook?secret=${streamSecret}`);
+                        navigator.clipboard.writeText("https://www.evolvetech.biz.vn/api/webhook");
                         setCopiedWebhook(true);
                         setTimeout(() => setCopiedWebhook(false), 2000);
                       }}
                       className="live-copy-btn"
                     >
-                      {copiedWebhook ? 'Đã Chép' : 'Sao Chép'}
+                      {copiedWebhook ? 'Đã Chép' : 'Sao Chép URL'}
                     </button>
                   </div>
-                  <div style={{ marginTop: '6px', fontSize: '10px', color: '#64748b', lineHeight: 1.4 }}>
-                    Bảo mật: Giao dịch chỉ được ghi sổ khi có Secret Key hợp lệ. Luồng SSE được mã hóa định danh riêng tư.
+
+                  <div className="live-webhook-label">
+                    <span>Authorization Bearer Token (Bảo mật riêng tư):</span>
+                    <button type="button" onClick={rotateSecretKey} className="secret-rotate-btn">
+                      Tạo mã mới
+                    </button>
+                  </div>
+                  <div className="live-webhook-input-row">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={`Bearer ${streamSecret}`} 
+                      className="live-webhook-input"
+                      style={{ color: '#00f5d4' }}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        navigator.clipboard.writeText(`Bearer ${streamSecret}`);
+                        setActiveToast({ title: 'Đã sao chép Bearer Token!', sub: 'Dán vào trường Authorization trên cổng Webhook của bạn.' });
+                        setTimeout(() => setActiveToast(null), 3000);
+                      }}
+                      className="live-copy-btn"
+                    >
+                      Sao Chép Token
+                    </button>
+                  </div>
+
+                  <div style={{ marginTop: '8px', fontSize: '10px', color: '#64748b', lineHeight: 1.4 }}>
+                    Chuẩn an toàn: Không nhúng token vào URL để tránh lộ log truy cập. Dữ liệu tài chính được xử lý nội bộ, không chuyển tiếp ra máy chủ công cộng bên thứ ba (Tuân thủ Nghị định 13/2023/NĐ-CP).
                   </div>
                 </div>
 
@@ -997,7 +1042,7 @@ export default function TrialMVP() {
                   <div className="comp-col comp-kiotviet">
                     <div className="comp-brand-tag">KiotViet (POS Bán hàng)</div>
                     <ul className="comp-list">
-                      <li>• <strong>Chưa tối ưu TT 152/2025:</strong> Chưa hỗ trợ phân tầng doanh thu (S1a/S2b), chỉ in hóa đơn bán hàng.</li>
+                      <li>• <strong>Chưa tối ưu TT 152/2025:</strong> Chưa hỗ trợ phân loại theo phương pháp tính thuế TT 152 (S1a/S2a/Bộ 4 Sổ), chỉ in bill quầy.</li>
                       <li>• <strong>Mất 30h/tháng gõ Excel:</strong> Phải xuất file ra rồi tự nhập liệu lại vào phần mềm kế toán.</li>
                       <li>• <strong>Lỗi kết nối HĐĐT:</strong> Nghẽn lệnh giờ cao điểm, phụ thuộc vào kết nối máy in tại quầy.</li>
                     </ul>
@@ -1016,57 +1061,72 @@ export default function TrialMVP() {
                       <span>A-Sổ (Chuẩn TT 152/2025/TT-BTC)</span>
                     </div>
                     <ul className="comp-list">
-                      <li>• <strong>Chuẩn Gốc Thông Tư 152/2025:</strong> Tự động xếp Sổ S1a-HKD, S2b-HKD theo đúng ngưỡng doanh thu.</li>
+                      <li>• <strong>Chuẩn Gốc Thông Tư 152/2025:</strong> Tự động phân loại Sổ S1a, S2a hoặc Bộ 4 Sổ (S2b-S2e) theo phương pháp thuế.</li>
                       <li>• <strong>Bộ Lọc Chống Thuế Oan (Tax Shield):</strong> Tự bóc tách tiền vay, nạp vốn cá nhân + quyền Bỏ qua 1-chạm.</li>
-                      <li>• <strong>Khép Kín Cơ Quan Thuế:</strong> Tự động đối soát hóa đơn điện tử Nghị định 123, xuất XML chuẩn CQT.</li>
+                      <li>• <strong>Khép Kín Cơ Quan Thuế:</strong> Tự động đối soát hóa đơn điện tử Nghị định 70 & 123, xuất XML chuẩn CQT.</li>
                     </ul>
                   </div>
                 </div>
               </div>
 
-              {/* S1a/S2b-HKD Ledger Table (Circular 152/2025/TT-BTC Standard) */}
+              {/* S1a/S2a/S2b-HKD Ledger Table (Circular 152/2025/TT-BTC Standard) */}
               <div className="s1-ledger-box glass-panel">
                 <div className="ledger-box-header">
                   <div>
                     <div className="ledger-tag-row">
-                      <span className="ledger-badge-tt88">
-                        MẪU {revenueTier === 'under500m' ? 'S1a-HKD' : revenueTier === '500m_3b' ? 'S2b-HKD' : 'S2c-HKD'}
+                      <span className="ledger-badge-tt152">
+                        {taxRegime === 'group1' && 'NHÓM 1: MẪU S1a-HKD'}
+                        {taxRegime === 'group2' && 'NHÓM 2: MẪU S2a-HKD'}
+                        {taxRegime === 'group3' && 'NHÓM 3: BỘ 4 SỔ (S2b, S2c, S2d, S2e)'}
                       </span>
-                      <span className="ledger-badge-legal">THÔNG TƯ 152/2025/TT-BTC (MỚI NHẤT)</span>
-                      <span className="ledger-badge-compliance">ĐỐI SOÁT HĐĐT CƠ QUAN THUẾ</span>
+                      <span className="ledger-badge-legal">THÔNG TƯ 152/2025/TT-BTC</span>
+                      <span className="ledger-badge-compliance">ĐỐI SOÁT HĐĐT NGHỊ ĐỊNH 70 & 123</span>
                     </div>
 
-                    {/* TT152 Revenue Tier Selector */}
+                    {/* TT152 Statutory Tax Regime Selector */}
                     <div className="tt152-tier-selector">
-                      <span className="tt152-tier-label">Quy mô doanh thu (TT152):</span>
+                      <span className="tt152-tier-label">Phương pháp tính thuế (TT152):</span>
                       <button 
                         type="button" 
-                        className={`tt152-tier-btn ${revenueTier === 'under500m' ? 'active' : ''}`}
-                        onClick={() => setRevenueTier('under500m')}
+                        className={`tt152-tier-btn ${taxRegime === 'group1' ? 'active' : ''}`}
+                        onClick={() => setTaxRegime('group1')}
                       >
-                        Dưới 500 triệu/năm (S1a-HKD)
+                        Nhóm 1: Dưới ngưỡng chịu thuế (&lt; 500M) - S1a-HKD
                       </button>
                       <button 
                         type="button" 
-                        className={`tt152-tier-btn ${revenueTier === '500m_3b' ? 'active' : ''}`}
-                        onClick={() => setRevenueTier('500m_3b')}
+                        className={`tt152-tier-btn ${taxRegime === 'group2' ? 'active' : ''}`}
+                        onClick={() => setTaxRegime('group2')}
                       >
-                        500M - 3 tỷ/năm (S2b-HKD)
+                        Nhóm 2: Thuế % trên doanh thu - S2a-HKD
                       </button>
                       <button 
                         type="button" 
-                        className={`tt152-tier-btn ${revenueTier === 'over3b' ? 'active' : ''}`}
-                        onClick={() => setRevenueTier('over3b')}
+                        className={`tt152-tier-btn ${taxRegime === 'group3' ? 'active' : ''}`}
+                        onClick={() => setTaxRegime('group3')}
                       >
-                        Trên 3 tỷ/năm (S2c-HKD)
+                        Nhóm 3: Thuế TNCN theo thu nhập - Bộ 4 Sổ (S2b, S2c, S2d, S2e)
                       </button>
+                    </div>
+
+                    {/* Decree 70/2025/ND-CP Compliance Callout */}
+                    <div className="nd70-compliance-callout">
+                      <div className="nd70-header">
+                        <ShieldIcon size={14} color="#00f5d4" />
+                        <span>Quy Định HĐĐT Khởi Tạo Từ Máy Tính Tiền (Nghị định 70/2025/NĐ-CP)</span>
+                      </div>
+                      <p className="nd70-desc">
+                        Từ 01/06/2025, hộ kinh doanh F&amp;B, bán lẻ có doanh thu từ 1 tỷ đồng/năm bắt buộc kết nối dữ liệu HĐĐT-MTT với Cục Thuế. A-Sổ tự động đối soát giao dịch VietQR ngân hàng với HĐĐT từ các nhà cung cấp (VNPT, Viettel, MISA meInvoice, EasyInvoice) để đảm bảo không lệch sổ khi thanh tra.
+                      </p>
                     </div>
 
                     <h3 className="ledger-box-title">
-                      Sổ Doanh Thu Bán Hàng Hóa, Dịch Vụ ({revenueTier === 'under500m' ? 'Mẫu S1a-HKD' : revenueTier === '500m_3b' ? 'Mẫu S2b-HKD' : 'Mẫu S2c-HKD'})
+                      {taxRegime === 'group1' && 'Sổ Doanh Thu Bán Hàng Hóa, Dịch Vụ (Mẫu S1a-HKD)'}
+                      {taxRegime === 'group2' && 'Sổ Doanh Thu Theo Nhóm Ngành Nghề Thuế Suất (Mẫu S2a-HKD)'}
+                      {taxRegime === 'group3' && 'Hệ Thống 4 Sổ Kế Toán Chi Tiết Doanh Thu & Chi Phí (S2b, S2c, S2d, S2e-HKD)'}
                     </h3>
                     <p className="ledger-box-sub">
-                      Tự động phân loại từ VietQR theo Thông tư 152/2025/TT-BTC. Bạn có quyền <strong>Bỏ qua / Khôi phục</strong> từng dòng trước khi xuất XML nộp thuế.
+                      Tự động phân loại từ VietQR theo chuẩn Thông tư 152/2025/TT-BTC. Bạn có quyền <strong>Bỏ qua / Khôi phục</strong> từng dòng trước khi xuất XML nộp thuế.
                     </p>
                   </div>
                   
@@ -1115,7 +1175,13 @@ export default function TrialMVP() {
                             <td className="desc-col">
                               <div>{row.description}</div>
                               {row.overrideReason && (
-                                <span className="override-reason-hint">↳ {row.overrideReason}</span>
+                                <span className="override-reason-hint">-&gt; {row.overrideReason}</span>
+                              )}
+                              {row.auditRule && (
+                                <div><span className="audit-rule-tag">{row.auditRule}</span></div>
+                              )}
+                              {row.requiresConfirmation && (
+                                <div><span className="warning-confirmation-badge">Cần xác nhận thủ công (Số tiền lớn)</span></div>
                               )}
                             </td>
                             <td>
@@ -1127,7 +1193,7 @@ export default function TrialMVP() {
                               {row.isTaxable ? (
                                 row.formattedRetail
                               ) : (
-                                <span className="excluded-amount-strike">0đ (Đã bỏ qua)</span>
+                                <span className="excluded-amount-strike">0đ (Đã bóc tách)</span>
                               )}
                             </td>
                             <td>
@@ -1143,12 +1209,12 @@ export default function TrialMVP() {
                               </span>
                             </td>
                             <td className="text-center">
-                              {/* VULNERABILITY #1 FIX: INLINE EDIT / IGNORE TOGGLE */}
+                              {/* INLINE EDIT / TAX CLASSIFICATION OVERRIDE TOGGLE */}
                               <button
                                 type="button"
                                 className={`override-toggle-btn ${row.isTaxable ? 'btn-ignore' : 'btn-restore'}`}
                                 onClick={() => handleToggleRowTaxable(row.id)}
-                                title={row.isTaxable ? 'Bỏ qua dòng này (Không phải doanh thu chịu thuế)' : 'Khôi phục tính thuế cho dòng này'}
+                                title={row.isTaxable ? 'Bỏ qua dòng này (Không phải doanh thu chịu thuế)' : 'Chuyển thành doanh thu chịu thuế'}
                               >
                                 {row.isTaxable ? (
                                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -1158,7 +1224,7 @@ export default function TrialMVP() {
                                 ) : (
                                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                     <RefreshCwIcon size={12} color="currentColor" />
-                                    <span>Khôi phục tính thuế</span>
+                                    <span>Chuyển thành doanh thu</span>
                                   </span>
                                 )}
                               </button>
