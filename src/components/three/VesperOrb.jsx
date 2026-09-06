@@ -1,15 +1,20 @@
 import React, { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { scrollState } from '../../hooks/useScrollProgress';
 
 /**
  * VesperOrb — Faithfully replicates the Vesper signature 3D Wavy Particle Torus.
  * Reference: https://storage.getlayers.ai/templates/vesper-06e69bbad0.webp
  *
- * Parametric undulating torus ribbon of 16,200 round glowing particles with
- * smooth gradient from Electric Mint (#00f5d4) to Azure Blue (#3b82f6) to Neon Violet (#a855f7).
+ * Parametric undulating torus ribbon of 16,200 round glowing particles.
+ * Reacts dynamically to scroll position and velocity:
+ * - Rotates and tumbles through 3D space across scroll sections
+ * - Expands outward ("blows open" into a cosmic ring)
+ * - Amplifies wave frequency and ripple height with scroll speed
+ * - Shifts position to frame landing page sections
  */
-const VesperOrb = ({ scrollProgress = 0 }) => {
+const VesperOrb = () => {
   const pointsRef = useRef();
   const groupRef = useRef();
   const { pointer } = useThree();
@@ -18,7 +23,7 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
   const vSteps = 90;
   const particleCount = uSteps * vSteps; // 16,200 points
 
-  // Soft circular particle texture so points render as anti-aliased luminous glowing beads (no squares!)
+  // Soft circular particle texture so points render as anti-aliased luminous glowing beads
   const circleTexture = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
@@ -71,7 +76,6 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
         ang[idx * 2] = u;
         ang[idx * 2 + 1] = v;
 
-        // Base initialization
         pos[idx * 3] = 0;
         pos[idx * 3 + 1] = 0;
         pos[idx * 3 + 2] = 0;
@@ -94,16 +98,27 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
     const positionsAttr = pointsRef.current.geometry.attributes.position;
     const posArray = positionsAttr.array;
 
-    const majorR = 2.4;
-    const minorR = 0.85;
+    // Real-time zero-latency scroll progress (0.0 to 1.0) and velocity from Lenis
+    const progress = scrollState.progress || 0;
+    const velocity = scrollState.velocity || 0;
+
+    // 1. Dynamic Wave Amplification based on scroll speed
+    const speedBoost = Math.min(velocity * 0.0025, 2.5);
+    const waveAmp = (0.28 + speedBoost * 0.15) * (1.0 + progress * 0.6);
+
+    // 2. The "Blows Open" Torus Expansion
+    // As the user scrolls down, the torus opens up into an expansive cosmic ribbon
+    const majorR = 2.4 + progress * 2.6;
+    const minorR = 0.85 + progress * 0.5;
 
     // Fluid undulation waves propagating around the parametric ring
     for (let i = 0; i < particleCount; i++) {
       const u = angles[i * 2];
       const v = angles[i * 2 + 1];
 
-      const wave = Math.sin(u * 4.0 + time * 1.2) * 0.28
-                 + Math.cos(v * 3.0 + time * 1.4) * 0.16
+      // Harmonic waves modulated by scroll velocity
+      const wave = Math.sin(u * 4.0 + time * 1.3 + progress * 3.0) * waveAmp
+                 + Math.cos(v * 3.0 + time * 1.5) * (0.16 + speedBoost * 0.08)
                  + Math.sin(u * 2.0 - v * 2.0 + time * 1.8) * 0.18;
 
       const currentR = majorR + wave;
@@ -111,7 +126,7 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
 
       const x = (currentR + current_r * Math.cos(v)) * Math.cos(u);
       const y = (currentR + current_r * Math.cos(v)) * Math.sin(u);
-      const z = current_r * Math.sin(v) + Math.sin(u * 3.0 + time * 1.1) * 0.32;
+      const z = current_r * Math.sin(v) + Math.sin(u * 3.0 + time * 1.1 + progress * 2.0) * 0.35;
 
       posArray[i * 3] = x;
       posArray[i * 3 + 1] = y;
@@ -120,26 +135,33 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
 
     positionsAttr.needsUpdate = true;
 
-    // Vesper signature 3D tilt: looking diagonally into the ring hole
+    // 3. Dramatic 3D Tumbling on Scroll
+    // Torus twists along all 3 axes as user travels down the page
     const baseRotX = -0.55;
-    const baseRotY = 0.35 + time * 0.05;
+    const baseRotY = 0.35 + time * 0.06;
     const baseRotZ = -0.22;
 
-    const targetRotX = baseRotX + pointer.y * 0.25;
-    const targetRotY = baseRotY + pointer.x * 0.3;
+    const scrollRotX = progress * Math.PI * 1.5;
+    const scrollRotY = progress * Math.PI * 2.2;
+    const scrollRotZ = progress * Math.PI * 0.8;
 
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.05);
-    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.05);
-    groupRef.current.rotation.z = baseRotZ;
+    const targetRotX = baseRotX + scrollRotX + pointer.y * 0.25;
+    const targetRotY = baseRotY + scrollRotY + pointer.x * 0.3;
+    const targetRotZ = baseRotZ + scrollRotZ;
 
-    // Scroll adaptation: scales slightly and glides deeper into space
-    const targetScale = 1.0 - scrollProgress * 0.35;
-    groupRef.current.scale.setScalar(THREE.MathUtils.lerp(groupRef.current.scale.x, Math.max(targetScale, 0.45), 0.08));
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.07);
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, 0.07);
+    groupRef.current.rotation.z = THREE.MathUtils.lerp(groupRef.current.rotation.z, targetRotZ, 0.07);
 
-    const targetY = scrollProgress * -1.5;
-    const targetZ = scrollProgress * -2.0;
-    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.08);
-    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.08);
+    // 4. Horizontal and Vertical Path Following
+    // Glides dynamically to frame different section cards
+    const targetX = Math.sin(progress * Math.PI * 2.0) * 1.6 + 0.2;
+    const targetY = -progress * 2.2 + 0.1;
+    const targetZ = -progress * 2.0;
+
+    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.07);
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.07);
+    groupRef.current.position.z = THREE.MathUtils.lerp(groupRef.current.position.z, targetZ, 0.07);
   });
 
   return (
@@ -171,9 +193,9 @@ const VesperOrb = ({ scrollProgress = 0 }) => {
         />
       </points>
 
-      {/* Subtle Mint & Violet Ambient Core Lights */}
-      <pointLight color="#00f5d4" intensity={2.0} distance={10} position={[-2, 2, 2]} />
-      <pointLight color="#8b5cf6" intensity={2.0} distance={10} position={[2, -2, -1]} />
+      {/* Dynamic Ambient Point Lights */}
+      <pointLight color="#00f5d4" intensity={2.2} distance={12} position={[-2, 2, 2]} />
+      <pointLight color="#8b5cf6" intensity={2.2} distance={12} position={[2, -2, -1]} />
     </group>
   );
 };

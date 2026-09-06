@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect, useRef } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import ParticleField from './ParticleField';
 import VesperOrb from './VesperOrb';
@@ -15,37 +15,18 @@ const checkWebGLSupport = () => {
 };
 
 const SceneContent = () => {
-  const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const reqRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
-    const handleScroll = () => {
-      if (!reqRef.current) {
-        reqRef.current = requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-          const currentProgress = maxScroll > 0 ? Math.min(Math.max(scrollY / maxScroll, 0), 1) : 0;
-          setProgress(currentProgress);
-          reqRef.current = null;
-        });
-      }
-    };
 
     const handleVisibilityChange = () => {
       setIsVisible(document.visibilityState === 'visible');
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    handleScroll();
-
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (reqRef.current) cancelAnimationFrame(reqRef.current);
     };
   }, []);
 
@@ -60,10 +41,10 @@ const SceneContent = () => {
       <ambientLight intensity={0.4} />
 
       {/* Floating deep space bokeh dots */}
-      <ParticleField scrollProgress={progress} />
+      <ParticleField />
 
-      {/* The Vesper Wavy Particle Torus Ribbon */}
-      <VesperOrb scrollProgress={progress} />
+      {/* The Vesper Wavy Particle Torus Ribbon (reads scrollState directly in useFrame) */}
+      <VesperOrb />
     </>
   );
 };
@@ -110,7 +91,7 @@ const SceneCanvasComponent = () => {
         dpr={[1, 2]}
         gl={{ 
           antialias: true, 
-          alpha: false, // Opaque WebGL canvas prevents browser compositor whiteout!
+          alpha: false,
           powerPreference: 'high-performance',
         }}
         style={{ width: '100%', height: '100%' }}
