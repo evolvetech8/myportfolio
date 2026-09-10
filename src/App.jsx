@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import { SmoothScroll } from './components/SmoothScroll';
 import Navbar from './components/Navbar';
@@ -42,12 +42,14 @@ function AppShell() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/trial" element={<TrialMVP />} />
             <Route path="/cpa" element={<AccountantWorkspace />} />
+            <Route path="/cpa/clients/:clientId/ledger" element={<TrialMVP />} />
             <Route path="/accountant" element={<AccountantWorkspace />} />
             <Route path="/portal" element={<AccountantWorkspace initialPortalOpen={true} initialPersona="lan" />} />
             <Route path="/demo/huong" element={<AccountantWorkspace initialPersona="huong" />} />
             <Route path="/demo/tuan" element={<AccountantWorkspace initialPersona="tuan" />} />
             <Route path="/demo/lan" element={<AccountantWorkspace initialPersona="lan" initialPortalOpen={true} />} />
             <Route path="/demo/:personaId" element={<AccountantWorkspace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />

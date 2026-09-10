@@ -107,7 +107,7 @@ async def handle_bank_transfer(request: Request):
         )
 
         if not is_valid_sig and not is_valid_bearer:
-            logger.warning("🚨 BLOCKED: Invalid or missing HMAC signature. Possible spoofing attack attempt!")
+            logger.warning("[SECURITY BLOCKED] Invalid or missing HMAC signature. Possible spoofing attack attempt!")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid HMAC webhook signature. Request rejected."
@@ -134,7 +134,7 @@ async def handle_bank_transfer(request: Request):
     acc_num = data.get("accountNumber") or data.get("subAccount") or "UNKNOWN"
     gateway = data.get("gateway", "sepay")
 
-    logger.info(f"⚡ HMAC Verified: +{amount:,.0f} VND | Acc: {acc_num} | Ref: {ref_code}")
+    logger.info(f"[HMAC VERIFIED] +{amount:,.0f} VND | Acc: {acc_num} | Ref: {ref_code}")
 
     clean_data = {
         "reference_no": str(ref_code),

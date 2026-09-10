@@ -360,7 +360,7 @@ export default function CpaBillingModal({ isOpen, onClose, currentPlan = 'starte
                       onClick={() => {
                         setSelectedPlan(p.id);
                         if (p.id === 'enterprise') {
-                          alert('Quý công ty vui lòng liên hệ hotline 0903-xxx-xxx hoặc gửi email tới contact@evolvetech.biz.vn để nhận hợp đồng riêng cho quy mô trên 200 HKD.');
+                          alert('Quý công ty vui lòng liên hệ hotline 0353.600.900 hoặc gửi email tới archonic88@gmail.com để nhận hợp đồng riêng cho quy mô trên 200 HKD.');
                         } else {
                           setShowQrStep(true);
                         }

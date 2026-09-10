@@ -15,7 +15,7 @@ export default function Pricing({ isStandalone = false }) {
 
   const openCheckout = (planId, trial = false) => {
     if (planId === 'enterprise') {
-      alert('Quý công ty vui lòng liên hệ hotline 0903-xxx-xxx hoặc gửi email tới contact@evolvetech.biz.vn để nhận hợp đồng riêng cho quy mô trên 200 HKD.');
+      navigate('/contact');
       return;
     }
     setCheckoutPlan(planId);

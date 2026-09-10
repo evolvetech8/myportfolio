@@ -43,7 +43,7 @@ export default function TrialMVP() {
   const [honeypot, setHoneypot] = useState('');
 
   // Phase 1: Bank Connection State
-  const [isBankConnected, setIsBankConnected] = useState(!!clientParam);
+  const [isBankConnected, setIsBankConnected] = useState(!!effectiveClientId);
   const [showBankModal, setShowBankModal] = useState(false);
   const [bankDetails, setBankDetails] = useState({
     bankCode: 'MB',

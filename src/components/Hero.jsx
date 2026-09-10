@@ -15,7 +15,7 @@ export default function Hero() {
         <h1 className="hero-title">{t('hero.title')}</h1>
         <p className="hero-subtitle">{t('hero.subtitle')}</p>
         <div className="hero-ctas">
-          <Link to="/contact" className="nano-button">{t('hero.cta')}</Link>
+          <Link to="/cpa" className="nano-button">{t('hero.cta')}</Link>
           <a href="#products" className="hero-cta-secondary">{t('hero.cta2')}</a>
         </div>
 
