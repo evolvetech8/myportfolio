@@ -137,7 +137,7 @@ export default function ScheduleTable() {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* View Mode Toggle */}
-          <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 border border-slate-200 text-xs font-semibold">
+          <div className="bg-slate-100 p-1 rounded-xl flex flex-wrap items-center gap-1 border border-slate-200 text-xs font-semibold">
             <button
               type="button"
               onClick={() => handleViewModeChange('24_MONTHS')}

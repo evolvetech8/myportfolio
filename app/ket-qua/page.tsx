@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = 'force-dynamic';
+import { waitlistReady } from '@/lib/waitlist/config';
 export default function KetQuaPage() {
-  return <ResultsDashboard />;
+  return <ResultsDashboard waitlistOpen={waitlistReady()} />;
 }

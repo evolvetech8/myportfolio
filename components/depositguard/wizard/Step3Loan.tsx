@@ -27,7 +27,7 @@ export default function Step3Loan() {
   };
 
   const handlePostPromoRateChange = (rate: number) => {
-    updateLoan({ postPromoRate: rate });
+    updateLoan({ postPromoRate: rate, illustrativeRate: false });
   };
 
   const handleGracePeriodChange = (months: number) => {
@@ -72,7 +72,7 @@ export default function Step3Loan() {
       {/* Step Header */}
       <div className="border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2 text-blue-800 font-semibold text-xs tracking-wider uppercase mb-1">
-          <Landmark className="w-4 h-4" /> Bước 3: Gói vay ngân hàng
+          <Landmark className="w-4 h-4" /> Bước 3 · Khoản vay
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
           Lựa chọn phương thức trả nợ & kịch bản lãi suất
@@ -197,9 +197,11 @@ export default function Step3Loan() {
           presets={postPromoPresets}
           error={step3Validation.errors.postPromoRate}
           warning={step3Validation.warnings.postPromoRate}
-          helperText="Bằng lãi suất cơ sở ngân hàng + biên độ thả nổi (thường từ 10.5% - 13.0%/năm)."
+          helperText="Dùng mức ngân hàng đã cung cấp hoặc chọn số minh họa bên dưới."
         />
 
+        <div className="self-center space-y-2"><button type="button" className="rounded-xl border px-4 py-3 text-blue-800" onClick={() => updateLoan({postPromoRate: 12, illustrativeRate: true})}>Tôi chưa biết · dùng mức minh họa 12%/năm</button>
+          {loan.illustrativeRate && <p role="status">Đang dùng giả định 12%/năm. Hãy hỏi ngân hàng để thay bằng mức thực tế.</p>}</div>
         {/* Grace Period Months */}
         <DualNumberInput
           id="gracePeriodMonths"

@@ -8,7 +8,7 @@ import { formatCompactVND, formatMonthsToYears } from '@/lib/depositguard/format
 import RiskBadge from '../common/RiskBadge';
 
 export default function ResultsHeader() {
-  const { loan, simulationResult, resetStressScenario } = useSimulation();
+  const { loan, simulationResult, baseResult, stress, resetStressScenario } = useSimulation();
 
   const isAnnuity = loan.repaymentMethod === 'ANNUITY';
 
@@ -20,16 +20,16 @@ export default function ResultsHeader() {
           href="/kiem-tra-mua-nha"
           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue-800 hover:text-blue-900 transition"
         >
-          <ArrowLeft className="w-4 h-4" /> Quay lại chỉnh sửa thông số
+          <ArrowLeft className="w-4 h-4" /> Sửa số đã nhập
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={resetStressScenario}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> Khôi phục kịch bản cơ sở
+            <RotateCcw className="w-3.5 h-3.5" /> Về số ban đầu
           </button>
           <button
             type="button"
@@ -41,6 +41,19 @@ export default function ResultsHeader() {
         </div>
       </div>
 
+      <section aria-label="Tóm tắt kết quả" className="space-y-3 text-base">
+        {loan.example && <p className="font-semibold">Kịch bản bắt đầu từ số liệu gia đình minh họa.</p>}
+        {loan.illustrativeRate && <p>Lãi suất sau ưu đãi đang dùng giả định {loan.postPromoRate}%/năm. Hãy xác nhận với ngân hàng.</p>}
+        <p>Tháng đầu trả ngân hàng <strong>{simulationResult.month1Payment.toLocaleString('vi-VN')} đồng</strong>.</p>
+        {loan.promoPeriodMonths >= loan.loanTermMonths ? <p>Ưu đãi kéo dài hết thời hạn vay.</p> : loan.promoPeriodMonths === 0 ? <p>Khoản vay áp dụng lãi suất sau ưu đãi từ tháng đầu.</p> : <p>Khi hết ưu đãi, khoản trả từ {simulationResult.schedule[loan.promoPeriodMonths-1].totalDebtService.toLocaleString('vi-VN')} đồng ở tháng {loan.promoPeriodMonths} thành <strong>{simulationResult.postPromoPayment.toLocaleString('vi-VN')} đồng ở tháng {loan.promoPeriodMonths+1}</strong>.</p>}
+        {[...new Set([0, Math.min(loan.promoPeriodMonths, loan.loanTermMonths-1)])].map(index => {
+          const row = simulationResult.schedule[index], original = baseResult.schedule[index];
+          if (!row || !original) return null;
+          const balance = (n: number) => n === 0 ? 'vừa đủ' : (n > 0 ? 'còn dư ' : 'còn thiếu ') + Math.abs(n).toLocaleString('vi-VN') + ' đồng';
+          return <p key={index}>Tháng {row.month}, sau sinh hoạt và trả nợ: <strong>{balance(row.operatingCashFlow)}</strong>. {(stress.rateShockPp || stress.incomeShockPercent || stress.expenseShockPercent) ? <span>Với số ban đầu: {balance(original.operatingCashFlow)}.</span> : null}</p>;
+        })}
+        <p className="text-sm">Kịch bản hiện tại: lãi suất sau ưu đãi {(loan.postPromoRate + stress.rateShockPp).toLocaleString('vi-VN')}%/năm{stress.incomeShockPercent ? `, thu nhập thay đổi ${stress.incomeShockPercent}% trong ${stress.incomeShockDurationMonths} tháng` : ''}{stress.expenseShockPercent ? `, chi phí thay đổi ${stress.expenseShockPercent}%` : ''}.</p>
+      </section>
       {/* Main summary header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-2">

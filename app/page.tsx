@@ -25,7 +25,7 @@ import InfographicGallery from '@/components/depositguard/common/InfographicGall
 
 export default function DepositGuardHomePage() {
   const router = useRouter();
-  const { loadGoldenFixture, updateLoan, updateHousehold, resetStressScenario } = useSimulation();
+  const { setHasSimulated, loadGoldenFixture, updateLoan, updateHousehold, resetStressScenario } = useSimulation();
 
   const handleLoadGoldenExample = () => {
     loadGoldenFixture();
@@ -78,6 +78,7 @@ export default function DepositGuardHomePage() {
       });
       resetStressScenario();
     }
+    setHasSimulated(true);
     router.push('/ket-qua');
   };
 
@@ -128,16 +129,16 @@ export default function DepositGuardHomePage() {
                   href="/kiem-tra-mua-nha"
                   className="px-7 py-4 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-sm sm:text-base shadow-sm transition-all flex items-center justify-center gap-2.5 min-h-[52px]"
                 >
-                  <span>Kiểm tra miễn phí</span>
+                  <span>Tính thử với số của gia đình tôi</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <Link
-                  href="/bao-cao-mau"
+                <button type="button"
+                  onClick={handleLoadGoldenExample}
                   className="px-6 py-4 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-bold text-sm sm:text-base border border-slate-300 transition-all flex items-center justify-center gap-2 min-h-[52px]"
                 >
                   <FileCheck2 className="w-4 h-4 text-blue-700" />
-                  <span>Xem hồ sơ chẩn đoán mẫu</span>
-                </Link>
+                  <span>Xem một ví dụ điền sẵn</span>
+                </button>
               </div>
 
               {/* 4-Column Architectural Hairline Telemetry Strip */}

@@ -72,7 +72,7 @@ export default function FormattedCurrencyInput({
           {label}
         </label>
         <span className="text-xs font-bold text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/80 shadow-2xs">
-          {formatCompactVND(value)}
+          {formatCompactVND(value).replace(' tr ₫',' triệu đồng').replace(' ₫',' đồng').replace(/(\d)\.(\d{1,2}) (?=tỷ|triệu)/,'$1,$2 ')}
         </span>
       </div>
 

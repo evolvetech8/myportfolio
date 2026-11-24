@@ -17,6 +17,8 @@ import { formatVND } from '@/lib/depositguard/formatters';
 import RiskBadge from '@/components/depositguard/common/RiskBadge';
 import DisclaimerBanner from '@/components/depositguard/common/DisclaimerBanner';
 
+import { waitlistReady } from '@/lib/waitlist/config';
+export const dynamic='force-dynamic';
 export const metadata: Metadata = {
   title: 'Hồ Sơ Chẩn Đoán Rủi Ro Tài Chính Trước Đặt Cọc (Bản Mẫu) | EvolveTech DepositGuard',
   description:
@@ -321,6 +323,7 @@ export default function BaoCaoMauPage() {
         </div>
       </div>
 
+      <Link className="mx-auto my-4 block w-fit rounded-xl bg-blue-800 p-4 text-white print:hidden" href="/ra-soat-ho-so-vay?source=sample">{waitlistReady() ? 'Báo cho tôi khi mở gói rà soát 299.000đ' : 'Xem hai gói rà soát chuyên sâu'}</Link>
       <DisclaimerBanner />
     </div>
   );

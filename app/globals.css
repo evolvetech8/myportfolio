@@ -85,3 +85,8 @@ body {
   background-color: #1E40AF;
   color: #ffffff;
 }
+
+@media print {
+  body > header, body > footer, nav, button, .print\:hidden { display: none !important; }
+  main { color: black; background: white; }
+}

@@ -13,7 +13,7 @@ import CashFlowChart from './CashFlowChart';
 import ScheduleTable from './ScheduleTable';
 import DisclaimerCard from './DisclaimerCard';
 
-export default function ResultsDashboard() {
+export default function ResultsDashboard({ waitlistOpen = false }: { waitlistOpen?: boolean } = {}) {
   const { hasSimulated, isSimulated, loan } = useSimulation();
   const [mounted, setMounted] = useState(false);
 
@@ -80,11 +80,15 @@ export default function ResultsDashboard() {
         {/* Corrective Levers & Reverse Solver Recommendations */}
         <CorrectiveLevers />
 
+        {/* Beta Program CTA */}
+
+
         {/* Accessible Amortization Table */}
         <ScheduleTable />
 
         {/* Legal Disclaimer & Transparency Card */}
         <DisclaimerCard />
+        <div className="print:hidden"><Link className="inline-block rounded-xl bg-blue-800 p-4 text-white" href="/ra-soat-ho-so-vay?source=results">{waitlistOpen ? 'Báo cho tôi khi mở gói rà soát 299.000đ' : 'Xem hai gói rà soát chuyên sâu'}</Link></div>
       </div>
     </div>
   );

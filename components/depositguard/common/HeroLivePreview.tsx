@@ -17,7 +17,7 @@ import AnimatedCurrency from '@/components/depositguard/common/AnimatedCurrency'
 
 export default function HeroLivePreview() {
   const router = useRouter();
-  const { updateLoan, updateHousehold, resetStressScenario } = useSimulation();
+  const { updateLoan, updateHousehold, resetStressScenario, setHasSimulated } = useSimulation();
 
   const [loanAmount, setLoanAmount] = useState<number>(2_000_000_000);
   const [netIncome, setNetIncome] = useState<number>(55_000_000);
@@ -94,6 +94,7 @@ export default function HeroLivePreview() {
       plannedEmergencyReserveFloor: 90_000_000,
     });
     resetStressScenario();
+    setHasSimulated(true);
     router.push('/ket-qua');
   };
 

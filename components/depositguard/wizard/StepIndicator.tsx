@@ -10,9 +10,9 @@ export interface StepIndicatorProps {
 }
 
 const STEPS = [
-  { step: 1 as const, code: '01', title: 'Bất động sản', desc: 'Giá trị & Vốn tự có' },
-  { step: 2 as const, code: '02', title: 'Dòng tiền gia đình', desc: 'Thu nhập & Quỹ đệm' },
-  { step: 3 as const, code: '03', title: 'Gói vay ngân hàng', desc: 'Lãi suất & Thời hạn' },
+  { step: 1 as const, code: '01', title: 'Căn nhà', desc: 'Giá trị & Vốn tự có' },
+  { step: 2 as const, code: '02', title: 'Thu chi gia đình', desc: 'Thu nhập & Quỹ đệm' },
+  { step: 3 as const, code: '03', title: 'Khoản vay', desc: 'Lãi suất & Thời hạn' },
 ];
 
 export default function StepIndicator({

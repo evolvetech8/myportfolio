@@ -74,7 +74,7 @@ export default function Step2Household() {
       {/* Step Header */}
       <div className="border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2 text-blue-800 font-semibold text-xs tracking-wider uppercase mb-1">
-          <Wallet className="w-4 h-4" /> Bước 2: Dòng tiền & Khả năng chịu đựng
+          <Wallet className="w-4 h-4" /> Bước 2 · Thu chi gia đình
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
           Thu nhập, chi tiêu và quỹ dự phòng gia đình
@@ -102,7 +102,7 @@ export default function Step2Household() {
       {/* Monthly Net Income */}
       <FormattedCurrencyInput
         id="monthlyNetIncome"
-        label="Thu nhập ròng hàng tháng của hộ gia đình"
+        label="Mỗi tháng, cả nhà thực nhận bao nhiêu tiền?"
         value={household.monthlyNetIncome}
         onChange={handleIncomeChange}
         min={5_000_000}
@@ -144,7 +144,7 @@ export default function Step2Household() {
       {/* Liquid Savings */}
       <FormattedCurrencyInput
         id="liquidSavings"
-        label="Tổng tiền mặt & Tiền gửi tiết kiệm hiện có"
+        label="Nhà mình hiện có tổng cộng bao nhiêu tiền mặt và tiết kiệm?"
         value={household.liquidSavings}
         onChange={handleSavingsChange}
         min={0}

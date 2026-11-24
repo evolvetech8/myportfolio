@@ -24,6 +24,8 @@ export interface ExtendedLoanInput extends LoanInput {
   propertyType?: PropertyType;
   region?: Region;
   purchasePrice?: number;
+  illustrativeRate?: boolean;
+  example?: boolean;
 }
 
 export const DEFAULT_LOAN_INPUT: ExtendedLoanInput = {
@@ -306,7 +308,8 @@ export function SimulationProvider({ children }: { children: React.ReactNode }) 
   }, []);
 
   const loadGoldenFixture = useCallback(() => {
-    setLoan(DEFAULT_LOAN_INPUT);
+    setHasSimulated(true);
+    setLoan({ ...DEFAULT_LOAN_INPUT, example: true });
     setHousehold(DEFAULT_HOUSEHOLD_INPUT);
     setStress(DEFAULT_STRESS_SCENARIO);
     setActivePreset('BASE');

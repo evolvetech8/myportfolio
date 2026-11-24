@@ -64,7 +64,7 @@ export default function Step1Property() {
       {/* Step Header */}
       <div className="border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2 text-blue-800 font-semibold text-xs tracking-wider uppercase mb-1">
-          <Home className="w-4 h-4" /> Bước 1: Giá trị bất động sản
+          <Home className="w-4 h-4" /> Bước 1 · Căn nhà
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
           Thông tin ngôi nhà bạn dự định mua
@@ -104,7 +104,7 @@ export default function Step1Property() {
       {/* Purchase Price Input */}
       <FormattedCurrencyInput
         id="purchasePrice"
-        label="Giá mua bất động sản dự kiến"
+        label="Căn nhà dự kiến giá bao nhiêu?"
         value={priceValue}
         onChange={handlePriceChange}
         min={300_000_000}
@@ -118,7 +118,7 @@ export default function Step1Property() {
       {/* Down Payment Input */}
       <FormattedCurrencyInput
         id="downPayment"
-        label="Vốn tự có (Tiền mặt sẵn sàng thanh toán)"
+        label="Trong số tiền tiết kiệm, anh/chị định dùng bao nhiêu để trả tiền mua nhà?"
         value={loan.downPayment}
         onChange={handleDownPaymentChange}
         min={0}

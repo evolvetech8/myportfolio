@@ -38,9 +38,9 @@ export default function WhatIfControls() {
 
   const presets: { id: ScenarioPresetKey; label: string; desc: string }[] = [
     { id: 'BASE', label: 'Cơ sở', desc: 'Lãi suất thả nổi dự kiến ban đầu' },
-    { id: 'RATE_SHOCK_2PP', label: '+2% Lãi suất', desc: 'Thị trường biến động tăng lãi suất' },
+    { id: 'RATE_SHOCK_2PP', label: 'Nếu lãi suất tăng thêm 2 điểm phần trăm', desc: `Từ ${loan.postPromoRate}% lên ${loan.postPromoRate + 2}%/năm sau ưu đãi` },
     { id: 'RATE_SHOCK_4PP', label: '+4% Lãi suất', desc: 'Kỳ chu kỳ thắt chặt tiền tệ mạnh' },
-    { id: 'INCOME_SHOCK_3M', label: '-20% Thu nhập (3T)', desc: 'Mất việc hoặc giảm lương tạm thời' },
+    { id: 'INCOME_SHOCK_3M', label: 'Nếu thu nhập giảm 20% trong 3 tháng', desc: 'Mất việc hoặc giảm lương tạm thời' },
     { id: 'INCOME_SHOCK_6M', label: '-20% Thu nhập (6T)', desc: 'Gián đoạn kinh doanh kéo dài' },
     { id: 'EXTREME_STRESS', label: 'Căng thẳng kép', desc: '+2% lãi + giảm thu nhập + tăng chi phí' },
   ];
@@ -71,7 +71,7 @@ export default function WhatIfControls() {
           onClick={resetStressScenario}
           className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 active:scale-[0.98]"
         >
-          <RotateCcw className="w-3.5 h-3.5" /> Khôi phục kịch bản cơ sở
+          <RotateCcw className="w-3.5 h-3.5" /> Về số ban đầu
         </button>
       </div>
 

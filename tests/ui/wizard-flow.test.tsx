@@ -152,8 +152,8 @@ describe('Regression & End-to-End Wizard Flow Test Suite', () => {
     // STEP 1: Property Profile
     // -------------------------------------------------------------------------
     expect(ctx.currentStep).toBe(1);
-    expect(container.textContent).toContain('Bước 1: Giá trị bất động sản');
-    expect(container.textContent).toContain('Giá mua bất động sản dự kiến');
+    expect(container.textContent).toContain('Bước 1 · Căn nhà');
+    expect(container.textContent).toContain('Căn nhà dự kiến giá bao nhiêu?');
 
     const step1NextBtn = Array.from(container.querySelectorAll('button')).find((b) =>
       b.textContent?.includes('Tiếp tục sang bước 2')
@@ -170,8 +170,8 @@ describe('Regression & End-to-End Wizard Flow Test Suite', () => {
     // STEP 2: Household Profile
     // -------------------------------------------------------------------------
     expect(ctx.currentStep).toBe(2);
-    expect(container.textContent).toContain('Bước 2: Dòng tiền & Khả năng chịu đựng');
-    expect(container.textContent).toContain('Thu nhập ròng hàng tháng');
+    expect(container.textContent).toContain('Bước 2 · Thu chi gia đình');
+    expect(container.textContent).toContain('Mỗi tháng, cả nhà thực nhận bao nhiêu tiền?');
     expect(ctx.step2Validation.isValid).toBe(true);
 
     const step2NextBtn = Array.from(container.querySelectorAll('button')).find((b) =>
@@ -189,7 +189,7 @@ describe('Regression & End-to-End Wizard Flow Test Suite', () => {
     // STEP 3: Loan Parameters
     // -------------------------------------------------------------------------
     expect(ctx.currentStep).toBe(3);
-    expect(container.textContent).toContain('Bước 3: Gói vay ngân hàng');
+    expect(container.textContent).toContain('Bước 3 · Khoản vay');
     expect(container.textContent).toContain('Thời hạn gói vay');
     expect(ctx.step3Validation.isValid).toBe(true);
 
